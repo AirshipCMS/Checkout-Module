@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-checkout',
@@ -8,9 +9,21 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 })
 export class CheckoutComponent implements OnInit {
 
-  constructor() { }
+  user : any;
+  constructor(private auth: AuthService) { }
 
   ngOnInit() {
+    this.auth.getProfile()
+      .subscribe(
+        res => {
+          this.user = res;
+          this.auth.isAuthenticated = true;
+        },
+        err => {
+          this.auth.isAuthenticated = false;
+          console.error(err);
+        }
+      )
   }
 
 }
