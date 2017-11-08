@@ -1,16 +1,21 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+
 import { AuthService } from '../auth.service';
+import { CartComponent } from '../cart';
 
 @Component({
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
+  // providers: [CartDirective],
   encapsulation: ViewEncapsulation.None
 })
 export class CheckoutComponent implements OnInit {
 
   user : any;
-  constructor(private auth: AuthService) { }
+
+  constructor(private auth: AuthService) {
+  }
 
   ngOnInit() {
     this.auth.getProfile()
@@ -24,6 +29,10 @@ export class CheckoutComponent implements OnInit {
           console.error(err);
         }
       )
+  }
+
+  cartEmpty(value){
+    return value;
   }
 
 }

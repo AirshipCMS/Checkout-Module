@@ -8,16 +8,16 @@ import { AppComponent } from './app.component';
 import { CheckoutComponent } from './checkout/checkout.component';
 import { ReceiptComponent } from './receipt/receipt.component';
 import { appRoutingProviders, routing } from './app.routes';
-import { CartDirective } from './cart/cart.directive';
 import { CanActivateViaAuthGuard } from './can-activate-via-auth-guard';
 import { AuthService } from './auth.service';
+import { CartComponent } from './cart';
 
 @NgModule({
   declarations: [
     AppComponent,
     CheckoutComponent,
     ReceiptComponent,
-    CartDirective
+    CartComponent
   ],
   imports: [
     BrowserModule,
