@@ -1,0 +1,13 @@
+<div class="single-payment-order-container container">
+  <div class="container-header">
+    <h4>Single-Payment Order</h4>
+  </div>
+  <div class="clearfix">
+    <div class="left">
+      <shipping-address></shipping-address>
+    </div>
+    <div class="right">
+      <app-cart (cartEmpty)="cartEmpty.emit($event)"></app-cart>
+    </div>
+  </div>
+</div>

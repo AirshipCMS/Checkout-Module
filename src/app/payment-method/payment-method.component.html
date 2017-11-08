@@ -1,7 +1,9 @@
-<div class="payment-method-container">
-  <h4>Payment Method</h4>
-  <div>
-    <div>
+<div class="payment-method-container container">
+  <div class="container-header">
+    <h4>Payment Method</h4>
+  </div>
+  <div class="clearfix">
+    <div class="left">
       <label for="card-element">Credit or Debit Card</label>
       <button *ngIf="defaultCard && !editDefualtCard" type="button" (click)="editDefualtCard = true">Change Card</button>
       <div>
@@ -14,8 +16,8 @@
         </div>
       </div>
     </div>
-  </div>
-  <div>
-    <p>See below for order total(s). Single-Payment Items are charged as a single order. Subscriptions are charged as separate orders.</p>
+     <div class="right">
+      <p>See below for order total(s). Single-Payment Items are charged as a single order. Subscriptions are charged as separate orders.</p>
+    </div>
   </div>
 </div>

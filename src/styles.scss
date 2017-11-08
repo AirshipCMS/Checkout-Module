@@ -1,0 +1,34 @@
+/* You can add global styles to this file, and also import other style files */
+@import './app/scss/variables';
+
+.container{
+  border: 1px solid $border-color;
+  margin: 20px;
+}
+
+.container-header{
+  background-color: #DBDBDB;
+  color: #4D4D4D;
+
+  h4{
+    margin: 0;
+  }
+}
+
+.clearfix{
+  clear: both;
+}
+
+.left,.right{
+  display: inline-block;
+  vertical-align: top;
+}
+
+.left{
+  width: 70%;
+}
+
+.right{
+  width: 29%;
+  background-color: #F4F4F4;
+}

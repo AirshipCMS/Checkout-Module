@@ -9,7 +9,7 @@ declare var Stripe;
 @Component({
   selector: 'payment-method',
   templateUrl: './payment-method.component.html',
-  styleUrls: ['./payment-method.component.css'],
+  styleUrls: ['./payment-method.component.scss'],
   encapsulation: ViewEncapsulation.None
 })
 export class PaymentMethodComponent implements OnInit {
@@ -34,7 +34,7 @@ export class PaymentMethodComponent implements OnInit {
   createToken() {
     this.stripe.createToken(this.cardElement)
       .then((res) => {
-        if(Object.keys(this.user.account).length > 0) { //if user doesn't have an account. should account be created at this point or let /api/checkout handle it?
+        if(Object.keys(this.user.account).length > 0) { //if user doesn't have an account.
           this.addCardAndSetAsDefault(res.token.id);
         } else {
           this.token = res.token.id;

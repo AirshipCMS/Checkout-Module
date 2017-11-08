@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
 import { AuthService } from '../auth.service';
-import { CartComponent } from '../cart';
+import { SinglePaymentOrderComponent } from '../single-payment-order';
 import { PaymentMethodComponent } from '../payment-method';
 
 @Component({
