@@ -13,7 +13,7 @@
   <div>
     <div>
       <h4 class="subtotal cart-label">Subtotal</h4>
-      <p class="subtotal">{{ getSubtotal() }}</p>
+      <p class="subtotal">{{ subtotal | currency: "USD" }}</p>
     </div>
     <div>
       <h4 class="shipping cart-label">Shipping</h4>

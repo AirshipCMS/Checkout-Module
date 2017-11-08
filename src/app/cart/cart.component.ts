@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 
 import { CartService } from './cart.service';
 
@@ -12,14 +12,21 @@ import { CartService } from './cart.service';
 export class CartComponent implements OnInit {
 
   @Output() cartEmpty = new EventEmitter();
+  @Input() shippingType : string;
+  @Input() shipping : string;
+  @Input() tax : string;
+  @Input() handling : string;
+  @Input() total : string;
+  subtotal : number = 0;
 
   constructor(private service: CartService) {}
 
   ngOnInit() {
-    this.cartEmpty.emit(this.service.cart.items.length === 0)
+    this.cartEmpty.emit(this.service.cart.items.length === 0);
+    this.subtotal = this.service.calculateSubtotal();
   }
 
-  getSubtotal() {
+  getShipping() {
     
   }
 
