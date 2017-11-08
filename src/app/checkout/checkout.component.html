@@ -1,6 +1,10 @@
 <h1>Secure Checkout</h1>
+<p>You are securely logged in as {{ user?.email }}</p>
+<div>
+	<payment-method></payment-method>
+	<app-cart (cartEmpty)="cartEmpty($event)"></app-cart>
+</div>
 <div *ngIf="cartEmpty()">
 	<p>You have no items in your cart.</p>
 	<a href="/">Continue Shopping</a>
 </div>
-<app-cart *ngIf="!cartEmpty()" (cartEmpty)="cartEmpty($event)"></app-cart>

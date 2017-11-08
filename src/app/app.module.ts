@@ -5,19 +5,21 @@ import { HttpClientModule } from '@angular/common/http';
 
 
 import { AppComponent } from './app.component';
-import { CheckoutComponent } from './checkout/checkout.component';
-import { ReceiptComponent } from './receipt/receipt.component';
+import { CheckoutComponent } from './checkout';
+import { ReceiptComponent } from './receipt';
 import { appRoutingProviders, routing } from './app.routes';
 import { CanActivateViaAuthGuard } from './can-activate-via-auth-guard';
 import { AuthService } from './auth.service';
 import { CartComponent } from './cart';
+import { PaymentMethodComponent } from './payment-method';
 
 @NgModule({
   declarations: [
     AppComponent,
     CheckoutComponent,
     ReceiptComponent,
-    CartComponent
+    CartComponent,
+    PaymentMethodComponent
   ],
   imports: [
     BrowserModule,
