@@ -18,6 +18,10 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.getUserProfile();
+  }
+
+  getUserProfile() {
     this.auth.getProfile()
       .subscribe(
         res => {
@@ -28,7 +32,7 @@ export class CheckoutComponent implements OnInit {
           this.auth.isAuthenticated = false;
           console.error(err);
         }
-      )
+      );
   }
 
   cartEmpty(value){

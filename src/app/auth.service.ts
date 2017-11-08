@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
+import { environment } from '../environments/environment';
+
 @Injectable()
 export class AuthService {
-  // Should auth be handle within in this app or login status app?
   id_token : string;
   isAuthenticated : boolean = true;
 
@@ -13,7 +14,7 @@ export class AuthService {
 
   getProfile() {
     let headers = new HttpHeaders().set('authorization', `bearer ${this.id_token}`)
-    return this.http.get('https://endtoend.airshipcms-alpha.io/api/users/profile', { headers });
+    return this.http.get(`${environment.domain}/api/users/profile`, { headers });
   }
 
 }

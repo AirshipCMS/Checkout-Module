@@ -12,6 +12,7 @@ import { CanActivateViaAuthGuard } from './can-activate-via-auth-guard';
 import { AuthService } from './auth.service';
 import { CartComponent } from './cart';
 import { PaymentMethodComponent } from './payment-method';
+import { StripeService } from './stripe.service';
 
 @NgModule({
   declarations: [
@@ -26,7 +27,7 @@ import { PaymentMethodComponent } from './payment-method';
     HttpClientModule,
     routing
   ],
-  providers: [CanActivateViaAuthGuard, appRoutingProviders, AuthService],
+  providers: [CanActivateViaAuthGuard, appRoutingProviders, AuthService, StripeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

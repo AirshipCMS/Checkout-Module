@@ -3,9 +3,15 @@
   <div>
     <div>
       <label for="card-element">Credit or Debit Card</label>
+      <button *ngIf="defaultCard && !editDefualtCard" type="button" (click)="editDefualtCard = true">Change Card</button>
       <div>
         <div id="card-element"></div>
-        <button type="button" (click)="addCard()">Add Card</button>
+        <button type="button" (click)="createToken()">Add Card</button>
+      </div>
+      <div *ngIf="defaultCard && !editDefualtCard">
+        <div>
+          <p>{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }}</p>
+        </div>
       </div>
     </div>
   </div>
