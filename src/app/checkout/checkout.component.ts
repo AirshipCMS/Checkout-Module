@@ -13,6 +13,7 @@ import { PaymentMethodComponent } from '../payment-method';
 export class CheckoutComponent implements OnInit {
 
   user : any;
+  loading : boolean = true;
 
   constructor(private auth: AuthService) {
   }
@@ -27,9 +28,12 @@ export class CheckoutComponent implements OnInit {
         res => {
           this.user = res;
           this.auth.isAuthenticated = true;
+          this.loading = false;
         },
         err => {
+          this.loading = false;
           this.auth.isAuthenticated = false;
+          this.auth.login();
           console.error(err);
         }
       );

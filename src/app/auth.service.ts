@@ -17,4 +17,10 @@ export class AuthService {
     return this.http.get(`${environment.domain}/api/users/profile`, { headers });
   }
 
+  login() {
+    if(!this.isAuthenticated) {
+      window.location.href = '/login';
+    }
+  }
+
 }

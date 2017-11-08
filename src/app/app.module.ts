@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 
@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { CheckoutComponent } from './checkout';
 import { ReceiptComponent } from './receipt';
 import { appRoutingProviders, routing } from './app.routes';
-import { CanActivateViaAuthGuard } from './can-activate-via-auth-guard';
 import { AuthService } from './auth.service';
 import { CartComponent } from './cart';
 import { PaymentMethodComponent } from './payment-method';
@@ -29,10 +28,11 @@ import { ShippingAddressComponent } from './shipping-address';
   imports: [
     BrowserModule,
     HttpClientModule,
+    ReactiveFormsModule
     FormsModule,
     routing
   ],
-  providers: [CanActivateViaAuthGuard, appRoutingProviders, AuthService, StripeService],
+  providers: [appRoutingProviders, AuthService, StripeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

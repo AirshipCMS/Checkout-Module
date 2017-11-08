@@ -3,10 +3,9 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { CheckoutComponent } from './checkout';
 import { ReceiptComponent } from './receipt';
-import { CanActivateViaAuthGuard } from './can-activate-via-auth-guard';
 
 const AppRoutes : Routes = [
-  { path: 'checkout', component: CheckoutComponent, canActivate: [CanActivateViaAuthGuard] },
+  { path: 'checkout', component: CheckoutComponent },
   { path: 'receipt', component: ReceiptComponent }
 ]
 

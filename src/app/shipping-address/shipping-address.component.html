@@ -1,44 +1,44 @@
 <div>
   <label>Shipping Address</label>
-  <form [(ngModel)]="shipping_address" name="shipping_address">
+  <form [formGroup]="form">
     <div class="inline-field">
       <label>First Name*</label>
-      <input type="text" name="first_name" [(ngModel)]="shipping_address.first_name">
+      <input type="text" formControlName="first_name" required [(ngModel)]="first_name">
     </div>
     <div class="inline-field">
       <label>Last Name*</label>
-      <input type="text" name="last_name" [(ngModel)]="shipping_address.last_name">
+      <input type="text" formControlName="last_name" required [(ngModel)]="last_name">
     </div>
     <div>
       <label>Country*</label>
-      <select [(ngModel)]="shipping_address.country" name="country">
+      <select [(ngModel)]="country" required formControlName="country">
         <option>Select One</option>
       </select>
     </div>
     <div>
       <label>Shipping Address 1*</label>
-      <input type="text" name="address_1" [(ngModel)]="shipping_address.address_1">
+      <input type="text" formControlName="address_1" required [(ngModel)]="address_1">
     </div>
     <div>
       <label>Shipping Address 2</label>
-      <input type="text" name="address_2" [(ngModel)]="shipping_address.address_2">
+      <input type="text" formControlName="address_2" [(ngModel)]="address_2">
     </div>
     <div>
       <label>City*</label>
-      <input type="text" name="city" [(ngModel)]="shipping_address.city">
+      <input type="text" formControlName="city" required [(ngModel)]="city">
     </div>
     <div>
       <label>State/Province/Region/Other*</label>
-      <input type="text" name="state" [(ngModel)]="shipping_address.state">
+      <input type="text" formControlName="state" required [(ngModel)]="state">
     </div>
     <div>
       <label>Zip/Postal Code*</label>
-      <input type="text" name="zipcode" [(ngModel)]="shipping_address.zipcode">
+      <input type="text" formControlName="zipcode" required [(ngModel)]="zipcode">
     </div>
     <div>
       <label>Phone</label>
-      <input type="text" name="phone" [(ngModel)]="shipping_address.phone">
+      <input type="text" formControlName="phone" [(ngModel)]="phone">
     </div>
   </form>
-  <button type="button" (click)="saveAddress()">Save Address</button>
+  <button [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>
 </div>
