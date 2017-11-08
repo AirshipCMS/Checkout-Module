@@ -28,7 +28,7 @@ import { ShippingAddressComponent } from './shipping-address';
   imports: [
     BrowserModule,
     HttpClientModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
     FormsModule,
     routing
   ],

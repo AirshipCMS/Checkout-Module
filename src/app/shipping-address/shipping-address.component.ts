@@ -2,19 +2,23 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { FormValidator } from '../form-validator';
+import { ShippingAddressService } from './shipping-address.service';
 
 @Component({
   selector: 'shipping-address',
   templateUrl: './shipping-address.component.html',
   styleUrls: ['./shipping-address.component.scss'],
+  providers: [ShippingAddressService],
   encapsulation: ViewEncapsulation.None
 })
 export class ShippingAddressComponent implements OnInit {
 
-  shipping_address : any = {};
+  countries : Array<any> = [];
   form : FormGroup;
+  shipping_address : any = {};
+  states : Array<any> = [];
 
-  constructor(private builder: FormBuilder) {
+  constructor(private builder: FormBuilder, private service: ShippingAddressService) {
     this.form  = this.builder.group({
       first_name: ['', Validators.compose([Validators.required])],
       last_name: ['', Validators.compose([Validators.required])],
@@ -29,10 +33,16 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.countries = this.service.countries;
   }
 
   saveAddress() {
-    console.log(this.form)
+  }
+
+  getStates(country) {
+    if(country) {
+      this.states = this.service.getStates(country)
+    }
   }
 
 }

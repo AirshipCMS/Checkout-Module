@@ -11,8 +11,9 @@
     </div>
     <div>
       <label>Country*</label>
-      <select [(ngModel)]="country" required formControlName="country">
+      <select [(ngModel)]="country" required formControlName="country" (ngModelChange)="getStates($event)">
         <option>Select One</option>
+        <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
       </select>
     </div>
     <div>
@@ -29,7 +30,10 @@
     </div>
     <div>
       <label>State/Province/Region/Other*</label>
-      <input type="text" formControlName="state" required [(ngModel)]="state">
+      <select [(ngModel)]="state" required formControlName="state">
+        <option>Select One</option>
+        <option *ngFor="let state of states.items" [ngValue]="country">{{ state.name }}</option>
+      </select>
     </div>
     <div>
       <label>Zip/Postal Code*</label>
