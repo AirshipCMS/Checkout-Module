@@ -28,12 +28,16 @@
       <label>City*</label>
       <input type="text" formControlName="city" required [(ngModel)]="city">
     </div>
-    <div>
+    <div class="inline-field">
       <label>State/Province/Region/Other*</label>
       <select [(ngModel)]="state" required formControlName="state">
-        <option>Select One</option>
-        <option *ngFor="let state of states.items" [ngValue]="country">{{ state.name }}</option>
+        <option disabled="" selected="">Select One</option>
+        <option *ngFor="let state of states.items" [ngValue]="state">{{ state.name }}</option>
       </select>
+    </div>
+    <div *ngIf="state?.name === 'Other'" class="inline-field">
+      <label>Other</label>
+      <input type="text" name="other" formControlName="other">
     </div>
     <div>
       <label>Zip/Postal Code*</label>
