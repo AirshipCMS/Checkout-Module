@@ -15,7 +15,7 @@ export class ShippingAddressComponent implements OnInit {
 
   countries : Array<any> = [];
   form : FormGroup;
-  shipping_address : any = {};
+  savedAddress : any;
   states : Array<any> = [];
 
   constructor(private builder: FormBuilder, private service: ShippingAddressService) {
@@ -38,6 +38,7 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   saveAddress() {
+    this.savedAddress = this.service.saveAddress(this.form.value);
   }
 
   getStates(country) {

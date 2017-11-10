@@ -1,6 +1,6 @@
 <div>
   <label>Shipping Address</label>
-  <form [formGroup]="form">
+  <form *ngIf="!savedAddress" [formGroup]="form">
     <div class="inline-field">
       <label>First Name*</label>
       <input type="text" formControlName="first_name" required [(ngModel)]="first_name">
@@ -47,6 +47,12 @@
       <label>Phone</label>
       <input type="text" formControlName="phone" [(ngModel)]="phone">
     </div>
+    <button  type="button" (click)="saveAddress()">Save Address</button>
   </form>
-  <button [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>
+  <div *ngIf="savedAddress">
+    <p>{{ savedAddress.first_name }} {{ save_address.last_name }}</p>
+    <p>{{ savedAddress.address_1 }}</p>
+    <p>{{ savedAddress.address_2 }}</p>
+    <p>{{ savedAddress.city }}, {{ savedAddress.state }} {{ savedAddress.zipcode }}</p>
+  </div>
 </div>
