@@ -47,12 +47,12 @@
       <label>Phone</label>
       <input type="text" formControlName="phone" [(ngModel)]="phone">
     </div>
-    <button  type="button" (click)="saveAddress()">Save Address</button>
+    <button [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>
   </form>
   <div *ngIf="savedAddress">
-    <p>{{ savedAddress.first_name }} {{ save_address.last_name }}</p>
-    <p>{{ savedAddress.address_1 }}</p>
-    <p>{{ savedAddress.address_2 }}</p>
-    <p>{{ savedAddress.city }}, {{ savedAddress.state }} {{ savedAddress.zipcode }}</p>
+    <p>{{ savedAddress?.first_name }} {{ savedAddress?.last_name }}</p>
+    <p>{{ savedAddress?.address_1 }}</p>
+    <p>{{ savedAddress?.address_2 }}</p>
+    <p>{{ savedAddress?.city }}, {{ savedAddress?.state }} {{ savedAddress?.zipcode }}</p>
   </div>
 </div>

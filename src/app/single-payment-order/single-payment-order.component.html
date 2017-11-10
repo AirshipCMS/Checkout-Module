@@ -4,7 +4,7 @@
   </div>
   <div class="clearfix">
     <div class="left">
-      <shipping-address></shipping-address>
+      <shipping-address [user]="user"></shipping-address>
     </div>
     <div class="right">
       <app-cart (cartEmpty)="cartEmpty.emit($event)"></app-cart>

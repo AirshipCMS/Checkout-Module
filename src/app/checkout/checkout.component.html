@@ -3,7 +3,7 @@
 	<p>You are securely logged in as {{ user?.email }}</p>
 	<div>
 		<payment-method [user]="user"></payment-method>
-		<single-payment-order (cartEmpty)="cartEmpty($event)"></single-payment-order>
+		<single-payment-order [user]="user" (cartEmpty)="cartEmpty($event)"></single-payment-order>
 	</div>
 	<div *ngIf="cartEmpty()">
 		<p>You have no items in your cart.</p>

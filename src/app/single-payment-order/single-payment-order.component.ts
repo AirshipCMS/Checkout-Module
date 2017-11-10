@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 
 import { CartComponent } from '../cart';
 import { ShippingAddressComponent } from '../shipping-address';
@@ -12,6 +12,7 @@ import { ShippingAddressComponent } from '../shipping-address';
 export class SinglePaymentOrderComponent implements OnInit {
 
   @Output() cartEmpty = new EventEmitter();
+  @Input() user;
 
   constructor() { }
 
