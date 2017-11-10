@@ -13,10 +13,15 @@ export class SinglePaymentOrderComponent implements OnInit {
 
   @Output() cartEmpty = new EventEmitter();
   @Input() user;
+  shippingAddress : any;
 
   constructor() { }
 
   ngOnInit() {
+  }
+
+  savedShippingAddress(address:any) {
+  	this.shippingAddress = address;
   }
 
 }

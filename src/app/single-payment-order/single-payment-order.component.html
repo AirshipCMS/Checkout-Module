@@ -4,10 +4,10 @@
   </div>
   <div class="clearfix">
     <div class="left">
-      <shipping-address [user]="user"></shipping-address>
+      <shipping-address [user]="user" (savedShippingAddress)="savedShippingAddress($event)"></shipping-address>
     </div>
     <div class="right">
-      <app-cart (cartEmpty)="cartEmpty.emit($event)"></app-cart>
+      <app-cart (cartEmpty)="cartEmpty.emit($event)" [shippingAddress]="shippingAddress"></app-cart>
     </div>
   </div>
 </div>

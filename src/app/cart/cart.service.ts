@@ -20,17 +20,24 @@ export class CartService {
     return subtotal/100;
   }
 
-  getShipping() {
+  getShipping(address:any) {
     let body = {
-      cart: this.cart,
-      shipping_type: '',
       country: '',
       state: '',
       zipcode: '',
       other_location: '',
       other_location_text: ''
     };
+    for(const [key] of Object.entries(body)) {
+      body[key] = address[key];
+    }
+    body['cart'] = this.cart;
+    body['shipping_type'] = ''
     return this.http.put(`${environment.domain}/api/shipping`, body);
+  }
+
+  handleError(err) {
+    console.error(err);
   }
 
 }

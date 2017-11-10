@@ -1,5 +1,6 @@
 <div>
   <label>Shipping Address</label>
+  <button class="inline-button" type="button" *ngIf="savedAddress">Change Address</button>
   <form *ngIf="!savedAddress" [formGroup]="form">
     <div class="inline-field">
       <label>First Name*</label>

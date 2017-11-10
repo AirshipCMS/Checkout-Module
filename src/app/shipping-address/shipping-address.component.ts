@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { FormValidator } from '../form-validator';
@@ -18,6 +18,7 @@ export class ShippingAddressComponent implements OnInit {
   savedAddress : any;
   states : Array<any> = [];
   @Input() user;
+  @Output() savedShippingAddress = new EventEmitter();
 
   constructor(private builder: FormBuilder, private service: ShippingAddressService) {
     this.form  = this.builder.group({
@@ -45,15 +46,18 @@ export class ShippingAddressComponent implements OnInit {
 
   getLocalAddress() {
     this.savedAddress = this.service.getLocalAddress();
+    this.savedShippingAddress.emit(this.savedAddress);
   }
 
   getSavedAddress() {
-    this.service.getSavedAddress(this.user);
+    this.savedAddress = this.service.getSavedAddress(this.user);
+    this.savedShippingAddress.emit(this.savedAddress);
   }
 
   saveAddress() {
     this.savedAddress = this.service.formattAddress(this.form.value);
     this.service.saveAddress(this.form.value, this.savedAddress, this.user);
+    this.savedShippingAddress.emit(this.savedAddress);
   }
 
   getStates(country) {
