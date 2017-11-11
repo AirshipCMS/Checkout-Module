@@ -5,6 +5,18 @@
   <div class="clearfix">
     <div class="left">
       <shipping-address [user]="user" (savedShippingAddress)="savedShippingAddress($event)"></shipping-address>
+      <div>
+        <label>Shiiping Type</label>
+        <select></select>
+      </div>
+      <div>
+        <label>Billing</label>
+        <p>Pending...</p>
+      </div>
+      <div>
+        <label>Order Notes</label>
+        <textarea placeholder="Add notes to this order..."></textarea>
+      </div>
     </div>
     <div class="right">
       <app-cart (cartEmpty)="cartEmpty.emit($event)" [shippingAddress]="shippingAddress"></app-cart>

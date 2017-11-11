@@ -17,21 +17,25 @@
     </div>
     <div>
       <h4 class="shipping cart-label">Shipping</h4>
-      <p class="shipping"></p>
+      <p class="shipping" *ngIf="pending">{{ shipping }}</p>
+      <p class="shipping" *ngIf="!pending">{{ shipping | currency: "USD" }}</p>
     </div>
     <div>
       <h4 class="tax cart-label">Tax</h4>
-      <p class="tax"></p>
+      <p class="tax" *ngIf="pending">{{ tax }}</p>
+      <p class="tax" *ngIf="!pending">{{ tax | currency: "USD" }}</p>
     </div>
     <div>
       <h4 class="handling cart-label">Handling</h4>
-      <p class="handling"></p>
+      <p class="handling" *ngIf="pending">{{ handling }}</p>
+      <p class="handling" *ngIf="!pending">{{ handling | currency: "USD" }}</p>
     </div>
   </div>
   <div>
     <div>
       <h4 class="total cart-label">Total</h4>
-      <p class="total"></p>
+      <p class="total" *ngIf="pending">{{ total }}</p>
+      <p class="total" *ngIf="!pending">{{ total | currency: "USD" }}</p>
     </div>
   </div>
 </div>

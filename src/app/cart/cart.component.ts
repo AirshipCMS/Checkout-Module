@@ -13,11 +13,12 @@ export class CartComponent implements OnInit {
 
   @Output() cartEmpty = new EventEmitter();
   @Input() shippingType : string;
-  @Input() shipping : string = '(pending)';
-  @Input() tax : string = '(pending)';
-  @Input() handling : string = '(pending)';
-  @Input() total : string = '(pending)';
+  @Input() shipping : any = '(pending)';
+  @Input() tax : any = '(pending)';
+  @Input() handling : any = '(pending)';
+  @Input() total : any = '(pending)';
   subtotal : number = 0;
+  pending : boolean = true;
   @Input() shippingAddress : any;
 
   constructor(private service: CartService) {}
@@ -32,7 +33,11 @@ export class CartComponent implements OnInit {
     this.service.getShipping(this.shippingAddress)
       .subscribe(
         res => {
-          console.log(res)
+          this.handling = res.handling_cost.usd/100;
+          this.shipping = res.shipping_cost.usd/100;
+          this.tax = res.tax.usd/100;
+          this.total = res.total.usd/100;
+          this.pending = false;
         },
         err => this.service.handleError(err)
       );
