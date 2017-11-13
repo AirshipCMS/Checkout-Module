@@ -7,7 +7,7 @@
       <shipping-address [user]="user" (savedShippingAddress)="savedShippingAddress($event)"></shipping-address>
       <div>
         <label>Shiiping Type</label>
-        <select></select>
+        <shipping-type (shippingTypeChanged)="shippingTypeChanged($event)"></shipping-type>
       </div>
       <div>
         <label>Billing</label>

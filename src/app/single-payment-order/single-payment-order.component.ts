@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } fro
 
 import { CartComponent } from '../cart';
 import { ShippingAddressComponent } from '../shipping-address';
+import { ShippingTypeComponent } from '../shipping-type';
 
 @Component({
   selector: 'single-payment-order',
@@ -14,6 +15,7 @@ export class SinglePaymentOrderComponent implements OnInit {
   @Output() cartEmpty = new EventEmitter();
   @Input() user;
   shippingAddress : any;
+  shippingType : string;
 
   constructor() { }
 
@@ -22,6 +24,10 @@ export class SinglePaymentOrderComponent implements OnInit {
 
   savedShippingAddress(address:any) {
   	this.shippingAddress = address;
+  }
+
+  shippingTypeChanged(shippingType:string) {
+    this.shippingType = shippingType;
   }
 
 }

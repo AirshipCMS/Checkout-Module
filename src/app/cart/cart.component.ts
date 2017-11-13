@@ -33,10 +33,10 @@ export class CartComponent implements OnInit {
     this.service.getShipping(this.shippingAddress)
       .subscribe(
         res => {
-          this.handling = res.handling_cost.usd/100;
-          this.shipping = res.shipping_cost.usd/100;
-          this.tax = res.tax.usd/100;
-          this.total = res.total.usd/100;
+          this.handling = res['handling_cost'].usd/100;
+          this.shipping = res['shipping_cost'].usd/100;
+          this.tax = res['tax'].usd/100;
+          this.total = res['total'].usd/100;
           this.pending = false;
         },
         err => this.service.handleError(err)
