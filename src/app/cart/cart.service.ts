@@ -7,8 +7,20 @@ import { environment } from '../../environments/environment';
 export class CartService {
 
   cart : any;
+  omitList : Array<any>;
   constructor(private http: HttpClient) {
-    this.cart = localStorage.getItem('cart') ? JSON.parse(localStorage.getItem('cart')) : { items: [] };
+    let localCart = JSON.parse(localStorage.getItem('cart'));
+    this.cart = localCart ? this.scrubCart(localCart) : { items: [] };
+  }
+
+  scrubCart(cart:any) {
+    let formattedCart = { items: [] };
+    formattedCart.items = cart.items.filter((item) => item.type !== 'plan').map((item) => {
+      delete item.product_plan;
+      if(item.type) delete item.type;
+      return item;
+    });
+    return formattedCart;
   }
 
   calculateSubtotal() {
