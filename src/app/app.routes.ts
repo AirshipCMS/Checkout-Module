@@ -6,7 +6,7 @@ import { ReceiptComponent } from './receipt';
 
 const AppRoutes : Routes = [
   { path: 'checkout', component: CheckoutComponent },
-  { path: 'receipt', component: ReceiptComponent }
+  { path: 'checkout#receipt', component: ReceiptComponent }
 ]
 
 export const appRoutingProviders : any[] = [];

@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'order-notes',
@@ -9,6 +9,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 export class OrderNotesComponent implements OnInit {
 
   orderNotes : string = '';
+  @Output() savedOrderNotes = new EventEmitter();
 
   constructor() { }
 
@@ -18,10 +19,12 @@ export class OrderNotesComponent implements OnInit {
 
   saveOrderNotes(orderNotes) {
     localStorage.setItem('customer_notes', orderNotes.target.value);
+    this.savedOrderNotes.emit(orderNotes.target.value);
   }
 
   getOrderNotes() {
     let localNotes = localStorage.getItem('customer_notes');
     this.orderNotes = localNotes ? localNotes : '';
+    this.savedOrderNotes.emit(this.orderNotes);
   }
 }

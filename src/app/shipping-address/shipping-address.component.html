@@ -38,7 +38,7 @@
     </div>
     <div *ngIf="state?.name === 'Other'" class="inline-field">
       <label>Other</label>
-      <input type="text" name="other" formControlName="other">
+      <input type="text" name="other_location_text" formControlName="other_location_text">
     </div>
     <div>
       <label>Zip/Postal Code*</label>
@@ -46,7 +46,7 @@
     </div>
     <div>
       <label>Phone</label>
-      <input type="text" formControlName="phone" [(ngModel)]="phone">
+      <input type="text" formControlName="phone_number" [(ngModel)]="phone_number">
     </div>
     <button [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>
   </form>

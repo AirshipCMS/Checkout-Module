@@ -19,7 +19,7 @@ export class PaymentMethodComponent implements OnInit {
   defaultCard;
   cardElement;
   stripe;
-  token : string;
+  token;
   editDefualtCard : boolean = false;
   @Input() user;
   @Output() defaultCardSaved = new EventEmitter();
@@ -43,8 +43,8 @@ export class PaymentMethodComponent implements OnInit {
         } else {
           this.token = res.token.id;
           this.defaultCard = res.token.card;
-          this.service.saveLocalCard(this.defaultCard);
-          this.defaultCardSaved.emit(this.defaultCard);
+          this.service.saveLocalCard(this.defaultCard, this.token);
+          this.defaultCardSaved.emit({ defaultCard : this.defaultCard, token: this.token });
         }
       });
   }
@@ -55,7 +55,7 @@ export class PaymentMethodComponent implements OnInit {
       .subscribe(
         defaultCard => {
           this.defaultCard = defaultCard;
-          this.defaultCardSaved.emit(this.defaultCard);
+          this.defaultCardSaved.emit({ defaultCard : this.defaultCard, token: this.token });
         },
         err => console.error(err)
       );
@@ -63,8 +63,10 @@ export class PaymentMethodComponent implements OnInit {
 
   getSavedCard(elements) {
     if(Object.keys(this.user.account).length === 0) {
-      this.defaultCard = this.service.getLocalCard();
-      this.defaultCardSaved.emit(this.defaultCard);
+      let localData = this.service.getLocalCard();
+      this.defaultCard = localData.card;
+      this.token = localData.token;
+      this.defaultCardSaved.emit({ defaultCard : this.defaultCard, token: this.token });
     } else {
 
     }

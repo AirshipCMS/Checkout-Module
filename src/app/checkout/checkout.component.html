@@ -2,15 +2,19 @@
   <h1>Secure Checkout</h1>
   <p>You are securely logged in as {{ user?.email }}</p>
   <div>
-    <payment-method [user]="user" (defaultCardSaved)="defaultCardSaved($event)"></payment-method>
+    <payment-method
+      [user]="user"
+      (defaultCardSaved)="defaultCardSaved($event)"
+    ></payment-method>
     <single-payment-order
       [user]="user"
-      (cartEmpty)="cartEmpty($event)"
       [defaultCard]="defaultCard"
-      (savedShippingAddress)="retrievedShippingAddress($event)"
+      (savedShippingAddress)="gotShippingAddress($event)"
+      (savedOrderNotes)="gotOrderNotes($event)"
+      (cartHasItems)="gotCartItems($event)"
     ></single-payment-order>
   </div>
-  <div *ngIf="cartEmpty()">
+  <div *ngIf="cart?.items.length === 0">
     <p>You have no items in your cart.</p>
     <a href="/">Continue Shopping</a>
   </div>

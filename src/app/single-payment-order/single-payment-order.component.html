@@ -4,7 +4,7 @@
   </div>
   <div class="clearfix">
     <div class="left">
-      <shipping-address [user]="user" (savedShippingAddress)="retreivedSavedShippingAddress($event)"></shipping-address>
+      <shipping-address [user]="user" (savedShippingAddress)="gotSavedShippingAddress($event)"></shipping-address>
       <div>
         <label>Shipping Type</label>
         <shipping-type (shippingTypeChanged)="shippingTypeChanged($event)"></shipping-type>
@@ -16,12 +16,12 @@
       </div>
       <div>
         <label>Order Notes</label>
-        <order-notes></order-notes>
+        <order-notes (savedOrderNotes)="gotOrderNotes($event)"></order-notes>
       </div>
     </div>
     <div class="right">
       <app-cart
-        (cartEmpty)="cartEmpty.emit($event)"
+        (cartHasItems)="cartHasItems.emit($event)"
         (shippingCalculated)="shippingCalculated($event)"
         [shippingAddress]="shippingAddress"
         [shippingType]="shippingType"

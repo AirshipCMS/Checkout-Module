@@ -19,8 +19,11 @@ export class CheckoutComponent implements OnInit {
   loading : boolean = true;
   defaultCard : any;
   shippingAddress : any;
+  orderNotes : string;
+  cart : any = { items: [] };
+  stripeToken : string;
 
-  constructor(private auth: AuthService, private router: Router, service: CheckoutService) {
+  constructor(private auth: AuthService, private router: Router, private service: CheckoutService) {
   }
 
   ngOnInit() {
@@ -43,16 +46,33 @@ export class CheckoutComponent implements OnInit {
       );
   }
 
-  defaultCardSaved(defaultCard:any) {
-    this.defaultCard = defaultCard;
+  gotCartItems(cart:any) {
+    this.cart = cart;
   }
 
-  cartEmpty(value){
-    return value;
+  gotOrderNotes(orderNotes:string) {
+    this.orderNotes = orderNotes;
   }
 
-  retrievedShippingAddress(address:any) {
+  defaultCardSaved(data) {
+    this.stripeToken = data.token;
+    this.defaultCard = data.defaultCard;
+  }
+
+  gotShippingAddress(address:any) {
     this.shippingAddress = address;
+  }
+
+  placeOrder() {
+    this.service.checkout(this.shippingAddress, this.user, this.cart, this.orderNotes, this.stripeToken)
+      .subscribe(
+        res => {
+          this.service.checkoutResponse = res;
+          this.service.clearLocalStorage();
+          this.router.navigate(['/checkout#receipt']);
+        },
+        err => this.service.handleError(err)
+      );
   }
 
 }

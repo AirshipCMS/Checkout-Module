@@ -11,7 +11,7 @@ import { CartService } from './cart.service';
 })
 export class CartComponent implements OnInit {
 
-  @Output() cartEmpty = new EventEmitter();
+  @Output() cartHasItems = new EventEmitter();
   @Output() shippingCalculated = new EventEmitter();
   @Input() shippingType : string;
   shipping : any = '(pending)';
@@ -26,7 +26,7 @@ export class CartComponent implements OnInit {
   constructor(private service: CartService) {}
 
   ngOnInit() {
-    this.cartEmpty.emit(this.service.cart.items.length === 0);
+    this.cartHasItems.emit(this.service.cart);
     this.subtotal = this.service.calculateSubtotal();
     this.getShipping();
   }
