@@ -1,7 +1,8 @@
-import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { mergeMap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
+import { PaymentMethodService } from './payment-method.service';
 import { StripeService } from '../stripe.service';
 
 declare var Stripe;
@@ -10,6 +11,7 @@ declare var Stripe;
   selector: 'payment-method',
   templateUrl: './payment-method.component.html',
   styleUrls: ['./payment-method.component.scss'],
+  providers: [PaymentMethodService],
   encapsulation: ViewEncapsulation.None
 })
 export class PaymentMethodComponent implements OnInit {
@@ -20,8 +22,9 @@ export class PaymentMethodComponent implements OnInit {
   token : string;
   editDefualtCard : boolean = false;
   @Input() user;
+  @Output() defaultCardSaved = new EventEmitter();
 
-  constructor(private stripeService: StripeService) {
+  constructor(private stripeService: StripeService, private service: PaymentMethodService) {
   }
 
   ngOnInit() {
@@ -29,6 +32,7 @@ export class PaymentMethodComponent implements OnInit {
     let elements = this.stripe.elements();
     this.cardElement = elements.create('card');
     this.cardElement.mount('#card-element');
+    this.getSavedCard(elements);
   }
 
   createToken() {
@@ -39,6 +43,8 @@ export class PaymentMethodComponent implements OnInit {
         } else {
           this.token = res.token.id;
           this.defaultCard = res.token.card;
+          this.service.saveLocalCard(this.defaultCard);
+          this.defaultCardSaved.emit(this.defaultCard);
         }
       });
   }
@@ -47,9 +53,21 @@ export class PaymentMethodComponent implements OnInit {
     this.stripeService.addCard(token)
       .pipe(mergeMap(card => this.stripeService.setDefaultCard(card, this.user)))
       .subscribe(
-        defaultCard => this.defaultCard = defaultCard,
+        defaultCard => {
+          this.defaultCard = defaultCard;
+          this.defaultCardSaved.emit(this.defaultCard);
+        },
         err => console.error(err)
       );
+  }
+
+  getSavedCard(elements) {
+    if(Object.keys(this.user.account).length === 0) {
+      this.defaultCard = this.service.getLocalCard();
+      this.defaultCardSaved.emit(this.defaultCard);
+    } else {
+
+    }
   }
 
 }

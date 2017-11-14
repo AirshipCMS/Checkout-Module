@@ -20,7 +20,7 @@ export class CartService {
     return subtotal/100;
   }
 
-  getShipping(address:any) {
+  getShipping(address:any, shippingType:string) {
     let body = {
       country: '',
       state: '',
@@ -32,7 +32,7 @@ export class CartService {
       body[key] = address[key];
     }
     body['cart'] = this.cart;
-    body['shipping_type'] = ''
+    body['shipping_type'] = shippingType;
     return this.http.put(`${environment.domain}/api/shipping`, body);
   }
 

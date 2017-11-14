@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 
 import { CartComponent } from '../cart';
+import { OrderNotesComponent } from '../order-notes';
 import { ShippingAddressComponent } from '../shipping-address';
 import { ShippingTypeComponent } from '../shipping-type';
 
@@ -13,21 +14,31 @@ import { ShippingTypeComponent } from '../shipping-type';
 export class SinglePaymentOrderComponent implements OnInit {
 
   @Output() cartEmpty = new EventEmitter();
+  @Output() savedShippingAddress = new EventEmitter();
   @Input() user;
   shippingAddress : any;
   shippingType : string;
+  shippingCalculationPending : boolean = true;
+  orderTotal : number;
+  @Input() defaultCard : any;
 
   constructor() { }
 
   ngOnInit() {
   }
 
-  savedShippingAddress(address:any) {
+  retreivedSavedShippingAddress(address:any) {
   	this.shippingAddress = address;
+    this.savedShippingAddress.emit(address);
   }
 
   shippingTypeChanged(shippingType:string) {
     this.shippingType = shippingType;
+  }
+
+  shippingCalculated(total:number) {
+    this.shippingCalculationPending = false;
+    this.orderTotal = total;
   }
 
 }

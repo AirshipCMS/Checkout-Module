@@ -6,7 +6,7 @@
     <div class="left">
       <label for="card-element">Credit or Debit Card</label>
       <button *ngIf="defaultCard && !editDefualtCard" type="button" (click)="editDefualtCard = true">Change Card</button>
-      <div>
+      <div [ngClass]="{'hidden':defaultCard}">
         <div id="card-element"></div>
         <button type="button" (click)="createToken()">Add Card</button>
       </div>

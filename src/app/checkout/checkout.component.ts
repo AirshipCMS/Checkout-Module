@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../auth.service';
+import { CheckoutService } from './checkout.service';
 import { SinglePaymentOrderComponent } from '../single-payment-order';
 import { PaymentMethodComponent } from '../payment-method';
 
@@ -8,14 +10,17 @@ import { PaymentMethodComponent } from '../payment-method';
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
+  providers: [CheckoutService],
   encapsulation: ViewEncapsulation.None
 })
 export class CheckoutComponent implements OnInit {
 
   user : any;
   loading : boolean = true;
+  defaultCard : any;
+  shippingAddress : any;
 
-  constructor(private auth: AuthService) {
+  constructor(private auth: AuthService, private router: Router, service: CheckoutService) {
   }
 
   ngOnInit() {
@@ -34,13 +39,20 @@ export class CheckoutComponent implements OnInit {
           this.loading = false;
           this.auth.isAuthenticated = false;
           this.auth.login();
-          console.error(err);
         }
       );
   }
 
+  defaultCardSaved(defaultCard:any) {
+    this.defaultCard = defaultCard;
+  }
+
   cartEmpty(value){
     return value;
+  }
+
+  retrievedShippingAddress(address:any) {
+    this.shippingAddress = address;
   }
 
 }

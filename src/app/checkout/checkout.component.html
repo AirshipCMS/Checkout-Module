@@ -1,13 +1,22 @@
-<div *ngIf="!loading">	
-	<h1>Secure Checkout</h1>
-	<p>You are securely logged in as {{ user?.email }}</p>
-	<div>
-		<payment-method [user]="user"></payment-method>
-		<single-payment-order [user]="user" (cartEmpty)="cartEmpty($event)"></single-payment-order>
-	</div>
-	<div *ngIf="cartEmpty()">
-		<p>You have no items in your cart.</p>
-		<a href="/">Continue Shopping</a>
-	</div>
+<div *ngIf="!loading">  
+  <h1>Secure Checkout</h1>
+  <p>You are securely logged in as {{ user?.email }}</p>
+  <div>
+    <payment-method [user]="user" (defaultCardSaved)="defaultCardSaved($event)"></payment-method>
+    <single-payment-order
+      [user]="user"
+      (cartEmpty)="cartEmpty($event)"
+      [defaultCard]="defaultCard"
+      (savedShippingAddress)="retrievedShippingAddress($event)"
+    ></single-payment-order>
+  </div>
+  <div *ngIf="cartEmpty()">
+    <p>You have no items in your cart.</p>
+    <a href="/">Continue Shopping</a>
+  </div>
+  <div>
+    <a class="button" href="/cart">Back to Cart</a>
+    <button type="button" (click)="placeOrder()" [disabled]="!defaultCard && !shippingAddress">Place Order</button>
+  </div>
 </div>
 <div *ngIf="loading" class="loader">loading</div>

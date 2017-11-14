@@ -15,6 +15,7 @@ import { StripeService } from './stripe.service';
 import { SinglePaymentOrderComponent } from './single-payment-order';
 import { ShippingAddressComponent } from './shipping-address';
 import { ShippingTypeComponent } from './shipping-type/shipping-type.component';
+import { OrderNotesComponent } from './order-notes/order-notes.component';
 
 @NgModule({
   declarations: [
@@ -25,7 +26,8 @@ import { ShippingTypeComponent } from './shipping-type/shipping-type.component';
     PaymentMethodComponent,
     SinglePaymentOrderComponent,
     ShippingAddressComponent,
-    ShippingTypeComponent
+    ShippingTypeComponent,
+    OrderNotesComponent
   ],
   imports: [
     BrowserModule,

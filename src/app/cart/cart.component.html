@@ -38,4 +38,7 @@
       <p class="total" *ngIf="!pending">{{ total | currency: "USD" }}</p>
     </div>
   </div>
+  <div *ngIf="!pending">
+    <p>{{ defaultCard?.brand }} ending *{{defaultCard?.last4 }} will be charged {{ total | currency: "USD" }}</p>
+  </div>
 </div>

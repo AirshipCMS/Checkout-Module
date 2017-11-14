@@ -4,22 +4,29 @@
   </div>
   <div class="clearfix">
     <div class="left">
-      <shipping-address [user]="user" (savedShippingAddress)="savedShippingAddress($event)"></shipping-address>
+      <shipping-address [user]="user" (savedShippingAddress)="retreivedSavedShippingAddress($event)"></shipping-address>
       <div>
-        <label>Shiiping Type</label>
+        <label>Shipping Type</label>
         <shipping-type (shippingTypeChanged)="shippingTypeChanged($event)"></shipping-type>
       </div>
       <div>
         <label>Billing</label>
-        <p>Pending...</p>
+        <p *ngIf="shippingCalculationPending">Pending...</p>
+        <p *ngIf="!shippingCalculationPending">{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
       </div>
       <div>
         <label>Order Notes</label>
-        <textarea placeholder="Add notes to this order..."></textarea>
+        <order-notes></order-notes>
       </div>
     </div>
     <div class="right">
-      <app-cart (cartEmpty)="cartEmpty.emit($event)" [shippingAddress]="shippingAddress"></app-cart>
+      <app-cart
+        (cartEmpty)="cartEmpty.emit($event)"
+        (shippingCalculated)="shippingCalculated($event)"
+        [shippingAddress]="shippingAddress"
+        [shippingType]="shippingType"
+        [defaultCard]="defaultCard"
+      ></app-cart>
     </div>
   </div>
 </div>
