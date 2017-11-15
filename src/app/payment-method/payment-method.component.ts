@@ -16,6 +16,7 @@ declare var Stripe;
 })
 export class PaymentMethodComponent implements OnInit {
 
+  accountCards : Array<any>;
   defaultCard;
   cardElement;
   stripe;
@@ -69,7 +70,15 @@ export class PaymentMethodComponent implements OnInit {
       this.token = localData.token;
       this.defaultCardSaved.emit({ defaultCard : this.defaultCard, token: this.token });
     } else {
-
+      this.service.getAccountCards()
+        .subscribe(
+          res => {
+            this.accountCards = res['data'];
+            this.defaultCard = this.accountCards.find((item) => item.id === this.user.account.customer.default_source);
+            this.defaultCardSaved.emit({ defaultCard: this.defaultCard });
+          },
+          err => this.service.handleError(err)
+        )
     }
   }
 

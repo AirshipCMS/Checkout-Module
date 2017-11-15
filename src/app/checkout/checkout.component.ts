@@ -73,10 +73,6 @@ export class CheckoutComponent implements OnInit {
       )
   }
 
-  gotCartItems(cart:any) {
-    // this.cart = cart;
-  }
-
   gotOrderNotes(orderNotes:string) {
     this.orderNotes = orderNotes;
   }

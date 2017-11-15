@@ -33,4 +33,8 @@ export class PaymentMethodService {
     return this.http.get(`${environment.domain}/api/account/cards`, { headers: this.headers });
   }
 
+  handleError(err) {
+    console.error(err);
+  }
+
 }

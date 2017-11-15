@@ -12,7 +12,6 @@ import { SharedService } from '../shared.service';
 })
 export class CartComponent implements OnInit {
 
-  @Output() cartHasItems = new EventEmitter();
   @Output() shippingCalculated = new EventEmitter();
   @Input() shippingType : string;
   shipping : any = '(pending)';
@@ -27,9 +26,8 @@ export class CartComponent implements OnInit {
   constructor(private service: CartService) {}
 
   ngOnInit() {
-    this.cartHasItems.emit(this.service.cart);
     this.subtotal = this.service.calculateSubtotal();
-    this.getShipping();
+    if(this.shippingAddress) this.getShipping(); //needs an emitter
   }
 
   getShipping() {

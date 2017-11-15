@@ -13,8 +13,6 @@ import { ShippingTypeComponent } from '../shipping-type';
 })
 export class SinglePaymentOrderComponent implements OnInit {
 
-  @Output() cartEmpty = new EventEmitter();
-  @Output() cartHasItems = new EventEmitter();
   @Output() savedShippingAddress = new EventEmitter();
   @Output() savedOrderNotes = new EventEmitter();
   @Input() user;
