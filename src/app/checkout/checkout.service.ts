@@ -20,7 +20,6 @@ export class CheckoutService {
     cart['customer_notes'] = customer_notes;
     let order = {
       shipping_address,
-      // billing_address: shipping_address,
       email: user.email,
       cart,
       misc_data:  {}

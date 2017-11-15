@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 
 import { CartService } from './cart.service';
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
-  providers: [CartService],
+  providers: [CartService, SharedService],
   encapsulation: ViewEncapsulation.None
 })
 export class CartComponent implements OnInit {

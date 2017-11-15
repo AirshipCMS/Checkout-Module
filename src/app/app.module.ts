@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
-
 import { AppComponent } from './app.component';
 import { CheckoutComponent } from './checkout';
 import { ReceiptComponent } from './receipt';
@@ -16,6 +15,7 @@ import { SinglePaymentOrderComponent } from './single-payment-order';
 import { ShippingAddressComponent } from './shipping-address';
 import { ShippingTypeComponent } from './shipping-type/shipping-type.component';
 import { OrderNotesComponent } from './order-notes/order-notes.component';
+import { SharedService } from './shared.service';
 
 @NgModule({
   declarations: [
@@ -36,7 +36,7 @@ import { OrderNotesComponent } from './order-notes/order-notes.component';
     FormsModule,
     routing
   ],
-  providers: [appRoutingProviders, AuthService, StripeService],
+  providers: [appRoutingProviders, AuthService, StripeService, SharedService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

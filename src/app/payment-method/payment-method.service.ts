@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class PaymentMethodService {
 
-  constructor() { }
+  headers : HttpHeaders;
+
+  constructor(private http: HttpClient) {
+    let id_token : string = localStorage.getItem('id_token');
+    this.headers = new HttpHeaders().set('Authorization', `bearer ${id_token}`);
+  }
 
   saveLocalCard(card:any, token:any) {
     let localCard = {
@@ -19,6 +27,10 @@ export class PaymentMethodService {
       card: JSON.parse(localStorage.getItem('card')),
       token: localStorage.getItem('stripe_token')
     }
+  }
+
+  getAccountCards() {
+    return this.http.get(`${environment.domain}/api/account/cards`, { headers: this.headers });
   }
 
 }

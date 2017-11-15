@@ -21,6 +21,7 @@ export class PaymentMethodComponent implements OnInit {
   stripe;
   token;
   editDefualtCard : boolean = false;
+  checked: boolean = false;
   @Input() user;
   @Output() defaultCardSaved = new EventEmitter();
 

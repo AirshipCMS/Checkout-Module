@@ -73,10 +73,6 @@ export class ShippingAddressService {
     return address;
   }
 
-  getSavedAddress(user:any) {
-    return this.http.get(`${environment.domain}/api/account`, { headers: this.headers }); //remove this and have checkout get account to reduce api calls
-  }
-
   handleError(error) {
     console.error(error);
   }
