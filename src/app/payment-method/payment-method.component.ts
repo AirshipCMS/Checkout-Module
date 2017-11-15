@@ -19,6 +19,7 @@ export class PaymentMethodComponent implements OnInit {
   accountCards : Array<any>;
   defaultCard;
   cardElement;
+  changeCardOption : string = 'new';
   stripe;
   token;
   editDefualtCard : boolean = false;
@@ -57,10 +58,23 @@ export class PaymentMethodComponent implements OnInit {
       .subscribe(
         defaultCard => {
           this.defaultCard = defaultCard;
+          this.accountCards.push(this.defaultCard);
           this.defaultCardSaved.emit({ defaultCard : this.defaultCard, token: this.token });
         },
         err => console.error(err)
       );
+  }
+
+  setDefaultCard(card:any) {
+    this.stripeService.setDefaultCard(card.id, this.user)
+      .subscribe(
+        res => {
+          this.defaultCard = card;
+          this.defaultCardSaved.emit({ defaultCard : this.defaultCard });
+          this.editDefualtCard = false;
+        },
+        err => this.service.handleError(err)
+      )
   }
 
   getSavedCard(elements) {

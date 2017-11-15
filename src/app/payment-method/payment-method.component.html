@@ -6,9 +6,32 @@
     <div class="left">
       <label for="card-element">Credit or Debit Card</label>
       <button *ngIf="defaultCard && !editDefualtCard" type="button" (click)="editDefualtCard = true">Change Card</button>
-      <div [ngClass]="{'hidden':defaultCard}">
-        <div id="card-element"></div>
-        <button type="button" (click)="createToken()">Add Card</button>
+      <div [ngClass]="{'hidden':defaultCard && !editDefualtCard}">
+        <div>
+          <label *ngIf="defaultCard && accountCards" for="change_card_option_new">
+            New Credit or Debit Card
+            <input id="change_card_option_new" type="radio" [(ngModel)]="changeCardOption" value="new">
+          </label>
+          <div [ngClass]="{'hidden': changeCardOption === 'existing'}" id="card-element"></div>
+          <div>
+            <button *ngIf="editDefualtCard" type="button" (click)="editDefualtCard = !editDefualtCard">Cancel</button>
+            <button type="button" (click)="createToken()">Add Card</button>
+          </div>
+        </div>
+        <div *ngIf="defaultCard && accountCards">
+          <label for="change_card_option_existing">
+            Existing Card
+            <input id="change_card_option_existing" type="radio" [(ngModel)]="changeCardOption" value="existing">
+          </label>
+          <select *ngIf="changeCardOption === 'existing'" [(ngModel)]="cardOptions">
+            <option selected="" disabled="">Select One</option>
+            <option *ngFor="let card of accountCards" [ngValue]="card">{{ card?.brand }} ending *{{ card.last4 }}</option>
+          </select>
+          <div *ngIf="changeCardOption === 'existing'">
+            <button type="button" (click)="editDefaultCard = !editDefaultCard">Cancel</button>
+            <button type="button" (click)="setDefaultCard(cardOptions)">Set as Default</button>
+          </div>
+        </div>
       </div>
       <div *ngIf="defaultCard && !editDefualtCard">
         <div>
