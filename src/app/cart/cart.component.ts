@@ -7,7 +7,7 @@ import { SharedService } from '../shared.service';
   selector: 'app-cart',
   templateUrl: './cart.component.html',
   styleUrls: ['./cart.component.css'],
-  providers: [CartService, SharedService],
+  providers: [CartService],
   encapsulation: ViewEncapsulation.None
 })
 export class CartComponent implements OnInit {
@@ -20,14 +20,17 @@ export class CartComponent implements OnInit {
   total : any = '(pending)';
   subtotal : number = 0;
   pending : boolean = true;
-  @Input() shippingAddress : any;
+  shippingAddress : any;
   @Input() defaultCard : any;
 
-  constructor(private service: CartService) {}
+  constructor(private service: CartService, private sharedService: SharedService) {
+  }
 
   ngOnInit() {
     this.subtotal = this.service.calculateSubtotal();
-    if(this.shippingAddress) this.getShipping(); //needs an emitter
+    this.sharedService.shippingAddress$.toPromise().then(
+      test => console.log(test)
+    )
   }
 
   getShipping() {

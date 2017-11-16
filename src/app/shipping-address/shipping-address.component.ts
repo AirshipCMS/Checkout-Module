@@ -1,8 +1,10 @@
 import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
 
 import { FormValidator } from '../form-validator';
 import { ShippingAddressService } from './shipping-address.service';
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'shipping-address',
@@ -20,7 +22,7 @@ export class ShippingAddressComponent implements OnInit {
   @Input() user;
   @Output() savedShippingAddress = new EventEmitter();
 
-  constructor(private builder: FormBuilder, private service: ShippingAddressService) {
+  constructor(private builder: FormBuilder, private service: ShippingAddressService, private sharedService: SharedService) {
     this.form  = this.builder.group({
       first_name: ['', Validators.compose([Validators.required])],
       last_name: ['', Validators.compose([Validators.required])],
@@ -39,6 +41,7 @@ export class ShippingAddressComponent implements OnInit {
     this.countries = this.service.countries;
     if(Object.keys(this.user.account).length > 0) {
       this.savedAddress = this.user.account.postal_addresses[0];
+      this.sharedService.setShippingAddress(this.savedAddress);
     } else {
       this.getLocalAddress();
     }
@@ -46,18 +49,18 @@ export class ShippingAddressComponent implements OnInit {
 
   getLocalAddress() {
     this.savedAddress = this.service.getLocalAddress();
-    this.savedShippingAddress.emit(this.savedAddress);
+    this.sharedService.setShippingAddress(this.savedAddress);
   }
 
   saveAddress() {
     this.savedAddress = this.service.formattAddress(this.form.value);
     this.service.saveAddress(this.form.value, this.savedAddress, this.user);
-    this.savedShippingAddress.emit(this.savedAddress);
+    this.sharedService.setShippingAddress(this.savedAddress);
   }
 
   getStates(country) {
     if(country) {
-      this.states = this.service.getStates(country)
+      this.states = this.service.getStates(country);
     }
   }
 

@@ -13,10 +13,8 @@ import { ShippingTypeComponent } from '../shipping-type';
 })
 export class SinglePaymentOrderComponent implements OnInit {
 
-  @Output() savedShippingAddress = new EventEmitter();
   @Output() savedOrderNotes = new EventEmitter();
   @Input() user;
-  shippingAddress : any;
   shippingType : string;
   shippingCalculationPending : boolean = true;
   orderTotal : number;
@@ -25,11 +23,6 @@ export class SinglePaymentOrderComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-  }
-
-  gotSavedShippingAddress(address:any) {
-  	this.shippingAddress = address;
-    this.savedShippingAddress.emit(address);
   }
 
   gotOrderNotes(orderNotes:any) {

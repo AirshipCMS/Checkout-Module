@@ -12,7 +12,7 @@ import { SharedService } from '../shared.service';
   selector: 'app-checkout',
   templateUrl: './checkout.component.html',
   styleUrls: ['./checkout.component.css'],
-  providers: [CartService, CheckoutService, SharedService],
+  providers: [CartService, CheckoutService],
   encapsulation: ViewEncapsulation.None
 })
 export class CheckoutComponent implements OnInit {
@@ -80,10 +80,6 @@ export class CheckoutComponent implements OnInit {
   defaultCardSaved(data) {
     this.stripeToken = data.token;
     this.defaultCard = data.defaultCard;
-  }
-
-  gotShippingAddress(address:any) {
-    this.shippingAddress = address;
   }
 
   placeOrder() {

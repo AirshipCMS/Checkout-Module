@@ -9,9 +9,7 @@
     <single-payment-order
       [user]="user"
       [defaultCard]="defaultCard"
-      (savedShippingAddress)="gotShippingAddress($event)"
       (savedOrderNotes)="gotOrderNotes($event)"
-      (cartHasItems)="gotCartItems($event)"
     ></single-payment-order>
   </div>
   <div *ngIf="cart?.items.length === 0">
