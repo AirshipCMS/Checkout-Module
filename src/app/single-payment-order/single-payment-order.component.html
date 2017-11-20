@@ -7,7 +7,7 @@
       <shipping-address [user]="user"></shipping-address>
       <div>
         <label>Shipping Type</label>
-        <shipping-type (shippingTypeChanged)="shippingTypeChanged($event)"></shipping-type>
+        <shipping-type></shipping-type>
       </div>
       <div>
         <label>Billing</label>
@@ -16,13 +16,12 @@
       </div>
       <div>
         <label>Order Notes</label>
-        <order-notes (savedOrderNotes)="gotOrderNotes($event)"></order-notes>
+        <order-notes></order-notes>
       </div>
     </div>
     <div class="right">
       <app-cart
         (shippingCalculated)="shippingCalculated($event)"
-        [shippingType]="shippingType"
         [defaultCard]="defaultCard"
       ></app-cart>
     </div>

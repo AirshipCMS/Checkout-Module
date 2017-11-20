@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { environment } from '../../environments/environment';
+import { SharedService } from '../shared.service';
 
 @Injectable()
 export class CheckoutService {
@@ -9,7 +10,7 @@ export class CheckoutService {
   checkoutResponse : any;
   storageProperties : Array<any>;
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, public sharedService: SharedService) {
     let id_token : string = localStorage.getItem('id_token');
     this.headers = new HttpHeaders().set('Authorization', `bearer ${id_token}`);
     this.storageProperties = ['cart', 'card', 'stripe_token', 'shipping_address'];

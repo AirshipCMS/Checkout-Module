@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 import { FormControl, FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
@@ -20,7 +20,6 @@ export class ShippingAddressComponent implements OnInit {
   savedAddress : any;
   states : Array<any> = [];
   @Input() user;
-  @Output() savedShippingAddress = new EventEmitter();
 
   constructor(private builder: FormBuilder, private service: ShippingAddressService, private sharedService: SharedService) {
     this.form  = this.builder.group({

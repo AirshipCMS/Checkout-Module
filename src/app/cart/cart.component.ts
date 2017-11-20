@@ -13,7 +13,7 @@ import { SharedService } from '../shared.service';
 export class CartComponent implements OnInit {
 
   @Output() shippingCalculated = new EventEmitter();
-  @Input() shippingType : string;
+  shippingType : string;
   shipping : any = '(pending)';
   tax : any = '(pending)';
   handling : any = '(pending)';
@@ -28,8 +28,17 @@ export class CartComponent implements OnInit {
 
   ngOnInit() {
     this.subtotal = this.service.calculateSubtotal();
-    this.sharedService.shippingAddress$.toPromise().then(
-      test => console.log(test)
+    this.sharedService.shippingAddress$.subscribe(
+      address => {
+        this.shippingAddress = address;
+        this.getShipping();
+      }
+    )
+    this.sharedService.shippingType$.subscribe(
+      shippingType => {
+        this.shippingType = shippingType;
+        this.getShipping();
+      }
     )
   }
 
@@ -37,7 +46,7 @@ export class CartComponent implements OnInit {
     this.service.getShipping(this.shippingAddress, this.shippingType)
       .subscribe(
         res => {
-          this.handling = res['handling_cost'].usd/100;
+          this.handling = res['handling_cost'].usd/100;          
           this.shipping = res['shipping_cost'].usd/100;
           this.tax = res['tax'].usd/100;
           this.total = res['total'].usd/100;

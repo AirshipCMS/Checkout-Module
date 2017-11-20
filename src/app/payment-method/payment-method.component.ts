@@ -4,6 +4,7 @@ import { mergeMap } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { PaymentMethodService } from './payment-method.service';
 import { StripeService } from '../stripe.service';
+import { SharedService } from '../shared.service';
 
 declare var Stripe;
 

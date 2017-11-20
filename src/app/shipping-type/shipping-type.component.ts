@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { ShippingTypeService } from './shipping-type.service';
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'shipping-type',
@@ -12,20 +13,20 @@ import { ShippingTypeService } from './shipping-type.service';
 export class ShippingTypeComponent implements OnInit {
 
   options : Array<any>;
-  @Output() shippingTypeChanged = new EventEmitter();
   shippingType : string;
 
-  constructor(private service: ShippingTypeService) {
+  constructor(private service: ShippingTypeService, private sharedService: SharedService) {
     this.options = this.service.shippingTypes;
   }
 
   ngOnInit() {
     this.shippingType = this.service.getSavedShippingType();
-    this.shippingTypeChanged.emit(this.shippingType);
+    this.sharedService.setShippingType(this.shippingType);
   }
 
   saveShippingType(shippingType:string) {
     this.service.saveShippingType(shippingType);
+    this.sharedService.setShippingType(shippingType);
   }
 
 }

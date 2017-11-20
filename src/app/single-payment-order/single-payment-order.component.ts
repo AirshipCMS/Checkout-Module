@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
 import { CartComponent } from '../cart';
 import { OrderNotesComponent } from '../order-notes';
@@ -13,9 +13,8 @@ import { ShippingTypeComponent } from '../shipping-type';
 })
 export class SinglePaymentOrderComponent implements OnInit {
 
-  @Output() savedOrderNotes = new EventEmitter();
   @Input() user;
-  shippingType : string;
+  // shippingType : string;
   shippingCalculationPending : boolean = true;
   orderTotal : number;
   @Input() defaultCard : any;
@@ -25,13 +24,9 @@ export class SinglePaymentOrderComponent implements OnInit {
   ngOnInit() {
   }
 
-  gotOrderNotes(orderNotes:any) {
-    this.savedOrderNotes.emit(orderNotes);
-  }
-
-  shippingTypeChanged(shippingType:string) {
-    this.shippingType = shippingType;
-  }
+  // gotOrderNotes(orderNotes:any) {
+  //   this.savedOrderNotes.emit(orderNotes);
+  // }
 
   shippingCalculated(total:number) {
     this.shippingCalculationPending = false;
