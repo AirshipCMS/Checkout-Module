@@ -28,7 +28,7 @@ export class PaymentMethodComponent implements OnInit {
   @Input() user;
   @Output() defaultCardSaved = new EventEmitter();
 
-  constructor(private stripeService: StripeService, private service: PaymentMethodService) {
+  constructor(private stripeService: StripeService, private service: PaymentMethodService, private sharedService: SharedService) {
   }
 
   ngOnInit() {

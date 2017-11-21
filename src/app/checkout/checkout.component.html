@@ -7,10 +7,16 @@
       (defaultCardSaved)="defaultCardSaved($event)"
     ></payment-method>
     <single-payment-order
+      *ngIf="cartService.hasSingleOrderItems"
       [user]="user"
       [defaultCard]="defaultCard"
-      (savedOrderNotes)="gotOrderNotes($event)"
     ></single-payment-order>
+    <subscription-order
+      *ngIf="cartService.hasSubscriptionItems"
+      [user]="user"
+      [defaultCard]="defaultCard"
+      [cart]="cart"
+    ></subscription-order>
   </div>
   <div *ngIf="cart?.items.length === 0">
     <p>You have no items in your cart.</p>

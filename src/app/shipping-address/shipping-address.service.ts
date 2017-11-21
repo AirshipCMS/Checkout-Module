@@ -11,10 +11,12 @@ export class ShippingAddressService {
   countries : Array<any> = Countries.items;
   states : Array<any> = States.StateGroups;
   headers : HttpHeaders;
+  omitList : Array<any>;
 
   constructor(private http: HttpClient) {
     let id_token = localStorage.getItem('id_token');
     this.headers = new HttpHeaders().set('authorization', `bearer ${id_token}`);
+    this.omitList = ['created_at', 'id', 'site_id', 'updated_at', '_pivot_account_id', '_pivot_postal_address_id'];
   }
 
   getStates(country:any) {
@@ -70,6 +72,13 @@ export class ShippingAddressService {
   getLocalAddress() {
     let localAddress = JSON.parse(localStorage.getItem('shipping_address'));
     let address = localAddress ? localAddress : null;
+    return address;
+  }
+
+  scrubAddress(address: any) {
+    this.omitList.forEach((key) => {
+      delete address[key];
+    });
     return address;
   }
 

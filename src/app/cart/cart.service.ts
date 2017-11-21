@@ -7,10 +7,13 @@ import { environment } from '../../environments/environment';
 export class CartService {
 
   cart : any;
-  omitList : Array<any>;
+  hasSingleOrderItems : boolean = false;
+  hasSubscriptionItems : boolean = false;
+
   constructor(private http: HttpClient) {
     let localCart = JSON.parse(localStorage.getItem('cart'));
-    this.cart = localCart ? this.scrubCart(localCart) : { items: [] };
+    this.cart = localCart ? localCart : { items: [] };
+    this.checkCartItemTypes();
   }
 
   scrubCart(cart:any) {
@@ -32,6 +35,13 @@ export class CartService {
     return subtotal/100;
   }
 
+  checkCartItemTypes() {
+    this.cart.items.forEach((item) => {
+      if(item.type === 'plan') this.hasSubscriptionItems = true;
+      if(item.type !== 'plan') this.hasSingleOrderItems = true;
+    });
+  }
+
   getShipping(address:any, shippingType:string) {
     let body = {
       country: '',
@@ -43,7 +53,7 @@ export class CartService {
     for(const [key] of Object.entries(body)) {
       body[key] = address[key];
     }
-    body['cart'] = this.cart;
+    body['cart'] = this.scrubCart(this.cart);
     body['shipping_type'] = shippingType;
     return this.http.put(`${environment.domain}/api/shipping`, body);
   }

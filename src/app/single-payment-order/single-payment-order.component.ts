@@ -14,7 +14,6 @@ import { ShippingTypeComponent } from '../shipping-type';
 export class SinglePaymentOrderComponent implements OnInit {
 
   @Input() user;
-  // shippingType : string;
   shippingCalculationPending : boolean = true;
   orderTotal : number;
   @Input() defaultCard : any;
@@ -23,10 +22,6 @@ export class SinglePaymentOrderComponent implements OnInit {
 
   ngOnInit() {
   }
-
-  // gotOrderNotes(orderNotes:any) {
-  //   this.savedOrderNotes.emit(orderNotes);
-  // }
 
   shippingCalculated(total:number) {
     this.shippingCalculationPending = false;

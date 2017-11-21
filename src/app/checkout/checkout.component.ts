@@ -39,6 +39,8 @@ export class CheckoutComponent implements OnInit {
     this.loading = true;
     this.getUserProfile();
     this.cart = this.cartService.cart;
+    this.sharedService.orderNotes$.subscribe(orderNotes => this.orderNotes = orderNotes);
+    this.sharedService.shippingAddress$.subscribe(shippingAddress => this.shippingAddress = shippingAddress);
   }
 
   getUserProfile() {
@@ -73,25 +75,23 @@ export class CheckoutComponent implements OnInit {
       )
   }
 
-  gotOrderNotes(orderNotes:string) {
-    this.orderNotes = orderNotes;
-  }
-
   defaultCardSaved(data) {
     this.stripeToken = data.token;
     this.defaultCard = data.defaultCard;
   }
 
   placeOrder() {
-    this.service.checkout(this.shippingAddress, this.user, this.cart, this.orderNotes, this.stripeToken)
-      .subscribe(
-        res => {
-          this.service.checkoutResponse = res;
-          this.service.clearLocalStorage();
-          this.router.navigate(['/checkout#receipt']);
-        },
-        err => this.service.handleError(err)
-      );
+    console.log(this.shippingAddress)
+    console.log(this.cartService.scrubCart(this.cart))
+    // this.service.checkout(this.shippingAddress, this.user, this.cartService.scrubCart(this.cart), this.orderNotes, this.stripeToken)
+    //   .subscribe(
+    //     res => {
+    //       this.service.checkoutResponse = res;
+    //       this.service.clearLocalStorage();
+    //       this.router.navigate(['/checkout#receipt']);
+    //     },
+    //     err => this.service.handleError(err)
+    //   );
   }
 
 }

@@ -18,7 +18,7 @@ export class SharedService {
     this.shippingAddressSubject = new ReplaySubject<any>();
     this.shippingAddress$ = this.shippingAddressSubject.asObservable();
     this.orderNotesSubject = new ReplaySubject<any>();
-    this.orderNotes$ = this.shippingAddressSubject.asObservable();
+    this.orderNotes$ = this.orderNotesSubject.asObservable();
     this.shippingTypeSubject = new ReplaySubject<any>();
     this.shippingType$ = this.shippingTypeSubject.asObservable();
   }

@@ -16,6 +16,7 @@ import { ShippingAddressComponent } from './shipping-address';
 import { ShippingTypeComponent } from './shipping-type/shipping-type.component';
 import { OrderNotesComponent } from './order-notes/order-notes.component';
 import { SharedService } from './shared.service';
+import { SubscriptionOrderComponent } from './subscription-order/subscription-order.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { SharedService } from './shared.service';
     SinglePaymentOrderComponent,
     ShippingAddressComponent,
     ShippingTypeComponent,
-    OrderNotesComponent
+    OrderNotesComponent,
+    SubscriptionOrderComponent
   ],
   imports: [
     BrowserModule,
