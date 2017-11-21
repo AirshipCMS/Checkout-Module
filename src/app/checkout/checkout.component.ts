@@ -1,12 +1,17 @@
 import { Component, OnInit, ViewEncapsulation, Input, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/forkJoin';
 
 import { AuthService } from '../auth.service';
 import { CartService } from '../cart';
 import { CheckoutService } from './checkout.service';
 import { SinglePaymentOrderComponent } from '../single-payment-order';
+import { SubscriptionOrderComponent } from '../subscription-order';
 import { PaymentMethodComponent } from '../payment-method';
 import { SharedService } from '../shared.service';
+
+import * as _ from 'lodash';
 
 @Component({
   selector: 'app-checkout',
@@ -22,7 +27,8 @@ export class CheckoutComponent implements OnInit {
   defaultCard : any;
   shippingAddress : any;
   orderNotes : string;
-  cart : any;
+  singleOrderCart : any;
+  subscriptionCart : any;
   stripeToken : string;
 
   constructor(
@@ -38,7 +44,8 @@ export class CheckoutComponent implements OnInit {
   ngOnInit() {
     this.loading = true;
     this.getUserProfile();
-    this.cart = this.cartService.cart;
+    this.singleOrderCart = this.cartService.singleOrderCart;
+    this.subscriptionCart = this.cartService.subscriptionCart;
     this.sharedService.orderNotes$.subscribe(orderNotes => this.orderNotes = orderNotes);
     this.sharedService.shippingAddress$.subscribe(shippingAddress => this.shippingAddress = shippingAddress);
   }
@@ -81,17 +88,37 @@ export class CheckoutComponent implements OnInit {
   }
 
   placeOrder() {
-    console.log(this.shippingAddress)
-    console.log(this.cartService.scrubCart(this.cart))
-    // this.service.checkout(this.shippingAddress, this.user, this.cartService.scrubCart(this.cart), this.orderNotes, this.stripeToken)
-    //   .subscribe(
-    //     res => {
-    //       this.service.checkoutResponse = res;
-    //       this.service.clearLocalStorage();
-    //       this.router.navigate(['/checkout#receipt']);
-    //     },
-    //     err => this.service.handleError(err)
-    //   );
+    let subscriptionCart : any = this.cartService.scrubCart(_.cloneDeep(this.subscriptionCart));
+    let subscriptionOrder = subscriptionCart.items.map((item) => {
+      let cart = { items: [item] };
+      return this.service.checkout(this.shippingAddress, this.user, cart, this.orderNotes, this.stripeToken)
+    });
+    let singlePaymentOrder = this.service.checkout(this.shippingAddress, this.user, this.cartService.scrubCart(this.singleOrderCart), this.orderNotes, this.stripeToken);
+
+    if(this.subscriptionCart.items.length === 0) {
+      singlePaymentOrder.subscribe(
+        res => this.checkoutComplete(res),
+        err => this.service.handleError(err)
+      );
+    }
+    if(this.singleOrderCart.items.length === 0) {
+      Observable.forkJoin(subscriptionOrder).subscribe(
+        res => this.checkoutComplete(res),
+        err => this.service.handleError(err)
+      );
+    }
+    if(this.singleOrderCart.items.length > 0 && this.subscriptionCart.items.length > 0) {
+      Observable.forkJoin([subscriptionOrder, singlePaymentOrder]).subscribe(
+        res => this.checkoutComplete(res),
+        err => this.service.handleError(err)
+      );
+    }
+  }
+
+  checkoutComplete(res: any) {
+    this.service.checkoutResponse = res;
+    this.service.clearLocalStorage();
+    this.router.navigate(['/checkout#receipt']);
   }
 
 }

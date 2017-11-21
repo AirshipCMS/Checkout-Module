@@ -12,13 +12,11 @@ export class SubscriptionOrderComponent implements OnInit {
 
   @Input() user : any;
   @Input() defaultCard : any;
-  @Input() cart : any;
-  subscriptionItems : Array<any>;
+  @Input() subscriptionCart : any;
 
   constructor() { }
 
   ngOnInit() {
-    this.subscriptionItems = this.cart.items.filter((item) => item.type === 'plan');
   }
 
 }

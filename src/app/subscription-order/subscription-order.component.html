@@ -1,6 +1,6 @@
-<div class="single-payment-order-container container" *ngFor="let item of subscriptionItems">
+<div class="single-payment-order-container container" *ngFor="let item of subscriptionCart.items">
   <div class="container-header">
-    <h4>Single-Payment Order</h4>
+    <h4>Subscription</h4>
   </div>
   <div class="clearfix">
     <div class="left">
@@ -12,7 +12,7 @@
       <div>
         <label>Billing</label>
         <p *ngIf="shippingCalculationPending">Pending...</p>
-        <p *ngIf="!shippingCalculationPending">{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
+        <p *ngIf="!shippingCalculationPending">{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }} will be charged {{ item?.price.usd/100 | currency: 'USD'}}</p>
       </div>
       <div>
         <label>Order Notes</label>
@@ -23,7 +23,7 @@
       <div>
         <h4>{{ item?.product_title }}</h4>
         <p>{{ item?.product_plan.name }} - {{ item?.price.usd/100 | currency: 'USD' }} every {{ item?.product_plan.interval }}</p>
-        <p *ngIf="item?.product_plan.trial_days && item?.product_plan.trial_days > 0">Trial Period Days: {{ item.product_plan.trial_days }}</p>
+        <p *ngIf="item?.product_plan.trial_days && item?.product_plan.trial_days > 0">Trial Period Days: {{ item?.product_plan.trial_days }}</p>
       </div>
     </div>
   </div>

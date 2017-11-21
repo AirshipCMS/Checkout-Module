@@ -7,6 +7,8 @@ import { environment } from '../../environments/environment';
 export class CartService {
 
   cart : any;
+  subscriptionCart : any = { items: [] };
+  singleOrderCart : any = { items: [] };
   hasSingleOrderItems : boolean = false;
   hasSubscriptionItems : boolean = false;
 
@@ -18,9 +20,9 @@ export class CartService {
 
   scrubCart(cart:any) {
     let formattedCart = { items: [] };
-    formattedCart.items = cart.items.filter((item) => item.type !== 'plan').map((item) => {
+    formattedCart.items = cart.items.map((item) => {
       delete item.product_plan;
-      if(item.type) delete item.type;
+      if(item.type !== 'plan') delete item.type;
       return item;
     });
     return formattedCart;
@@ -37,8 +39,14 @@ export class CartService {
 
   checkCartItemTypes() {
     this.cart.items.forEach((item) => {
-      if(item.type === 'plan') this.hasSubscriptionItems = true;
-      if(item.type !== 'plan') this.hasSingleOrderItems = true;
+      if(item.type === 'plan') {
+        this.hasSubscriptionItems = true;
+        this.subscriptionCart.items.push(item);
+      }
+      if(item.type !== 'plan') {
+        this.hasSingleOrderItems = true;
+        this.singleOrderCart.items.push(item);
+      }
     });
   }
 

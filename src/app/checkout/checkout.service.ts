@@ -30,7 +30,7 @@ export class CheckoutService {
   }
 
   clearLocalStorage() {
-    this.storageProperties.forEach((item) => localStorage.removeItem(item))
+    this.storageProperties.forEach((item) => localStorage.removeItem(item));
   }
 
   handleError(err) {
