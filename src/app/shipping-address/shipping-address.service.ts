@@ -55,18 +55,18 @@ export class ShippingAddressService {
     return formattedAddress;
   }
 
-  saveAddress(address:any, formattedAddress:any, user:any) {
-    if(Object.keys(user.account).length > 0) {
-      let body = user.account;
-      body.shipping_address = formattedAddress;
-      this.http.put(`${environment.domain}/api/account`, body, { headers: this.headers })
-        .subscribe(
-          res => res,
-          err => this.handleError(err)
-        );
-    } else {
-      localStorage.setItem('shipping_address', JSON.stringify(address));
-    }
+  saveLocalAddress(address:any) {
+    localStorage.setItem('shipping_address', JSON.stringify(address));
+  }
+
+  saveAddress(formattedAddress:any, user:any) {
+    let body = user.account;
+    body.shipping_address = formattedAddress;
+    this.http.put(`${environment.domain}/api/account`, body, { headers: this.headers })
+      .subscribe(
+        res => res,
+        err => this.handleError(err)
+      );
   }
 
   getLocalAddress() {

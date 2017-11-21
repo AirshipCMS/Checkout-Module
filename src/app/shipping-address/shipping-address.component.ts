@@ -17,8 +17,11 @@ export class ShippingAddressComponent implements OnInit {
 
   countries : Array<any> = [];
   form : FormGroup;
-  savedAddress : any;
+  defaultAddress : any;
+  accountAddresses : Array<any> = [];
   states : Array<any> = [];
+  editDefaultAddress : boolean = false;
+  changeCardOption : string = 'existing';
   @Input() user;
 
   constructor(private builder: FormBuilder, private service: ShippingAddressService, private sharedService: SharedService) {
@@ -32,30 +35,43 @@ export class ShippingAddressComponent implements OnInit {
       state: ['', Validators.compose([Validators.required])],
       other_location_text: [''],
       zipcode: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(10), FormValidator.validZipcode])],
-      phone_number: ['', Validators.compose([Validators.minLength(7), FormValidator.validPhoneNumber, Validators.maxLength(24)])]
-    })
+      phone_number: ['', Validators.compose([Validators.minLength(7), FormValidator.validPhoneNumber, Validators.maxLength(24)])],
+      change_address_option: [this.changeCardOption],
+      address_options: ''
+    });
   }
 
   ngOnInit() {
     this.countries = this.service.countries;
     if(Object.keys(this.user.account).length > 0) {
-      let address = this.user.account.postal_addresses[0];
-      this.savedAddress = this.service.scrubAddress(address);
-      this.sharedService.setShippingAddress(this.service.formattAddress(this.savedAddress));
+      this.accountAddresses = this.user.account.postal_addresses;
+      this.defaultAddress = this.service.scrubAddress(this.accountAddresses[0]);
+      this.sharedService.setShippingAddress(this.service.scrubAddress(this.defaultAddress));
     } else {
       this.getLocalAddress();
     }
   }
 
+  setDefaultAddress(address: any) {
+    this.defaultAddress = address;
+    this.editDefaultAddress = false;
+    this.sharedService.setShippingAddress(this.defaultAddress);
+  }
+
   getLocalAddress() {
-    this.savedAddress = this.service.getLocalAddress();
-    this.sharedService.setShippingAddress(this.savedAddress);
+    this.defaultAddress = this.service.getLocalAddress();
+    this.sharedService.setShippingAddress(this.defaultAddress);
   }
 
   saveAddress() {
-    this.savedAddress = this.service.formattAddress(this.form.value);
-    this.service.saveAddress(this.form.value, this.savedAddress, this.user);
-    this.sharedService.setShippingAddress(this.savedAddress);
+    if(Object.keys(this.user.account).length > 0) {
+      this.defaultAddress = this.service.formattAddress(this.form.value);
+      this.service.saveAddress(this.defaultAddress, this.user);
+    } else {
+      this.defaultAddress = this.service.formattAddress(this.form.value);
+      this.service.saveLocalAddress(this.form.value);
+    }
+    this.sharedService.setShippingAddress(this.defaultAddress);
   }
 
   getStates(country) {

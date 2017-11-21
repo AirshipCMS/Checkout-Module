@@ -1,59 +1,81 @@
 <div>
   <label>Shipping Address</label>
-  <button class="inline-button" type="button" *ngIf="savedAddress">Change Address</button>
-  <form *ngIf="!savedAddress" [formGroup]="form">
-    <div class="inline-field">
-      <label>First Name*</label>
-      <input type="text" formControlName="first_name" required [(ngModel)]="first_name">
+  <button class="inline-button" type="button" *ngIf="defaultAddress && !editDefaultAddress" (click)="editDefaultAddress = true">Change Address</button>
+  <form *ngIf="!defaultAddress || editDefaultAddress" [formGroup]="form">
+    <label *ngIf="defaultAddress && accountAddresses" for="change_address_option">
+      Existing Address
+      <input id="change_address_option" type="radio" formControlName="change_address_option" value="existing">
+    </label>
+    <label *ngIf="defaultAddress && accountAddresses" for="change_address_option">
+      New Address
+      <input id="change_address_option" type="radio" formControlName="change_address_option" value="new">
+    </label>
+    <div *ngIf="form.value.change_address_option === 'new' || !defaultAddress">
+      <div class="inline-field">
+        <label>First Name*</label>
+        <input type="text" formControlName="first_name" required [(ngModel)]="first_name">
+      </div>
+      <div class="inline-field">
+        <label>Last Name*</label>
+        <input type="text" formControlName="last_name" required [(ngModel)]="last_name">
+      </div>
+      <div>
+        <label>Country*</label>
+        <select [(ngModel)]="country" required formControlName="country" (ngModelChange)="getStates($event)">
+          <option>Select One</option>
+          <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
+        </select>
+      </div>
+      <div>
+        <label>Shipping Address 1*</label>
+        <input type="text" formControlName="address_1" required [(ngModel)]="address_1">
+      </div>
+      <div>
+        <label>Shipping Address 2</label>
+        <input type="text" formControlName="address_2" [(ngModel)]="address_2">
+      </div>
+      <div>
+        <label>City*</label>
+        <input type="text" formControlName="city" required [(ngModel)]="city">
+      </div>
+      <div class="inline-field">
+        <label>State/Province/Region/Other*</label>
+        <select [(ngModel)]="state" required formControlName="state">
+          <option disabled="" selected="">Select One</option>
+          <option *ngFor="let state of states.items" [ngValue]="state">{{ state.name }}</option>
+        </select>
+      </div>
+      <div *ngIf="state?.name === 'Other'" class="inline-field">
+        <label>Other</label>
+        <input type="text" name="other_location_text" formControlName="other_location_text">
+      </div>
+      <div>
+        <label>Zip/Postal Code*</label>
+        <input type="text" formControlName="zipcode" required [(ngModel)]="zipcode">
+      </div>
+      <div>
+        <label>Phone</label>
+        <input type="text" formControlName="phone_number" [(ngModel)]="phone_number">
+      </div>
     </div>
-    <div class="inline-field">
-      <label>Last Name*</label>
-      <input type="text" formControlName="last_name" required [(ngModel)]="last_name">
-    </div>
-    <div>
-      <label>Country*</label>
-      <select [(ngModel)]="country" required formControlName="country" (ngModelChange)="getStates($event)">
-        <option>Select One</option>
-        <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
+    <div *ngIf="form.value.change_address_option === 'existing'">
+      <select formControlName="address_options">
+        <option selected="" disabled="">Select One</option>
+        <option *ngFor="let address of accountAddresses" [ngValue]="address">
+          {{ address?.first_name }} {{ address.last_name }} - {{ address?.address_1 }} {{ address?.address_2 }} {{ address?.city }}, {{ address?.state }} {{ address?.zipcode }}
+        </option>
       </select>
-    </div>
-    <div>
-      <label>Shipping Address 1*</label>
-      <input type="text" formControlName="address_1" required [(ngModel)]="address_1">
-    </div>
-    <div>
-      <label>Shipping Address 2</label>
-      <input type="text" formControlName="address_2" [(ngModel)]="address_2">
-    </div>
-    <div>
-      <label>City*</label>
-      <input type="text" formControlName="city" required [(ngModel)]="city">
-    </div>
-    <div class="inline-field">
-      <label>State/Province/Region/Other*</label>
-      <select [(ngModel)]="state" required formControlName="state">
-        <option disabled="" selected="">Select One</option>
-        <option *ngFor="let state of states.items" [ngValue]="state">{{ state.name }}</option>
-      </select>
-    </div>
-    <div *ngIf="state?.name === 'Other'" class="inline-field">
-      <label>Other</label>
-      <input type="text" name="other_location_text" formControlName="other_location_text">
-    </div>
-    <div>
-      <label>Zip/Postal Code*</label>
-      <input type="text" formControlName="zipcode" required [(ngModel)]="zipcode">
-    </div>
-    <div>
-      <label>Phone</label>
-      <input type="text" formControlName="phone_number" [(ngModel)]="phone_number">
+      <div *ngIf="form.value.change_address_option === 'existing'">
+        <button type="button" (click)="editDefaultAddress = !editDefaultAddress">Cancel</button>
+        <button type="button" (click)="setDefaultAddress(form.value.address_options)">Save</button>
+      </div>
     </div>
     <button [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>
   </form>
-  <div *ngIf="savedAddress">
-    <p>{{ savedAddress?.first_name }} {{ savedAddress?.last_name }}</p>
-    <p>{{ savedAddress?.address_1 }}</p>
-    <p>{{ savedAddress?.address_2 }}</p>
-    <p>{{ savedAddress?.city }}, {{ savedAddress?.state }} {{ savedAddress?.zipcode }}</p>
+  <div *ngIf="defaultAddress && !editDefaultAddress">
+    <p>{{ defaultAddress?.first_name }} {{ defaultAddress?.last_name }}</p>
+    <p>{{ defaultAddress?.address_1 }}</p>
+    <p>{{ defaultAddress?.address_2 }}</p>
+    <p>{{ defaultAddress?.city }}, {{ defaultAddress?.state }} {{ defaultAddress?.zipcode }}</p>
   </div>
 </div>
