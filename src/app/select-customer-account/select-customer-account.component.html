@@ -7,7 +7,7 @@
       <form [formGroup]="form">
         <select formControlName="account">
           <option>Select One</option>
-          <option *ngFor="let account of accounts"></option>
+          <option *ngFor="let account of accounts">{{ account?.user.email }}</option>
         </select>
       </form>
     </div>
