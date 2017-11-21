@@ -13,7 +13,6 @@ export class CheckoutService {
   constructor(private http: HttpClient, public sharedService: SharedService) {
     let id_token : string = localStorage.getItem('id_token');
     this.headers = new HttpHeaders().set('Authorization', `bearer ${id_token}`);
-    this.storageProperties = ['cart', 'card', 'stripe_token', 'shipping_address'];
   }
 
   checkout(shipping_address:any, user:any, cart:any, customer_notes:string, stripe_token:string) {
@@ -30,7 +29,9 @@ export class CheckoutService {
   }
 
   clearLocalStorage() {
-    this.storageProperties.forEach((item) => localStorage.removeItem(item));
+    for(var key in localStorage) {
+      if(key !== 'id_token') localStorage.removeItem(key);
+    }
   }
 
   handleError(err) {

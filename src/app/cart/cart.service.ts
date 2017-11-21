@@ -9,8 +9,6 @@ export class CartService {
   cart : any;
   subscriptionCart : any = { items: [] };
   singleOrderCart : any = { items: [] };
-  hasSingleOrderItems : boolean = false;
-  hasSubscriptionItems : boolean = false;
 
   constructor(private http: HttpClient) {
     let localCart = JSON.parse(localStorage.getItem('cart'));
@@ -39,14 +37,8 @@ export class CartService {
 
   checkCartItemTypes() {
     this.cart.items.forEach((item) => {
-      if(item.type === 'plan') {
-        this.hasSubscriptionItems = true;
-        this.subscriptionCart.items.push(item);
-      }
-      if(item.type !== 'plan') {
-        this.hasSingleOrderItems = true;
-        this.singleOrderCart.items.push(item);
-      }
+      if(item.type === 'plan') this.subscriptionCart.items.push(item);
+      if(item.type !== 'plan')this.singleOrderCart.items.push(item);
     });
   }
 

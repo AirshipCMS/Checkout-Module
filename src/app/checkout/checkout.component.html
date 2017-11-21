@@ -1,18 +1,18 @@
 <div *ngIf="!loading">  
   <h1>Secure Checkout</h1>
   <p>You are securely logged in as {{ user?.email }}</p>
-  <div>
+  <div *ngIf="singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0">
     <payment-method
       [user]="user"
       (defaultCardSaved)="defaultCardSaved($event)"
     ></payment-method>
     <single-payment-order
-      *ngIf="cartService.hasSingleOrderItems"
+      *ngIf="singleOrderCart?.items.length > 0"
       [user]="user"
       [defaultCard]="defaultCard"
     ></single-payment-order>
     <subscription-order
-      *ngIf="cartService.hasSubscriptionItems"
+      *ngIf="subscriptionCart?.items.length > 0"
       [user]="user"
       [defaultCard]="defaultCard"
       [subscriptionCart]="subscriptionCart"
