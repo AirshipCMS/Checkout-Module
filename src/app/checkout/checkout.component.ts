@@ -49,6 +49,7 @@ export class CheckoutComponent implements OnInit {
     this.subscriptionCart = this.cartService.subscriptionCart;
     this.sharedService.orderNotes$.subscribe(orderNotes => this.orderNotes = orderNotes);
     this.sharedService.shippingAddress$.subscribe(shippingAddress => this.shippingAddress = shippingAddress);
+    this.sharedService.account$.subscribe(account => this.account = account);
   }
 
   getUserProfile() {
@@ -57,11 +58,18 @@ export class CheckoutComponent implements OnInit {
         res => {
           this.user = res;
           this.auth.isAuthenticated = true;
-          if(this.user.scope === 'user' && Object.keys(this.user.account).length > 0) {
-            this.getAccount();
+          if(this.user.scope === 'user') {
+            if(Object.keys(this.user.account).length > 0) {
+              this.getAccount();
+            } else {
+              this.account = {};
+              this.loading = false;
+              this.ref.detectChanges();
+            }
           } else {
             this.loading = false;
-            this.ref.detectChanges();
+            this.account = JSON.parse(localStorage.getItem('account'));
+            console.log(this.account)
           }
         },
         err => {

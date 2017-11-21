@@ -2,7 +2,7 @@
   <h1>Secure Checkout</h1>
   <p *ngIf="user?.scope === 'user'">You are securely logged in as {{ user?.email }}</p>
   <p *ngIf="user?.scope !== 'user'">You are securely logged in as administrator {{ user?.email }}</p>
-  <p *ngIf="user?.scope !== 'user' && account">You are completing checkout as {{ user?.email }}</p>
+  <p *ngIf="user?.scope !== 'user' && account">You are completing checkout as {{ account?.user.email }}</p>
   <div *ngIf="(singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0) && account">
     <payment-method
       [user]="user"
@@ -25,7 +25,7 @@
     <p>You have no items in your cart.</p>
     <a href="/">Continue Shopping</a>
   </div>
-  <div>
+  <div *ngIf="account">
     <a class="button" href="/cart">Back to Cart</a>
     <button type="button" (click)="placeOrder()" [disabled]="!defaultCard && !shippingAddress">Place Order</button>
   </div>

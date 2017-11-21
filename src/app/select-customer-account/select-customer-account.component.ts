@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 import { SelectCustomerAccountService } from './select-customer-account.service';
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'select-customer-account',
@@ -14,8 +15,9 @@ export class SelectCustomerAccountComponent implements OnInit {
 
   form : FormGroup;
   accounts : any;
+  account : any;
 
-  constructor(private service: SelectCustomerAccountService, private builder: FormBuilder) { }
+  constructor(private service: SelectCustomerAccountService, private builder: FormBuilder, private sharedService: SharedService) { }
 
   ngOnInit() {
     this.form = this.builder.group({
@@ -36,7 +38,9 @@ export class SelectCustomerAccountComponent implements OnInit {
   }
 
   selectAccount(account: any) {
-
+    this.account = account;
+    localStorage.setItem('account', JSON.stringify(account));
+    this.sharedService.setAccount(account);
   }
 
 }

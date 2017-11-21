@@ -7,7 +7,7 @@
       <form [formGroup]="form">
         <select formControlName="account">
           <option>Select One</option>
-          <option *ngFor="let account of accounts">{{ account?.user.email }}</option>
+          <option *ngFor="let account of accounts" [ngValue]="account">{{ account?.user.email }}</option>
         </select>
       </form>
     </div>
@@ -19,4 +19,4 @@
   </div>
 </div>
 
-<button type="button" (click)="selectAccount(form.value.account)"></button>
+<button type="button" (click)="selectAccount(form.value.account)" [disabled]="form.status === 'INVALID'">Continue</button>
