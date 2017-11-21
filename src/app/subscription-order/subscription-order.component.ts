@@ -11,6 +11,7 @@ import { ShippingAddressComponent } from '../shipping-address';
 export class SubscriptionOrderComponent implements OnInit {
 
   @Input() user : any;
+  @Input() account : any;
   @Input() defaultCard : any;
   @Input() subscriptionCart : any;
 

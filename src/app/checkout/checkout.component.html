@@ -6,16 +6,19 @@
   <div *ngIf="(singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0) && account">
     <payment-method
       [user]="user"
+      [account]="account"
       (defaultCardSaved)="defaultCardSaved($event)"
     ></payment-method>
     <single-payment-order
       *ngIf="singleOrderCart?.items.length > 0"
       [user]="user"
+      [account]="account"
       [defaultCard]="defaultCard"
     ></single-payment-order>
     <subscription-order
       *ngIf="subscriptionCart?.items.length > 0"
       [user]="user"
+      [account]="account"
       [defaultCard]="defaultCard"
       [subscriptionCart]="subscriptionCart"
     ></subscription-order>

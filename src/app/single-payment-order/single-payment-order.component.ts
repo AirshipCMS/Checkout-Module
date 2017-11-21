@@ -14,6 +14,7 @@ import { ShippingTypeComponent } from '../shipping-type';
 export class SinglePaymentOrderComponent implements OnInit {
 
   @Input() user;
+  @Input() account;
   shippingCalculationPending : boolean = true;
   orderTotal : number;
   @Input() defaultCard : any;

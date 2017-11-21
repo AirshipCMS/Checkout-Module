@@ -23,6 +23,7 @@ export class ShippingAddressComponent implements OnInit {
   editDefaultAddress : boolean = false;
   changeCardOption : string = 'existing';
   @Input() user;
+  @Input() account;
 
   constructor(private builder: FormBuilder, private service: ShippingAddressService, private sharedService: SharedService) {
     this.form  = this.builder.group({
@@ -43,8 +44,8 @@ export class ShippingAddressComponent implements OnInit {
 
   ngOnInit() {
     this.countries = this.service.countries;
-    if(Object.keys(this.user.account).length > 0) {
-      this.accountAddresses = this.user.account.postal_addresses;
+    if(Object.keys(this.account).length > 0) {
+      this.accountAddresses = this.account.postal_addresses;
       this.defaultAddress = this.service.scrubAddress(this.accountAddresses[0]);
       this.sharedService.setShippingAddress(this.service.scrubAddress(this.defaultAddress));
     } else {
@@ -64,7 +65,7 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   saveAddress() {
-    if(Object.keys(this.user.account).length > 0) {
+    if(Object.keys(this.account).length > 0) {
       this.defaultAddress = this.service.formattAddress(this.form.value);
       this.service.saveAddress(this.defaultAddress, this.user);
     } else {

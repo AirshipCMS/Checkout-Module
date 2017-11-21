@@ -29,8 +29,10 @@ export class PaymentMethodService {
     }
   }
 
-  getAccountCards() {
-    return this.http.get(`${environment.domain}/api/account/cards`, { headers: this.headers });
+  getAccountCards(scope: string, account_id: number) {
+    let endpoint = '/account/cards';
+    if(scope !== 'user') endpoint = `/accounts/${account_id}/cards`;
+    return this.http.get(`${environment.domain}/api${endpoint}`, { headers: this.headers });
   }
 
   handleError(err) {

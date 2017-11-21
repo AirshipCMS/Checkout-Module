@@ -26,6 +26,7 @@ export class PaymentMethodComponent implements OnInit {
   editDefualtCard : boolean = false;
   checked: boolean = false;
   @Input() user;
+  @Input() account;
   @Output() defaultCardSaved = new EventEmitter();
 
   constructor(private stripeService: StripeService, private service: PaymentMethodService, private sharedService: SharedService) {
@@ -42,7 +43,7 @@ export class PaymentMethodComponent implements OnInit {
   createToken() {
     this.stripe.createToken(this.cardElement)
       .then((res) => {
-        if(Object.keys(this.user.account).length > 0) { //if user doesn't have an account.
+        if(Object.keys(this.account).length > 0) { //if user doesn't have an account.
           this.addCardAndSetAsDefault(res.token.id);
         } else {
           this.token = res.token.id;
@@ -79,17 +80,17 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   getSavedCard(elements) {
-    if(Object.keys(this.user.account).length === 0) {
+    if(Object.keys(this.account).length === 0) {
       let localData = this.service.getLocalCard();
       this.defaultCard = localData.card;
       this.token = localData.token;
       this.defaultCardSaved.emit({ defaultCard : this.defaultCard, token: this.token });
     } else {
-      this.service.getAccountCards()
+      this.service.getAccountCards(this.user.scope, this.account.id)
         .subscribe(
           res => {
             this.accountCards = res['data'];
-            this.defaultCard = this.accountCards.find((item) => item.id === this.user.account.customer.default_source);
+            this.defaultCard = this.accountCards.find((item) => item.id === this.account.customer.default_source);
             this.defaultCardSaved.emit({ defaultCard: this.defaultCard });
           },
           err => this.service.handleError(err)

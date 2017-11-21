@@ -68,8 +68,7 @@ export class CheckoutComponent implements OnInit {
             }
           } else {
             this.loading = false;
-            this.account = JSON.parse(localStorage.getItem('account'));
-            console.log(this.account)
+            this.account = this.account ? this.account : JSON.parse(localStorage.getItem('account'));
           }
         },
         err => {
