@@ -1,7 +1,9 @@
 <div *ngIf="!loading">  
   <h1>Secure Checkout</h1>
-  <p>You are securely logged in as {{ user?.email }}</p>
-  <div *ngIf="singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0">
+  <p *ngIf="user?.scope === 'user'">You are securely logged in as {{ user?.email }}</p>
+  <p *ngIf="user?.scope !== 'user'">You are securely logged in as administrator {{ user?.email }}</p>
+  <p *ngIf="user?.scope !== 'user' && account">You are completing checkout as {{ user?.email }}</p>
+  <div *ngIf="(singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0) && account">
     <payment-method
       [user]="user"
       (defaultCardSaved)="defaultCardSaved($event)"
@@ -18,6 +20,7 @@
       [subscriptionCart]="subscriptionCart"
     ></subscription-order>
   </div>
+  <select-customer-account *ngIf="user?.scope !== 'user' && !account"></select-customer-account>
   <div *ngIf="singleOrderCart?.items.length === 0 && subscriptionCart?.items.length === 0">
     <p>You have no items in your cart.</p>
     <a href="/">Continue Shopping</a>

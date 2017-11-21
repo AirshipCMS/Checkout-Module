@@ -1,0 +1,22 @@
+<div class="single-payment-order-container container">
+  <div class="container-header">
+    <h4>Select Customer Account</h4>
+  </div>
+  <div class="clearfix">
+    <div class="left">
+      <form [formGroup]="form">
+        <select formControlName="account">
+          <option>Select One</option>
+          <option *ngFor="let account of accounts"></option>
+        </select>
+      </form>
+    </div>
+    <div class="right">
+      <div>
+        <p>Select the Customer you want to create a order for.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<button type="button" (click)="selectAccount(form.value.account)"></button>

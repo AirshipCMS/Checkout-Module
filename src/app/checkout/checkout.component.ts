@@ -23,6 +23,7 @@ import * as _ from 'lodash';
 export class CheckoutComponent implements OnInit {
 
   user : any;
+  account : any;
   loading : boolean;
   defaultCard : any;
   shippingAddress : any;
@@ -56,7 +57,7 @@ export class CheckoutComponent implements OnInit {
         res => {
           this.user = res;
           this.auth.isAuthenticated = true;
-          if(Object.keys(this.user.account).length > 0) {
+          if(this.user.scope === 'user' && Object.keys(this.user.account).length > 0) {
             this.getAccount();
           } else {
             this.loading = false;
@@ -74,6 +75,7 @@ export class CheckoutComponent implements OnInit {
     this.auth.getAccount()
       .subscribe(
         res => {
+          this.account = res;
           this.user.account = res;
           this.loading = false;
           this.ref.detectChanges();

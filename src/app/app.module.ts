@@ -17,6 +17,7 @@ import { ShippingTypeComponent } from './shipping-type/shipping-type.component';
 import { OrderNotesComponent } from './order-notes/order-notes.component';
 import { SharedService } from './shared.service';
 import { SubscriptionOrderComponent } from './subscription-order/subscription-order.component';
+import { SelectCustomerAccountComponent } from './select-customer-account/select-customer-account.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { SubscriptionOrderComponent } from './subscription-order/subscription-or
     ShippingAddressComponent,
     ShippingTypeComponent,
     OrderNotesComponent,
-    SubscriptionOrderComponent
+    SubscriptionOrderComponent,
+    SelectCustomerAccountComponent
   ],
   imports: [
     BrowserModule,
