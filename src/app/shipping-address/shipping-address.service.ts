@@ -30,11 +30,11 @@ export class ShippingAddressService {
       address['other_location'] = false;
       switch (key) {
         case "country":
-          address[key] = value.code;
+          if(value.code) address[key] = value.code;
           break;
 
         case "state":
-          address[key] = value.name;
+          if(value.name) address[key] = value.name;
           break;
 
         case "other_location_text":

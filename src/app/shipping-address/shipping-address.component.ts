@@ -44,11 +44,11 @@ export class ShippingAddressComponent implements OnInit {
 
   ngOnInit() {
     this.countries = this.service.countries;
-    if(Object.keys(this.account).length > 0) {
+    if(this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
       let defaultAddress = this.accountAddresses.length-1;
       this.defaultAddress = this.service.scrubAddress(this.accountAddresses[defaultAddress]);
-      this.sharedService.setShippingAddress(this.service.scrubAddress(this.defaultAddress));
+      this.sharedService.setShippingAddress(this.service.formattAddress(this.defaultAddress));
     } else {
       this.getLocalAddress();
     }

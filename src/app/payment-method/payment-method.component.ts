@@ -55,7 +55,7 @@ export class PaymentMethodComponent implements OnInit {
 
   addCardAndSetAsDefault(token:string) {
     this.service.addCard(this.user.scope, this.account.id, token)
-      .pipe(mergeMap(card => this.service.setDefaultCard(card, this.user, this.account.customer.id)))
+      .pipe(mergeMap(card => this.service.setDefaultCard(card, this.user, this.account)))
       .subscribe(
         defaultCard => {
           this.defaultCard = defaultCard;
@@ -67,7 +67,7 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   setDefaultCard(card:any) {
-    this.service.setDefaultCard(card.id, this.user, this.account.customer.id)
+    this.service.setDefaultCard(card.id, this.user, this.account)
       .subscribe(
         res => {
           this.defaultCard = card;

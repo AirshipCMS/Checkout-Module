@@ -6,7 +6,8 @@ import { share } from 'rxjs/operators'
 
 @Injectable()
 export class SharedService {
-
+  
+  checkoutResponse : any;
   shippingAddress$ : Observable<any>;
   private shippingAddressSubject : ReplaySubject<any>;
   orderNotes$ : Observable<any>;

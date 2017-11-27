@@ -35,7 +35,7 @@ export class PaymentMethodService {
     return this.http.get(`${environment.domain}/api/${endpoint}`, { headers: this.headers });
   }
 
-  addCard(scope: string, account_id: number, card:any) {
+  addCard(scope: string, account_id: number, card: any) {
     let endpoint = 'account/cards';
     if(scope !== 'user') endpoint = `accounts/${account_id}/cards`;
     let body = {
@@ -46,13 +46,17 @@ export class PaymentMethodService {
     return this.http.post(`${environment.domain}/api/${endpoint}`, body, { headers: this.headers });
   }
 
-  setDefaultCard(default_source:any, user:any, customer_id: number) {
+  setDefaultCard(default_source: any, user: any, account: any) {
     let endpoint = 'customer';
-    if(user.scope !== 'user') endpoint = `customers/${customer_id}`;
+    let email = user.email;
+    if(user.scope !== 'user') {
+      endpoint = `customers/${account.customer.id}`;
+      email = account.user.email;
+    }
     let body = {
       stripe_payload: {
         default_source,
-        email: user.email
+        email
       }
     }
 

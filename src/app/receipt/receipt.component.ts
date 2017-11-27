@@ -1,22 +1,22 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
-import { CheckoutService } from '../checkout';
+import { SharedService } from '../shared.service';
 
 @Component({
   selector: 'app-receipt',
   templateUrl: './receipt.component.html',
   styleUrls: ['./receipt.component.css'],
-  providers: [CheckoutService],
+  providers: [SharedService],
   encapsulation: ViewEncapsulation.None
 })
 export class ReceiptComponent implements OnInit {
 
   orderDetails : any;
 
-  constructor(private checkoutService: CheckoutService) { }
+  constructor(private sharedService: SharedService) { }
 
   ngOnInit() {
-    this.orderDetails = this.checkoutService.checkoutResponse;
+    this.orderDetails = this.sharedService.checkoutResponse;
     console.log(this.orderDetails);
   }
 
