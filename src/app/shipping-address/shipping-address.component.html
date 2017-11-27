@@ -1,6 +1,6 @@
 <div>
   <label>Shipping Address</label>
-  <button class="inline-button" type="button" *ngIf="defaultAddress && !editDefaultAddress" (click)="editDefaultAddress = true">Change Address</button>
+  <button class="inline-button" type="button" *ngIf="defaultAddress && !editDefaultAddress && !orderDetails" (click)="editDefaultAddress = true">Change Address</button>
   <form *ngIf="!defaultAddress || editDefaultAddress" [formGroup]="form">
     <label *ngIf="defaultAddress && accountAddresses" for="change_address_option">
       Existing Address

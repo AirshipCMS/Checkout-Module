@@ -15,6 +15,7 @@ export class SinglePaymentOrderComponent implements OnInit {
 
   @Input() user;
   @Input() account;
+  @Input() orderDetails : any;
   shippingCalculationPending : boolean = true;
   orderTotal : number;
   @Input() defaultCard : any;

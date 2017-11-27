@@ -4,25 +4,40 @@
   </div>
   <div class="clearfix">
     <div class="left">
-      <shipping-address [user]="user" [account]="account"></shipping-address>
+      <shipping-address [user]="user" [account]="account" [orderDetails]="orderDetails"></shipping-address>
       <div>
         <label>Shipping Type</label>
-        <shipping-type></shipping-type>
+        <shipping-type [orderDetails]="orderDetails"></shipping-type>
+      </div>
+      <div *ngIf="orderDetails">
+        <label>Order Number</label>
+        <p>#{{ orderDetails?.single_payment.order_number }}</p>
+      </div>
+      <div *ngIf="orderDetails">
+        <label>Order Date</label>
+        <p *ngIf="orderDetails">{{ orderDetails?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
+      </div>
+      <div *ngIf="orderDetails">
+        <label>Customer ID</label>
+        <p>{{ orderDetails?.customer.email }}</p>
+        <p>{{ orderDetails?.customer.stripe_customer_id }}</p>
       </div>
       <div>
         <label>Billing</label>
-        <p *ngIf="shippingCalculationPending">Pending...</p>
-        <p *ngIf="!shippingCalculationPending">{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
+        <p *ngIf="shippingCalculationPending && !orderDetails">Pending...</p>
+        <p *ngIf="!shippingCalculationPending && !orderDetails">{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
+        <p *ngIf="orderDetails">{{ orderDetails?.single_payment.payment.stripe_card_raw_json_data.brand }} ending *{{ orderDetails?.single_payment.payment.stripe_card_raw_json_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ orderDetails?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
       <div>
         <label>Order Notes</label>
-        <order-notes></order-notes>
+        <order-notes [orderDetails]="orderDetails"></order-notes>
       </div>
     </div>
     <div class="right">
       <app-cart
         (shippingCalculated)="shippingCalculated($event)"
         [defaultCard]="defaultCard"
+        [orderDetails]="orderDetails"
       ></app-cart>
     </div>
   </div>

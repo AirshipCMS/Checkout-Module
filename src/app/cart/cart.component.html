@@ -1,12 +1,14 @@
 <div>
   <h4>Items</h4>
-  <div class="cart-items" *ngFor="let item of service.cart.items">
+  <div class="cart-items" *ngFor="let item of cart.items">
     <div>
       <div>
         <h4 class="product-title cart-label">{{ item.product_title }}</h4>
         <p class="cart-item-quantity">{{ item.quanitity }}</p>
-        <p class="cart-item-price">{{ item.price.usd/100 | currency: "USD" }}</p>
-        <p class="cart-item-variations">{{ item.product_variation_title }}</p>
+        <p class="cart-item-price" *ngIf="!orderDetails">{{ item.price.usd/100 | currency: "USD" }}</p>
+        <p class="cart-item-price" *ngIf="orderDetails">{{ item.product_variations[0].price.usd/100 | currency: "USD" }}</p>
+        <p class="cart-item-variations" *ngIf="!orderDetails">{{ item.product_variation_title }}</p>
+        <p class="cart-item-variations" *ngIf="orderDetails">{{ item.product_variations[0].product_variation_title }}</p>
       </div>
     </div>
   </div>
@@ -38,7 +40,7 @@
       <p class="total" *ngIf="!pending">{{ total | currency: "USD" }}</p>
     </div>
   </div>
-  <div *ngIf="!pending">
+  <div *ngIf="!pending && !orderDetails">
     <p>{{ defaultCard?.brand }} ending *{{defaultCard?.last4 }} will be charged {{ total | currency: "USD" }}</p>
   </div>
 </div>

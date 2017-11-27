@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
 import { SharedService } from '../shared.service';
 
@@ -10,7 +10,8 @@ import { SharedService } from '../shared.service';
 })
 export class OrderNotesComponent implements OnInit {
 
-  orderNotes : string = '';
+  @Input() orderNotes : string = '';
+  @Input() orderDetails : any;
 
   constructor(private sharedService: SharedService) { }
 

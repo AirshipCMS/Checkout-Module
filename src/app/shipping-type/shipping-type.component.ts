@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
 import { ShippingTypeService } from './shipping-type.service';
 import { SharedService } from '../shared.service';
@@ -14,6 +14,7 @@ export class ShippingTypeComponent implements OnInit {
 
   options : Array<any>;
   shippingType : string;
+  @Input() orderDetails: any;
 
   constructor(private service: ShippingTypeService, private sharedService: SharedService) {
     this.options = this.service.shippingTypes;

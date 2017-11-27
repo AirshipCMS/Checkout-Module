@@ -22,6 +22,7 @@ export class ShippingAddressComponent implements OnInit {
   states : Array<any> = [];
   editDefaultAddress : boolean = false;
   changeCardOption : string = 'existing';
+  @Input() orderDetails : any;
   @Input() user;
   @Input() account;
 
@@ -61,8 +62,12 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   getLocalAddress() {
-    this.defaultAddress = this.service.getLocalAddress();
-    this.sharedService.setShippingAddress(this.defaultAddress);
+    if(this.orderDetails) {
+      this.defaultAddress = this.orderDetails.shipping_address;
+    } else {
+      this.defaultAddress = this.service.getLocalAddress();
+      this.sharedService.setShippingAddress(this.defaultAddress);
+    }
   }
 
   saveAddress() {

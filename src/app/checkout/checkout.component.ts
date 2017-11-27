@@ -31,13 +31,14 @@ export class CheckoutComponent implements OnInit {
   singleOrderCart : any;
   subscriptionCart : any;
   stripeToken : string;
+  checkoutResponse : any;
 
   constructor(
     private auth: AuthService,
     private router: Router,
     private service: CheckoutService,
     private cartService: CartService,
-    private sharedService: SharedService,
+    public sharedService: SharedService,
     private ref: ChangeDetectorRef
     ) {
   }
