@@ -3,7 +3,6 @@ import { mergeMap } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
 import { PaymentMethodService } from './payment-method.service';
-import { StripeService } from '../stripe.service';
 import { SharedService } from '../shared.service';
 
 declare var Stripe;
@@ -29,7 +28,7 @@ export class PaymentMethodComponent implements OnInit {
   @Input() account;
   @Output() defaultCardSaved = new EventEmitter();
 
-  constructor(private stripeService: StripeService, private service: PaymentMethodService, private sharedService: SharedService) {
+  constructor(private service: PaymentMethodService, private sharedService: SharedService) {
   }
 
   ngOnInit() {
@@ -55,8 +54,8 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   addCardAndSetAsDefault(token:string) {
-    this.stripeService.addCard(token)
-      .pipe(mergeMap(card => this.stripeService.setDefaultCard(card, this.user)))
+    this.service.addCard(token)
+      .pipe(mergeMap(card => this.service.setDefaultCard(card, this.user)))
       .subscribe(
         defaultCard => {
           this.defaultCard = defaultCard;
@@ -68,7 +67,7 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   setDefaultCard(card:any) {
-    this.stripeService.setDefaultCard(card.id, this.user)
+    this.service.setDefaultCard(card.id, this.user)
       .subscribe(
         res => {
           this.defaultCard = card;
