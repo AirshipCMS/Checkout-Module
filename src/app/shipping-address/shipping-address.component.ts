@@ -46,7 +46,8 @@ export class ShippingAddressComponent implements OnInit {
     this.countries = this.service.countries;
     if(Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
-      this.defaultAddress = this.service.scrubAddress(this.accountAddresses[0]);
+      let defaultAddress = this.accountAddresses.length-1;
+      this.defaultAddress = this.service.scrubAddress(this.accountAddresses[defaultAddress]);
       this.sharedService.setShippingAddress(this.service.scrubAddress(this.defaultAddress));
     } else {
       this.getLocalAddress();
@@ -67,7 +68,14 @@ export class ShippingAddressComponent implements OnInit {
   saveAddress() {
     if(Object.keys(this.account).length > 0) {
       this.defaultAddress = this.service.formattAddress(this.form.value);
-      this.service.saveAddress(this.defaultAddress, this.user, this.account);
+      this.service.saveAddress(this.defaultAddress, this.user, this.account)
+        .subscribe(
+          address => {
+            this.account.postal_addresses.split(0,0,address);
+            this.defaultAddress = address;
+          },
+          err => this.service.handleError(err)
+        );
     } else {
       this.defaultAddress = this.service.formattAddress(this.form.value);
       this.service.saveLocalAddress(this.form.value);

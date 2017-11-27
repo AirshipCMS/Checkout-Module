@@ -12,11 +12,12 @@ export class ShippingAddressService {
   states : Array<any> = States.StateGroups;
   headers : HttpHeaders;
   omitList : Array<any>;
+  accountOmitList : Array<any>;
 
   constructor(private http: HttpClient) {
     let id_token = localStorage.getItem('id_token');
     this.headers = new HttpHeaders().set('authorization', `bearer ${id_token}`);
-    this.omitList = ['created_at', 'id', 'site_id', 'updated_at', '_pivot_account_id', '_pivot_postal_address_id'];
+    this.omitList = ['created_at', 'id', 'site_id', 'updated_at', '_pivot_account_id', '_pivot_postal_address_id', 'address_options', 'change_address_option'];
   }
 
   getStates(country: any) {
@@ -59,16 +60,10 @@ export class ShippingAddressService {
     localStorage.setItem('shipping_address', JSON.stringify(address));
   }
 
-  saveAddress(formattedAddress: any, user: any, account: any) {
-    let endpoint = 'account';
-    if(user.scope !== 'user') endpoint = `accounts/${account.id}`;
-    let body = account;
-    body.shipping_address = formattedAddress;
-    this.http.put(`${environment.domain}/api/${endpoint}`, body, { headers: this.headers })
-      .subscribe(
-        res => res,
-        err => this.handleError(err)
-      );
+  saveAddress(address: any, user: any, account: any) {
+    let endpoint = 'account/postal_address';
+    if(user.scope !== 'user') endpoint = `accounts/${account.id}/postal_address`;
+    return this.http.post(`${environment.domain}/api/${endpoint}`, this.scrubAddress(address), { headers: this.headers });
   }
 
   getLocalAddress() {

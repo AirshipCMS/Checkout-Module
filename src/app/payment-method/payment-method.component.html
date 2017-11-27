@@ -13,7 +13,7 @@
             <input id="change_card_option_new" type="radio" [(ngModel)]="changeCardOption" value="new">
           </label>
           <div [ngClass]="{'hidden': changeCardOption === 'existing'}" id="card-element"></div>
-          <div>
+          <div *ngIf="changeCardOption === 'new'">
             <button *ngIf="editDefualtCard" type="button" (click)="editDefualtCard = !editDefualtCard">Cancel</button>
             <button type="button" (click)="createToken()">Add Card</button>
           </div>

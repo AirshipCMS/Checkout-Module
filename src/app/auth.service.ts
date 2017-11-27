@@ -24,8 +24,10 @@ export class AuthService {
     }
   }
 
-  getAccount() {
-    return this.http.get(`${environment.domain}/api/account`, { headers: this.headers });
+  getAccount(scope: string, account: any) {
+    let endpoint = 'account';
+    if(scope !== 'user') endpoint = `accounts/${account.id}`;
+    return this.http.get(`${environment.domain}/api/${endpoint}`, { headers: this.headers });
   }
 
   handleError(err) {

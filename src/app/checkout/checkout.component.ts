@@ -60,15 +60,19 @@ export class CheckoutComponent implements OnInit {
           this.auth.isAuthenticated = true;
           if(this.user.scope === 'user') {
             if(Object.keys(this.user.account).length > 0) {
-              this.getAccount();
+              this.getAccount(this.user.account);
             } else {
               this.account = {};
               this.loading = false;
               this.ref.detectChanges();
             }
           } else {
-            this.loading = false;
-            this.account = this.account ? this.account : JSON.parse(localStorage.getItem('account'));
+            let account = localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')) : this.account;
+            if(account) {
+              this.getAccount(account);
+            } else {
+              this.loading = false;
+            }
           }
         },
         err => {
@@ -78,8 +82,8 @@ export class CheckoutComponent implements OnInit {
       );
   }
 
-  getAccount() {
-    this.auth.getAccount()
+  getAccount(account: any) {
+    this.auth.getAccount(this.user.scope, account)
       .subscribe(
         res => {
           this.account = res;
