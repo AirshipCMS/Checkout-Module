@@ -16,6 +16,8 @@ export class CheckoutService {
   }
 
   checkout(shipping_address:any, user:any, cart:any, customer_notes:string, stripe_token:string) {
+    let endpoint = 'checkout';
+    if(user.scope !== 'user') endpoint = 'admin/checkout';
     cart['email'] = user.email;
     cart['customer_notes'] = customer_notes;
     let order = {
@@ -25,7 +27,7 @@ export class CheckoutService {
       misc_data:  {}
     };
     if(stripe_token) order['stripe_token'] = stripe_token;
-    return this.http.post(`${environment.domain}/api/checkout`, order, { headers: this.headers });
+    return this.http.post(`${environment.domain}/api/${endpoint}`, order, { headers: this.headers });
   }
 
   clearLocalStorage() {

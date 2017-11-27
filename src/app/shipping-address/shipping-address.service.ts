@@ -19,11 +19,11 @@ export class ShippingAddressService {
     this.omitList = ['created_at', 'id', 'site_id', 'updated_at', '_pivot_account_id', '_pivot_postal_address_id'];
   }
 
-  getStates(country:any) {
+  getStates(country: any) {
     return this.states.find((item, i) => i === country.StateGroupID);
   }
 
-  formattAddress(address:any) {
+  formattAddress(address: any) {
     let formattedAddress;
     for(const [key, value] of Object.entries(address)) {
       address['other_location'] = false;
@@ -55,14 +55,16 @@ export class ShippingAddressService {
     return formattedAddress;
   }
 
-  saveLocalAddress(address:any) {
+  saveLocalAddress(address: any) {
     localStorage.setItem('shipping_address', JSON.stringify(address));
   }
 
-  saveAddress(formattedAddress:any, user:any) {
-    let body = user.account;
+  saveAddress(formattedAddress: any, user: any, account: any) {
+    let endpoint = 'account';
+    if(user.scope !== 'user') endpoint = `accounts/${account.id}`;
+    let body = account;
     body.shipping_address = formattedAddress;
-    this.http.put(`${environment.domain}/api/account`, body, { headers: this.headers })
+    this.http.put(`${environment.domain}/api/${endpoint}`, body, { headers: this.headers })
       .subscribe(
         res => res,
         err => this.handleError(err)

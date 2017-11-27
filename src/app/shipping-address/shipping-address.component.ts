@@ -67,7 +67,7 @@ export class ShippingAddressComponent implements OnInit {
   saveAddress() {
     if(Object.keys(this.account).length > 0) {
       this.defaultAddress = this.service.formattAddress(this.form.value);
-      this.service.saveAddress(this.defaultAddress, this.user);
+      this.service.saveAddress(this.defaultAddress, this.user, this.account);
     } else {
       this.defaultAddress = this.service.formattAddress(this.form.value);
       this.service.saveLocalAddress(this.form.value);

@@ -30,21 +30,25 @@ export class PaymentMethodService {
   }
 
   getAccountCards(scope: string, account_id: number) {
-    let endpoint = '/account/cards';
-    if(scope !== 'user') endpoint = `/accounts/${account_id}/cards`;
-    return this.http.get(`${environment.domain}/api${endpoint}`, { headers: this.headers });
+    let endpoint = 'account/cards';
+    if(scope !== 'user') endpoint = `accounts/${account_id}/cards`;
+    return this.http.get(`${environment.domain}/api/${endpoint}`, { headers: this.headers });
   }
 
-  addCard(card:any) {
+  addCard(scope: string, account_id: number, card:any) {
+    let endpoint = 'account/cards';
+    if(scope !== 'user') endpoint = `accounts/${account_id}/cards`;
     let body = {
       stripe_payload: {
         source: card.id
       }
     };
-    return this.http.post(`${environment.domain}/api/account/cards`, body, { headers: this.headers });
+    return this.http.post(`${environment.domain}/api/${endpoint}`, body, { headers: this.headers });
   }
 
-  setDefaultCard(default_source:any, user:any) {
+  setDefaultCard(default_source:any, user:any, customer_id: number) {
+    let endpoint = 'customer';
+    if(user.scope !== 'user') endpoint = `customers/${customer_id}`;
     let body = {
       stripe_payload: {
         default_source,
@@ -52,7 +56,7 @@ export class PaymentMethodService {
       }
     }
 
-    return this.http.put(`${environment.domain}/api/customer`, body, { headers: this.headers });
+    return this.http.put(`${environment.domain}/api/${endpoint}`, body, { headers: this.headers });
   }
 
   handleError(err) {
