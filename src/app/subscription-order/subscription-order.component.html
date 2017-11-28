@@ -1,26 +1,50 @@
-<div class="single-payment-order-container container" *ngFor="let item of subscriptionCart.items">
+<div class="single-payment-order-container container" *ngFor="let item of subscriptionCart.items; let i = index">
   <div class="container-header">
     <h4>Subscription</h4>
   </div>
   <div class="clearfix">
     <div class="left">
-      <shipping-address [user]="user" [account]="account"></shipping-address>
+      <shipping-address [user]="user" [account]="account" [orderDetails]="orderDetails"></shipping-address>
       <div>
         <label>Shipping Type</label>
-        <shipping-type></shipping-type>
+        <shipping-type [orderDetails]="orderDetails"></shipping-type>
+      </div>
+      <div *ngIf="orderDetails">
+        <label>Order Number</label>
+        <p>#{{ item?.stripe_data.metadata.order_number }}</p>
+      </div>
+      <div *ngIf="orderDetails">
+        <label>Order Date</label>
+        <p *ngIf="orderDetails">{{ orderDetails?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
+      </div>
+      <div *ngIf="orderDetails">
+        <label>Customer ID</label>
+        <p>{{ orderDetails?.customer.email }}</p>
+        <p>{{ orderDetails?.customer.stripe_customer_id }}</p>
       </div>
       <div>
         <label>Billing</label>
-        <p *ngIf="shippingCalculationPending">Pending...</p>
-        <p *ngIf="!shippingCalculationPending">{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }} will be charged {{ item?.price.usd/100 | currency: 'USD'}}</p>
+        <p *ngIf="shippingCalculationPending && !orderDetails">Pending...</p>
+        <p *ngIf="!shippingCalculationPending && !orderDetails">{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
+        <!-- <p *ngIf="orderDetails">{{ item?.stripe_data.brand }} ending *{{ item?.stripe_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ item?.created_at | date: 'MM/dd/yyyy' }}</p> -->
       </div>
       <div>
         <label>Order Notes</label>
-        <order-notes></order-notes>
+        <order-notes [orderDetails]="orderDetails"></order-notes>
       </div>
     </div>
     <div class="right">
-      <div>
+      <div *ngIf="orderDetails">
+        <h4>{{ plans[i].product_title }}</h4>
+        <p>{{ plans[i].name }} - {{ plans[i].price.usd/100 | currency: 'USD' }} every {{ item?.stripe_data.plan.interval }}</p>
+        <p *ngIf="item?.stripe_data.plan.trial_period_days && item?.stripe_data.plan.trial_period_days > 0">Trial Period Days: {{ item?.stripe_data.plan.trial_period_days }}</p>
+        <h4>Subscription Term</h4>
+        <p>Subscription ID: {{ item?.stripe_data.id }}</p>
+        <p>Start: {{ item?.created_at | date: 'MM/dd/yyyy' }}</p>
+        <p *ngIf="item?.stripe_data.plan.trial_period_days && item?.stripe_data.plan.trial_period_days > 0">Trail End: {{ item?.stripe_data.trial_end*1000 | date: 'MM/dd/yyyy' }}</p>
+        <p>Current Term: {{ item?.stripe_data.current_period_start*1000 | date: 'MM/dd/yyyy' }} - {{ item?.stripe_data.current_period_end*1000 | date: 'MM/dd/yyyy' }}</p>
+      </div>
+      <div *ngIf="!orderDetails">
         <h4>{{ item?.product_title }}</h4>
         <p>{{ item?.product_plan.name }} - {{ item?.price.usd/100 | currency: 'USD' }} every {{ item?.product_plan.interval }}</p>
         <p *ngIf="item?.product_plan.trial_days && item?.product_plan.trial_days > 0">Trial Period Days: {{ item?.product_plan.trial_days }}</p>

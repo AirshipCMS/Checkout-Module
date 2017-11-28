@@ -14,10 +14,16 @@ export class SubscriptionOrderComponent implements OnInit {
   @Input() account : any;
   @Input() defaultCard : any;
   @Input() subscriptionCart : any;
+  @Input() orderDetails : any;
+  plans : Array<any> = [];
 
   constructor() { }
 
   ngOnInit() {
+    if(this.orderDetails) {
+      this.subscriptionCart = this.orderDetails.subscriptions;
+      this.plans = this.orderDetails.plans;
+    }
   }
 
 }

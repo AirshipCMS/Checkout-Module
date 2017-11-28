@@ -31,18 +31,20 @@ export class CartComponent implements OnInit {
   ngOnInit() {
     this.cart = this.service.cart;
     this.subtotal = this.service.calculateSubtotal();
-    this.sharedService.shippingAddress$.subscribe(
-      address => {
-        this.shippingAddress = address;
-        this.getShipping();
-      }
-    )
-    this.sharedService.shippingType$.subscribe(
-      shippingType => {
-        this.shippingType = shippingType;
-        this.getShipping();
-      }
-    )
+    if(!this.orderDetails) {
+      this.sharedService.shippingAddress$.subscribe(
+        address => {
+          this.shippingAddress = address;
+          this.getShipping();
+        }
+      )
+      this.sharedService.shippingType$.subscribe(
+        shippingType => {
+          this.shippingType = shippingType;
+          this.getShipping();
+        }
+      )
+    }
     if(this.orderDetails) {
       this.cart = this.orderDetails.products;
       this.shipping = this.orderDetails.products.totals.shipping_cost.usd/100;

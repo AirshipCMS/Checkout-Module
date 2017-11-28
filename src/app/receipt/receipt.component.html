@@ -1,14 +1,15 @@
 <div>  
   <div>
     <single-payment-order
+      *ngIf="orderDetails.products.items"
       [orderDetails]="orderDetails"
     ></single-payment-order>
-    <!-- <subscription-order
-      *ngIf="subscriptionCart?.items.length > 0"
+    <subscription-order
       [user]="user"
       [account]="account"
       [defaultCard]="defaultCard"
       [subscriptionCart]="subscriptionCart"
-    ></subscription-order> -->
+      [orderDetails]="orderDetails"
+    ></subscription-order>
   </div>
 </div>
