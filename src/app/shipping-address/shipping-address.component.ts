@@ -24,9 +24,14 @@ export class ShippingAddressComponent implements OnInit {
   states : Array<any> = [];
   editDefaultAddress : boolean = false;
   changeCardOption : string = 'existing';
+  singlePaymentAddress : any;
+  subscriptionAddresses : Array<any>;
   @Input() orderDetails : any;
   @Input() user;
   @Input() account;
+  @Input() subscriptionCart : any;
+  @Input() subscriptionItemIndex : number;
+  @Input() singlePaymentOrder;
 
   constructor(private builder: FormBuilder, private service: ShippingAddressService, private sharedService: SharedService) {
     this.form  = this.builder.group({
@@ -47,28 +52,47 @@ export class ShippingAddressComponent implements OnInit {
 
   ngOnInit() {
     this.countries = this.service.countries;
+    this.subscriptionAddresses = this.service.getSubscriptionAddresses();
+    if(!this.subscriptionAddresses && this.subscriptionCart) {
+      this.subscriptionAddresses = [];
+      this.subscriptionCart.items.forEach((item) => {
+        this.subscriptionAddresses.push({});
+      });
+    }
     if(this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
-      let defaultAddress = this.accountAddresses.length-1;
-      this.defaultAddress = this.service.scrubAddress(this.accountAddresses[defaultAddress]);
-      this.sharedService.setShippingAddress(this.service.formattAddress(this.defaultAddress));
-    } else {
-      this.getLocalAddress();
+      this.defaultAddress = this.account.postal_addresses[0];
+      this.sharedService.setShippingAddress(this.defaultAddress);
     }
+    this.getAddress();
   }
 
   setDefaultAddress(address: any) {
     this.defaultAddress = address;
     this.editDefaultAddress = false;
-    this.sharedService.setShippingAddress(this.defaultAddress);
+    if(this.singlePaymentOrder) {
+      this.sharedService.setShippingAddress(this.defaultAddress);
+    } else {
+      if(this.subscriptionAddresses) {
+        this.subscriptionAddresses[this.subscriptionItemIndex] = this.defaultAddress;
+        this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
+      }
+    }
   }
 
-  getLocalAddress() {
-    if(this.orderDetails) {
+  getAddress() {
+    if(this.orderDetails) { //receipt
       this.defaultAddress = this.orderDetails.shipping_address;
     } else {
-      this.defaultAddress = this.service.getLocalAddress();
-      this.sharedService.setShippingAddress(this.defaultAddress);
+      let singlePaymentAddress = this.service.getSinglePaymentAddress();
+      let subscriptionAddresses = this.service.getSubscriptionAddresses();
+      if(this.subscriptionItemIndex !== undefined && subscriptionAddresses) {
+        this.defaultAddress = this.subscriptionAddresses[this.subscriptionItemIndex];
+      }
+      if(this.singlePaymentOrder && singlePaymentAddress) {
+        this.defaultAddress = singlePaymentAddress;
+        this.sharedService.setShippingAddress(this.defaultAddress);
+      }
     }
   }
 
@@ -83,11 +107,15 @@ export class ShippingAddressComponent implements OnInit {
           },
           err => this.service.handleError(err)
         );
-    } else {
-      this.defaultAddress = this.service.formattAddress(this.form.value);
-      this.service.saveLocalAddress(this.form.value);
     }
-    this.sharedService.setShippingAddress(this.defaultAddress);
+    this.defaultAddress = this.service.formattAddress(this.form.value);
+    if(this.subscriptionItemIndex !== undefined) {
+      this.subscriptionAddresses[this.subscriptionItemIndex] = this.defaultAddress;
+      this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
+    } else {
+      this.service.saveSinglePaymentAddress(this.form.value);
+      this.sharedService.setShippingAddress(this.defaultAddress);
+    }
   }
 
   getStates(country) {

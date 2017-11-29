@@ -16,7 +16,7 @@ export class CartService {
     this.checkCartItemTypes();
   }
 
-  scrubCart(cart:any) {
+  scrubCart(cart: any) {
     let formattedCart = { items: [] };
     formattedCart.items = cart.items.map((item) => {
       delete item.product_plan;
@@ -28,7 +28,7 @@ export class CartService {
 
   calculateSubtotal() {
     let subtotal = 0;
-    this.cart.items.forEach((item) => {
+    this.singleOrderCart.items.forEach((item) => {
       let priceTimesQuantity = item.price.usd * item.quantity;
       subtotal += priceTimesQuantity;
     });
@@ -42,7 +42,7 @@ export class CartService {
     });
   }
 
-  getShipping(address:any, shippingType:string) {
+  getShipping(address: any, shippingType: string) {
     let body = {
       country: '',
       state: '',
@@ -53,7 +53,7 @@ export class CartService {
     for(const [key] of Object.entries(body)) {
       body[key] = address[key];
     }
-    body['cart'] = this.scrubCart(this.cart);
+    body['cart'] = this.scrubCart(this.singleOrderCart);
     body['shipping_type'] = shippingType;
     return this.http.put(`${environment.domain}/api/shipping`, body);
   }

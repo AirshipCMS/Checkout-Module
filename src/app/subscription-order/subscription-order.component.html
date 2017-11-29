@@ -4,7 +4,7 @@
   </div>
   <div class="clearfix">
     <div class="left">
-      <shipping-address *ngIf="!skipShipping" [user]="user" [account]="account" [orderDetails]="orderDetails"></shipping-address>
+      <shipping-address *ngIf="!skipShipping" [user]="user" [account]="account" [orderDetails]="orderDetails" [subscriptionCart]="subscriptionCart" [subscriptionItemIndex]="i"></shipping-address>
       <div>
         <label>Shipping Type</label>
         <shipping-type [orderDetails]="orderDetails"></shipping-type>

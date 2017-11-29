@@ -21,10 +21,12 @@ export class SinglePaymentOrderComponent implements OnInit {
   orderTotal : number;
   @Input() defaultCard : any;
   skipShipping : boolean;
+  order;
 
   constructor() { }
 
   ngOnInit() {
+    this.order = this;
     this.skipShipping = environment.skip_single_payment_shipping;
   }
 

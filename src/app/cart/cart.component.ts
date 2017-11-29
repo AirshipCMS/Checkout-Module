@@ -30,7 +30,7 @@ export class CartComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cart = this.service.cart;
+    this.cart = this.service.singleOrderCart;
     this.subtotal = this.service.calculateSubtotal();
     if(!this.orderDetails) {
       if(!environment.skip_single_payment_shipping) {
@@ -47,7 +47,7 @@ export class CartComponent implements OnInit {
       this.sharedService.shippingType$.subscribe(
         shippingType => {
           this.shippingType = shippingType;
-          this.getShipping();
+          if(this.shippingAddress) this.getShipping();
         }
       )
     }

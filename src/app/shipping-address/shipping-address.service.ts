@@ -56,7 +56,7 @@ export class ShippingAddressService {
     return formattedAddress;
   }
 
-  saveLocalAddress(address: any) {
+  saveSinglePaymentAddress(address: any) {
     localStorage.setItem('shipping_address', JSON.stringify(address));
   }
 
@@ -66,7 +66,15 @@ export class ShippingAddressService {
     return this.http.post(`${environment.domain}/api/${endpoint}`, this.scrubAddress(address), { headers: this.headers });
   }
 
-  getLocalAddress() {
+  saveSubscriptionAddresses(addresses: Array<any>) {
+    localStorage.setItem('subscriptionAddresses', JSON.stringify(addresses));
+  }
+
+  getSubscriptionAddresses() {
+    return JSON.parse(localStorage.getItem('subscriptionAddresses'));
+  }
+
+  getSinglePaymentAddress() {
     let localAddress = JSON.parse(localStorage.getItem('shipping_address'));
     let address = localAddress ? localAddress : null;
     return address;
