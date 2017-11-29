@@ -41,6 +41,6 @@
     </div>
   </div>
   <div *ngIf="!pending && !orderDetails">
-    <p>{{ defaultCard?.brand }} ending *{{defaultCard?.last4 }} will be charged {{ total | currency: "USD" }}</p>
+    <p>{{ creditCard?.brand }} ending *{{creditCard?.last4 }} will be charged {{ total | currency: "USD" }}</p>
   </div>
 </div>

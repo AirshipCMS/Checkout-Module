@@ -23,7 +23,7 @@ export class CartComponent implements OnInit {
   subtotal : number = 0;
   pending : boolean = true;
   shippingAddress : any;
-  @Input() defaultCard : any;
+  @Input() creditCard : any;
   @Input() orderDetails: any;
 
   constructor(private service: CartService, private sharedService: SharedService) {

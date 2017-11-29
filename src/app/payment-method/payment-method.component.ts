@@ -17,16 +17,16 @@ declare var Stripe;
 export class PaymentMethodComponent implements OnInit {
 
   accountCards : Array<any>;
-  defaultCard;
+  creditCard;
   cardElement;
   changeCardOption : string = 'new';
   stripe;
   token;
-  editDefualtCard : boolean = false;
+  editCreditCard : boolean = false;
   checked: boolean = false;
   @Input() user;
   @Input() account;
-  @Output() defaultCardSaved = new EventEmitter();
+  @Output() creditCardSaved = new EventEmitter();
 
   constructor(private service: PaymentMethodService, private sharedService: SharedService) {
   }
@@ -46,33 +46,33 @@ export class PaymentMethodComponent implements OnInit {
           this.addCardAndSetAsDefault(res.token.id);
         } else {
           this.token = res.token.id;
-          this.defaultCard = res.token.card;
-          this.service.saveLocalCard(this.defaultCard, this.token);
-          this.defaultCardSaved.emit({ defaultCard : this.defaultCard, token: this.token });
+          this.creditCard = res.token.card;
+          this.service.saveLocalCard(this.creditCard, this.token);
+          this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
         }
       });
   }
 
   addCardAndSetAsDefault(token:string) {
     this.service.addCard(this.user.scope, this.account.id, token)
-      .pipe(mergeMap(card => this.service.setDefaultCard(card, this.user, this.account)))
+      .pipe(mergeMap(card => this.service.setCreditCard(card, this.user, this.account)))
       .subscribe(
-        defaultCard => {
-          this.defaultCard = defaultCard;
-          this.accountCards.push(this.defaultCard);
-          this.defaultCardSaved.emit({ defaultCard : this.defaultCard, token: this.token });
+        creditCard => {
+          this.creditCard = creditCard;
+          this.accountCards.push(this.creditCard);
+          this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
         },
         err => console.error(err)
       );
   }
 
-  setDefaultCard(card:any) {
-    this.service.setDefaultCard(card.id, this.user, this.account)
+  setCreditCard(card:any) {
+    this.service.setCreditCard(card.id, this.user, this.account)
       .subscribe(
         res => {
-          this.defaultCard = card;
-          this.defaultCardSaved.emit({ defaultCard : this.defaultCard });
-          this.editDefualtCard = false;
+          this.creditCard = card;
+          this.creditCardSaved.emit({ creditCard : this.creditCard });
+          this.editCreditCard = false;
         },
         err => this.service.handleError(err)
       )
@@ -81,16 +81,16 @@ export class PaymentMethodComponent implements OnInit {
   getSavedCard(elements) {
     if(Object.keys(this.account).length === 0) {
       let localData = this.service.getLocalCard();
-      this.defaultCard = localData.card;
+      this.creditCard = localData.card;
       this.token = localData.token;
-      this.defaultCardSaved.emit({ defaultCard : this.defaultCard, token: this.token });
+      this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
     } else {
       this.service.getAccountCards(this.user.scope, this.account.id)
         .subscribe(
           res => {
             this.accountCards = res['data'];
-            this.defaultCard = this.accountCards.find((item) => item.id === this.account.customer.default_source);
-            this.defaultCardSaved.emit({ defaultCard: this.defaultCard });
+            this.creditCard = this.accountCards.find((item) => item.id === this.account.customer.default_source);
+            this.creditCardSaved.emit({ creditCard: this.creditCard });
           },
           err => this.service.handleError(err)
         )

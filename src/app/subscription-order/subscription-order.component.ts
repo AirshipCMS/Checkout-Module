@@ -13,7 +13,7 @@ export class SubscriptionOrderComponent implements OnInit {
 
   @Input() user : any;
   @Input() account : any;
-  @Input() defaultCard : any;
+  @Input() creditCard : any;
   @Input() subscriptionCart : any;
   @Input() orderDetails : any;
   plans : Array<any> = [];

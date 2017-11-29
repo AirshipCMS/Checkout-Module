@@ -25,7 +25,7 @@
       <div>
         <label>Billing</label>
         <p *ngIf="shippingCalculationPending && !orderDetails">Pending...</p>
-        <p *ngIf="!shippingCalculationPending && !orderDetails">{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
+        <p *ngIf="!shippingCalculationPending && !orderDetails">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
         <!-- <p *ngIf="orderDetails">{{ item?.stripe_data.brand }} ending *{{ item?.stripe_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ item?.created_at | date: 'MM/dd/yyyy' }}</p> -->
       </div>
       <div>

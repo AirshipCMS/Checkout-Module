@@ -26,7 +26,7 @@ export class CheckoutComponent implements OnInit {
   user : any;
   account : any;
   loading : boolean;
-  defaultCard : any;
+  creditCard : any;
   shippingAddress : any;
   orderNotes : string;
   singleOrderCart : any;
@@ -97,9 +97,9 @@ export class CheckoutComponent implements OnInit {
       )
   }
 
-  defaultCardSaved(data) {
+  creditCardSaved(data) {
     this.stripeToken = data.token;
-    this.defaultCard = data.defaultCard;
+    this.creditCard = data.creditCard;
   }
 
   placeOrder() {
@@ -110,7 +110,7 @@ export class CheckoutComponent implements OnInit {
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
     if(environment.skip_subscription_shipping) subscriptionAddress = environment.default_address;
     let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.orderNotes, this.stripeToken);
-    subscriptionCart.items.map((item) => {
+    subscriptionCart.items.map((item, i) => {
       let cart = { items: [item] };
       checkoutStreams.push(this.service.checkout(subscriptionAddress, this.user, this.account, cart, this.orderNotes, this.stripeToken));
     });
@@ -140,7 +140,7 @@ export class CheckoutComponent implements OnInit {
   checkoutComplete(res: any) {
     console.log(res);
     this.sharedService.checkoutResponse = res;
-    this.service.clearLocalStorage();
+    // this.service.clearLocalStorage();
     this.router.navigate(['/checkout#receipt']);
   }
 

@@ -25,7 +25,7 @@
       <div>
         <label>Billing</label>
         <p *ngIf="shippingCalculationPending && !orderDetails">Pending...</p>
-        <p *ngIf="!shippingCalculationPending && !orderDetails">{{ defaultCard?.brand }} ending *{{ defaultCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
+        <p *ngIf="!shippingCalculationPending && !orderDetails">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
         <p *ngIf="orderDetails">{{ orderDetails?.single_payment.payment.stripe_card_raw_json_data.brand }} ending *{{ orderDetails?.single_payment.payment.stripe_card_raw_json_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ orderDetails?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
       <div>
@@ -36,7 +36,7 @@
     <div class="right">
       <app-cart
         (shippingCalculated)="shippingCalculated($event)"
-        [defaultCard]="defaultCard"
+        [creditCard]="creditCard"
         [orderDetails]="orderDetails"
       ></app-cart>
     </div>

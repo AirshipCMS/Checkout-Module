@@ -1,16 +1,16 @@
 <div>
   <label>Shipping Address</label>
-  <button class="inline-button" type="button" *ngIf="defaultAddress && !editDefaultAddress && !orderDetails" (click)="editDefaultAddress = true">Change Address</button>
-  <form *ngIf="!defaultAddress || editDefaultAddress" [formGroup]="form">
-    <label *ngIf="defaultAddress && accountAddresses" for="change_address_option">
+  <button class="inline-button" type="button" *ngIf="address && !editaddress && !orderDetails" (click)="editaddress = true">Change Address</button>
+  <form *ngIf="!address || editaddress" [formGroup]="form">
+    <label *ngIf="address && accountAddresses" for="change_address_option">
       Existing Address
       <input id="change_address_option" type="radio" formControlName="change_address_option" value="existing">
     </label>
-    <label *ngIf="defaultAddress && accountAddresses" for="change_address_option">
+    <label *ngIf="address && accountAddresses" for="change_address_option">
       New Address
       <input id="change_address_option" type="radio" formControlName="change_address_option" value="new">
     </label>
-    <div *ngIf="form.value.change_address_option === 'new' || !defaultAddress">
+    <div *ngIf="form.value.change_address_option === 'new' || !address">
       <div class="inline-field">
         <label>First Name*</label>
         <input type="text" formControlName="first_name" required [(ngModel)]="first_name">
@@ -66,16 +66,16 @@
         </option>
       </select>
       <div *ngIf="form.value.change_address_option === 'existing'">
-        <button type="button" (click)="editDefaultAddress = !editDefaultAddress">Cancel</button>
-        <button type="button" (click)="setDefaultAddress(form.value.address_options)">Save</button>
+        <button type="button" (click)="editaddress = !editaddress">Cancel</button>
+        <button type="button" (click)="setaddress(form.value.address_options)">Save</button>
       </div>
     </div>
     <button [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>
   </form>
-  <div *ngIf="defaultAddress && !editDefaultAddress">
-    <p>{{ defaultAddress?.first_name }} {{ defaultAddress?.last_name }}</p>
-    <p>{{ defaultAddress?.address_1 }}</p>
-    <p>{{ defaultAddress?.address_2 }}</p>
-    <p>{{ defaultAddress?.city }}, {{ defaultAddress?.state }} {{ defaultAddress?.zipcode }}</p>
+  <div *ngIf="address && !editaddress">
+    <p>{{ address?.first_name }} {{ address?.last_name }}</p>
+    <p>{{ address?.address_1 }}</p>
+    <p>{{ address?.address_2 }}</p>
+    <p>{{ address?.city }}, {{ address?.state }} {{ address?.zipcode }}</p>
   </div>
 </div>

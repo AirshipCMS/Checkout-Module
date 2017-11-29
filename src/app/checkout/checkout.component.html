@@ -7,19 +7,19 @@
     <payment-method
       [user]="user"
       [account]="account"
-      (defaultCardSaved)="defaultCardSaved($event)"
+      (creditCard)="creditCard($event)"
     ></payment-method>
     <single-payment-order
       *ngIf="singleOrderCart?.items.length > 0"
       [user]="user"
       [account]="account"
-      [defaultCard]="defaultCard"
+      [creditCard]="creditCard"
     ></single-payment-order>
     <subscription-order
       *ngIf="subscriptionCart?.items.length > 0"
       [user]="user"
       [account]="account"
-      [defaultCard]="defaultCard"
+      [creditCard]="creditCard"
       [subscriptionCart]="subscriptionCart"
     ></subscription-order>
   </div>
@@ -30,7 +30,7 @@
   </div>
   <div *ngIf="account">
     <a class="button" href="/cart">Back to Cart</a>
-    <button type="button" (click)="placeOrder()" [disabled]="!defaultCard && !shippingAddress">Place Order</button>
+    <button type="button" (click)="placeOrder()" [disabled]="!creditCard && !shippingAddress">Place Order</button>
   </div>
 </div>
 <div *ngIf="loading" class="loader">loading</div>

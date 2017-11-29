@@ -19,10 +19,10 @@ export class ShippingAddressComponent implements OnInit {
 
   countries : Array<any> = [];
   form : FormGroup;
-  defaultAddress : any;
+  address : any;
   accountAddresses : Array<any> = [];
   states : Array<any> = [];
-  editDefaultAddress : boolean = false;
+  editaddress : boolean = false;
   changeCardOption : string = 'existing';
   singlePaymentAddress : any;
   subscriptionAddresses : Array<any>;
@@ -61,20 +61,20 @@ export class ShippingAddressComponent implements OnInit {
     }
     if(this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
-      this.defaultAddress = this.account.postal_addresses[0];
-      this.sharedService.setShippingAddress(this.defaultAddress);
+      this.address = this.account.postal_addresses[0];
+      this.sharedService.setShippingAddress(this.address);
     }
     this.getAddress();
   }
 
-  setDefaultAddress(address: any) {
-    this.defaultAddress = address;
-    this.editDefaultAddress = false;
+  setaddress(address: any) {
+    this.address = address;
+    this.editaddress = false;
     if(this.singlePaymentOrder) {
-      this.sharedService.setShippingAddress(this.defaultAddress);
+      this.sharedService.setShippingAddress(this.address);
     } else {
       if(this.subscriptionAddresses) {
-        this.subscriptionAddresses[this.subscriptionItemIndex] = this.defaultAddress;
+        this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
         this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
       }
     }
@@ -82,39 +82,39 @@ export class ShippingAddressComponent implements OnInit {
 
   getAddress() {
     if(this.orderDetails) { //receipt
-      this.defaultAddress = this.orderDetails.shipping_address;
+      this.address = this.orderDetails.shipping_address;
     } else {
       let singlePaymentAddress = this.service.getSinglePaymentAddress();
       let subscriptionAddresses = this.service.getSubscriptionAddresses();
       if(this.subscriptionItemIndex !== undefined && subscriptionAddresses) {
-        this.defaultAddress = this.subscriptionAddresses[this.subscriptionItemIndex];
+        this.address = this.subscriptionAddresses[this.subscriptionItemIndex];
       }
       if(this.singlePaymentOrder && singlePaymentAddress) {
-        this.defaultAddress = singlePaymentAddress;
-        this.sharedService.setShippingAddress(this.defaultAddress);
+        this.address = singlePaymentAddress;
+        this.sharedService.setShippingAddress(this.address);
       }
     }
   }
 
   saveAddress() {
     if(Object.keys(this.account).length > 0) {
-      this.defaultAddress = this.service.formattAddress(this.form.value);
-      this.service.saveAddress(this.defaultAddress, this.user, this.account)
+      this.address = this.service.formattAddress(this.form.value);
+      this.service.saveAddress(this.address, this.user, this.account)
         .subscribe(
           address => {
             this.accountAddresses.push(address);
-            this.defaultAddress = address;
+            this.address = address;
           },
           err => this.service.handleError(err)
         );
     }
-    this.defaultAddress = this.service.formattAddress(this.form.value);
+    this.address = this.service.formattAddress(this.form.value);
     if(this.subscriptionItemIndex !== undefined) {
-      this.subscriptionAddresses[this.subscriptionItemIndex] = this.defaultAddress;
+      this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
       this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
     } else {
       this.service.saveSinglePaymentAddress(this.form.value);
-      this.sharedService.setShippingAddress(this.defaultAddress);
+      this.sharedService.setShippingAddress(this.address);
     }
   }
 

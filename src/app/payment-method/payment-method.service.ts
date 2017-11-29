@@ -46,7 +46,7 @@ export class PaymentMethodService {
     return this.http.post(`${environment.domain}/api/${endpoint}`, body, { headers: this.headers });
   }
 
-  setDefaultCard(default_source: any, user: any, account: any) {
+  setCreditCard(default_source: any, user: any, account: any) {
     let endpoint = 'customer';
     let email = user.email;
     if(user.scope !== 'user') {
