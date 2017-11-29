@@ -67,7 +67,7 @@
       </select>
       <div *ngIf="form.value.change_address_option === 'existing'">
         <button type="button" (click)="editaddress = !editaddress">Cancel</button>
-        <button type="button" (click)="setaddress(form.value.address_options)">Save</button>
+        <button type="button" (click)="setAddress(form.value.address_options)">Save</button>
       </div>
     </div>
     <button [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>

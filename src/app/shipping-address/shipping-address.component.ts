@@ -62,13 +62,13 @@ export class ShippingAddressComponent implements OnInit {
     if(this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
       this.address = this.account.postal_addresses[0];
-      this.sharedService.setShippingAddress(this.address);
+      this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
     }
     this.getAddress();
   }
 
-  setaddress(address: any) {
-    this.address = address;
+  setAddress(address: any) {
+    this.address = this.service.scrubAddress(this.service.formattAddress(address));
     this.editaddress = false;
     if(this.singlePaymentOrder) {
       this.sharedService.setShippingAddress(this.address);
@@ -76,6 +76,7 @@ export class ShippingAddressComponent implements OnInit {
       if(this.subscriptionAddresses) {
         this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
         this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
+        this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
       }
     }
   }
@@ -88,10 +89,11 @@ export class ShippingAddressComponent implements OnInit {
       let subscriptionAddresses = this.service.getSubscriptionAddresses();
       if(this.subscriptionItemIndex !== undefined && subscriptionAddresses) {
         this.address = this.subscriptionAddresses[this.subscriptionItemIndex];
+        this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
       }
       if(this.singlePaymentOrder && singlePaymentAddress) {
         this.address = singlePaymentAddress;
-        this.sharedService.setShippingAddress(this.address);
+        this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
       }
     }
   }
@@ -110,11 +112,12 @@ export class ShippingAddressComponent implements OnInit {
     }
     this.address = this.service.formattAddress(this.form.value);
     if(this.subscriptionItemIndex !== undefined) {
-      this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
+      this.subscriptionAddresses[this.subscriptionItemIndex] = this.service.formattAddress(this.service.scrubAddress(this.address));
       this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
+      this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
     } else {
       this.service.saveSinglePaymentAddress(this.form.value);
-      this.sharedService.setShippingAddress(this.address);
+      this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
     }
   }
 

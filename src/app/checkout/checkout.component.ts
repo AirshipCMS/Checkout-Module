@@ -27,7 +27,8 @@ export class CheckoutComponent implements OnInit {
   account : any;
   loading : boolean;
   creditCard : any;
-  shippingAddress : any;
+  singlePaymentAddress : any;
+  subscriptionAddresses : Array<any>;
   orderNotes : string;
   singleOrderCart : any;
   subscriptionCart : any;
@@ -50,7 +51,8 @@ export class CheckoutComponent implements OnInit {
     this.singleOrderCart = this.cartService.singleOrderCart;
     this.subscriptionCart = this.cartService.subscriptionCart;
     this.sharedService.orderNotes$.subscribe(orderNotes => this.orderNotes = orderNotes);
-    this.sharedService.shippingAddress$.subscribe(shippingAddress => this.shippingAddress = shippingAddress);
+    this.sharedService.shippingAddress$.subscribe(shippingAddress => this.singlePaymentAddress = shippingAddress);
+    this.sharedService.subscriptionAddresses$.subscribe(addresses => this.subscriptionAddresses = addresses);
     this.sharedService.account$.subscribe(account => this.account = account);
   }
 
@@ -105,14 +107,14 @@ export class CheckoutComponent implements OnInit {
   placeOrder() {
     let checkoutStreams = [];
     let subscriptionCart : any = this.cartService.scrubCart(_.cloneDeep(this.subscriptionCart));
-    let singlePaymentAddress = this.shippingAddress;
-    let subscriptionAddress = this.shippingAddress;
+    let singlePaymentAddress = this.singlePaymentAddress;
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
-    if(environment.skip_subscription_shipping) subscriptionAddress = environment.default_address;
     let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.orderNotes, this.stripeToken);
     subscriptionCart.items.map((item, i) => {
       let cart = { items: [item] };
-      checkoutStreams.push(this.service.checkout(subscriptionAddress, this.user, this.account, cart, this.orderNotes, this.stripeToken));
+      let address = this.subscriptionAddresses[i];
+      if(environment.skip_subscription_shipping) address = environment.default_address;
+      checkoutStreams.push(this.service.checkout(address, this.user, this.account, cart, this.orderNotes, this.stripeToken));
     });
 
     if(this.subscriptionCart.items.length === 0) {

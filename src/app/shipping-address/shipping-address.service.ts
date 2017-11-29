@@ -47,7 +47,7 @@ export class ShippingAddressService {
 
         default:
           if(value === undefined || value === null) {
-            delete address[key];
+            address[key] = '';
           }
           break;
       }
