@@ -6,6 +6,8 @@ import { FormValidator } from '../form-validator';
 import { ShippingAddressService } from './shipping-address.service';
 import { SharedService } from '../shared.service';
 
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'shipping-address',
   templateUrl: './shipping-address.component.html',
