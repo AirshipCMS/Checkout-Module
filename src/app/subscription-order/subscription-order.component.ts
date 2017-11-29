@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
 import { ShippingAddressComponent } from '../shipping-address';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'subscription-order',
@@ -16,10 +17,12 @@ export class SubscriptionOrderComponent implements OnInit {
   @Input() subscriptionCart : any;
   @Input() orderDetails : any;
   plans : Array<any> = [];
+  skipShipping : boolean;
 
   constructor() { }
 
   ngOnInit() {
+    this.skipShipping = environment.skip_subscription_shipping;
     if(this.orderDetails) {
       this.subscriptionCart = this.orderDetails.subscriptions;
       this.plans = this.orderDetails.plans;

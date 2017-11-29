@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, Input, Output, EventEmitter } fro
 
 import { CartService } from './cart.service';
 import { SharedService } from '../shared.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-cart',
@@ -32,12 +33,17 @@ export class CartComponent implements OnInit {
     this.cart = this.service.cart;
     this.subtotal = this.service.calculateSubtotal();
     if(!this.orderDetails) {
-      this.sharedService.shippingAddress$.subscribe(
-        address => {
-          this.shippingAddress = address;
-          this.getShipping();
-        }
-      )
+      if(!environment.skip_single_payment_shipping) {
+        this.sharedService.shippingAddress$.subscribe(
+          address => {
+            this.shippingAddress = address;
+            this.getShipping();
+          }
+        )
+      } else {
+        this.shippingAddress = environment.default_address;
+        this.getShipping();
+      }
       this.sharedService.shippingType$.subscribe(
         shippingType => {
           this.shippingType = shippingType;

@@ -10,6 +10,7 @@ import { SinglePaymentOrderComponent } from '../single-payment-order';
 import { SubscriptionOrderComponent } from '../subscription-order';
 import { PaymentMethodComponent } from '../payment-method';
 import { SharedService } from '../shared.service';
+import { environment } from '../../environments/environment';
 
 import * as _ from 'lodash';
 
@@ -103,11 +104,15 @@ export class CheckoutComponent implements OnInit {
 
   placeOrder() {
     let subscriptionCart : any = this.cartService.scrubCart(_.cloneDeep(this.subscriptionCart));
+    let singlePaymentAddress = this.shippingAddress;
+    let subscriptionAddress = this.shippingAddress;
+    if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
+    if(environment.skip_subscription_shipping) subscriptionAddress = environment.default_address;
+    let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.orderNotes, this.stripeToken);
     let subscriptionOrder = subscriptionCart.items.map((item) => {
       let cart = { items: [item] };
-      return this.service.checkout(this.shippingAddress, this.user, this.account, cart, this.orderNotes, this.stripeToken)
+      return this.service.checkout(subscriptionAddress, this.user, this.account, cart, this.orderNotes, this.stripeToken)
     });
-    let singlePaymentOrder = this.service.checkout(this.shippingAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.orderNotes, this.stripeToken);
 
     if(this.subscriptionCart.items.length === 0) {
       singlePaymentOrder.subscribe(

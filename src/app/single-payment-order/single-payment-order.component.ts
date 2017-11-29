@@ -4,6 +4,7 @@ import { CartComponent } from '../cart';
 import { OrderNotesComponent } from '../order-notes';
 import { ShippingAddressComponent } from '../shipping-address';
 import { ShippingTypeComponent } from '../shipping-type';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'single-payment-order',
@@ -19,10 +20,12 @@ export class SinglePaymentOrderComponent implements OnInit {
   shippingCalculationPending : boolean = true;
   orderTotal : number;
   @Input() defaultCard : any;
+  skipShipping : boolean;
 
   constructor() { }
 
   ngOnInit() {
+    this.skipShipping = environment.skip_single_payment_shipping;
   }
 
   shippingCalculated(total:number) {

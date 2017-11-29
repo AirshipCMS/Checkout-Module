@@ -78,7 +78,7 @@ export class ShippingAddressComponent implements OnInit {
       this.service.saveAddress(this.defaultAddress, this.user, this.account)
         .subscribe(
           address => {
-            this.account.postal_addresses.split(0,0,address);
+            this.accountAddresses.push(address);
             this.defaultAddress = address;
           },
           err => this.service.handleError(err)
