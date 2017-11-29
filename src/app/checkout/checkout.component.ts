@@ -103,15 +103,16 @@ export class CheckoutComponent implements OnInit {
   }
 
   placeOrder() {
+    let checkoutStreams = [];
     let subscriptionCart : any = this.cartService.scrubCart(_.cloneDeep(this.subscriptionCart));
     let singlePaymentAddress = this.shippingAddress;
     let subscriptionAddress = this.shippingAddress;
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
     if(environment.skip_subscription_shipping) subscriptionAddress = environment.default_address;
     let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.orderNotes, this.stripeToken);
-    let subscriptionOrder = subscriptionCart.items.map((item) => {
+    subscriptionCart.items.map((item) => {
       let cart = { items: [item] };
-      return this.service.checkout(subscriptionAddress, this.user, this.account, cart, this.orderNotes, this.stripeToken)
+      checkoutStreams.push(this.service.checkout(subscriptionAddress, this.user, this.account, cart, this.orderNotes, this.stripeToken));
     });
 
     if(this.subscriptionCart.items.length === 0) {
@@ -121,13 +122,15 @@ export class CheckoutComponent implements OnInit {
       );
     }
     if(this.singleOrderCart.items.length === 0) {
-      Observable.forkJoin(subscriptionOrder).subscribe(
+      Observable.forkJoin(checkoutStreams).subscribe(
         res => this.checkoutComplete(res),
         err => this.service.handleError(err)
       );
     }
+
     if(this.singleOrderCart.items.length > 0 && this.subscriptionCart.items.length > 0) {
-      Observable.forkJoin([subscriptionOrder, singlePaymentOrder]).subscribe(
+      checkoutStreams.push(singlePaymentOrder);
+      Observable.forkJoin(checkoutStreams).subscribe(
         res => this.checkoutComplete(res),
         err => this.service.handleError(err)
       );
@@ -135,6 +138,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   checkoutComplete(res: any) {
+    console.log(res);
     this.sharedService.checkoutResponse = res;
     this.service.clearLocalStorage();
     this.router.navigate(['/checkout#receipt']);

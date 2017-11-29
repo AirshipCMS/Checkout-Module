@@ -15,6 +15,7 @@ export class ReceiptComponent implements OnInit {
   constructor(public sharedService: SharedService) {}
 
   ngOnInit() {
+    console.log(this.sharedService.checkoutResponse)
     if(this.sharedService.checkoutResponse) {
       this.orderDetails = this.sharedService.checkoutResponse;
     } else {
