@@ -61,7 +61,7 @@ export class ShippingAddressComponent implements OnInit {
     }
     if(this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
-      this.address = this.account.postal_addresses[0];
+      this.address = this.service.formattAddress(this.account.postal_addresses[0]);
       this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
     }
     this.getAddress();
@@ -92,7 +92,7 @@ export class ShippingAddressComponent implements OnInit {
         this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
       }
       if(this.singlePaymentOrder && singlePaymentAddress) {
-        this.address = singlePaymentAddress;
+        this.address = this.service.formattAddress(singlePaymentAddress);
         this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
       }
     }

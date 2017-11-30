@@ -15,8 +15,7 @@ export class ReceiptComponent implements OnInit {
   constructor(public sharedService: SharedService) {}
 
   ngOnInit() {
-    console.log(this.sharedService.checkoutResponse)
-    if(this.sharedService.checkoutResponse) {
+    if(this.sharedService.checkoutResponse.products) {
       this.orderDetails = this.sharedService.checkoutResponse;
     } else {
       let subscriptions = { items: [] };
@@ -24,7 +23,7 @@ export class ReceiptComponent implements OnInit {
       let products = {};
       let single_payment = {};
       this.sharedService.checkoutResponse.forEach((item) => {
-        if(item.products.length > 0) {
+        if(item.products.items.length > 0) {
           products = item.products;
           single_payment = item.single_payment;
         }
