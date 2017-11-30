@@ -5,7 +5,7 @@
   <div class="clearfix">
     <div class="left">
       <shipping-address *ngIf="!skipShipping" [user]="user" [account]="account" [orderDetails]="orderDetails" [singlePaymentOrder]="true"></shipping-address>
-      <div>
+      <div *ngIf="!skipShipping">
         <label>Shipping Type</label>
         <shipping-type [orderDetails]="orderDetails"></shipping-type>
       </div>

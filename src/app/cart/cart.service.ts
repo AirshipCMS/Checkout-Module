@@ -20,6 +20,7 @@ export class CartService {
     let formattedCart = { items: [] };
     formattedCart.items = cart.items.map((item) => {
       delete item.product_plan;
+      delete item.has_no_shipments;
       if(item.type !== 'plan') delete item.type;
       return item;
     });
@@ -38,7 +39,7 @@ export class CartService {
   checkCartItemTypes() {
     this.cart.items.forEach((item) => {
       if(item.type === 'plan') this.subscriptionCart.items.push(item);
-      if(item.type !== 'plan')this.singleOrderCart.items.push(item);
+      if(item.type !== 'plan') this.singleOrderCart.items.push(item);
     });
   }
 

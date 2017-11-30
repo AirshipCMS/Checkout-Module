@@ -7,7 +7,7 @@
     <payment-method
       [user]="user"
       [account]="account"
-      (creditCard)="creditCard($event)"
+      (creditCardSaved)="creditCardSaved($event)"
     ></payment-method>
     <single-payment-order
       *ngIf="singleOrderCart?.items.length > 0"
