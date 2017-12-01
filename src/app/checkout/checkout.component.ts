@@ -29,11 +29,12 @@ export class CheckoutComponent implements OnInit {
   creditCard : any;
   singlePaymentAddress : any;
   subscriptionAddresses : Array<any>;
-  orderNotes : string;
+  singlePaymentNotes : string;
   singleOrderCart : any;
   subscriptionCart : any;
   stripeToken : string;
   checkoutResponse : any;
+  subscriptionNotes : Array<any>;
 
   constructor(
     private auth: AuthService,
@@ -50,10 +51,11 @@ export class CheckoutComponent implements OnInit {
     this.getUserProfile();
     this.singleOrderCart = this.cartService.singleOrderCart;
     this.subscriptionCart = this.cartService.subscriptionCart;
-    this.sharedService.orderNotes$.subscribe(orderNotes => this.orderNotes = orderNotes);
+    this.sharedService.orderNotes$.subscribe(singlePaymentNotes => this.singlePaymentNotes = singlePaymentNotes);
     this.sharedService.shippingAddress$.subscribe(shippingAddress => this.singlePaymentAddress = shippingAddress);
     this.sharedService.subscriptionAddresses$.subscribe(addresses => this.subscriptionAddresses = addresses);
     this.sharedService.account$.subscribe(account => this.account = account);
+    this.sharedService.subscriptionNotes$.subscribe(notes => this.subscriptionNotes = notes);
   }
 
   getUserProfile() {
@@ -109,14 +111,15 @@ export class CheckoutComponent implements OnInit {
     let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
     let singlePaymentAddress = this.singlePaymentAddress;
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
-    let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.orderNotes, this.stripeToken);
+    let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken);
     subscriptionCart.items.map((item, i) => {
       let cart = { items: [item] };
       let address = this.subscriptionAddresses[i];
+      let orderNotes = this.subscriptionNotes[i];
       if(environment.skip_subscription_shipping || (environment.has_no_shipments && item.has_no_shipments)) {
         address = environment.default_address;
       }
-      checkoutStreams.push(this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), this.orderNotes, this.stripeToken));
+      checkoutStreams.push(this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken));
     });
 
     if(this.subscriptionCart.items.length === 0) {

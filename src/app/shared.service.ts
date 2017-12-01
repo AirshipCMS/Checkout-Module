@@ -13,11 +13,13 @@ export class SharedService {
   shippingType$ : Observable<any>;
   account$ : Observable<any>;
   subscriptionAddresses$ : Observable<any>;
+  subscriptionNotes$ : Observable<any>;
   private shippingAddressSubject : ReplaySubject<any>;
   private orderNotesSubject : ReplaySubject<any>;
   private shippingTypeSubject : ReplaySubject<any>;
   private accountSubject : ReplaySubject<any>;
   private subscriptionAddressesSubject : ReplaySubject<any>;
+  private subscriptionNotesSubject : ReplaySubject<any>;
 
   constructor() {
     this.shippingAddressSubject = new ReplaySubject<any>();
@@ -30,6 +32,8 @@ export class SharedService {
     this.account$ = this.accountSubject.asObservable();
     this.subscriptionAddressesSubject = new ReplaySubject<any>();
     this.subscriptionAddresses$ = this.subscriptionAddressesSubject.asObservable();
+    this.subscriptionNotesSubject = new ReplaySubject<any>();
+    this.subscriptionNotes$ = this.subscriptionNotesSubject.asObservable();
   }
 
   setShippingAddress(shippingAddress: any) {
@@ -50,6 +54,10 @@ export class SharedService {
 
   setSubscriptionAddresses(addresses: Array<any>) {
     this.subscriptionAddressesSubject.next(addresses);
+  }
+
+  setSubscriptionNotes(orderNotes: Array<any>) {
+    this.subscriptionNotesSubject.next(orderNotes);
   }
 
 }
