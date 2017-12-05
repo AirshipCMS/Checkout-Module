@@ -20,7 +20,7 @@ export class AuthService {
 
   login() {
     if(!this.isAuthenticated) {
-      window.location.href = '/login';
+      window.location.href = '/signin';
     }
   }
 

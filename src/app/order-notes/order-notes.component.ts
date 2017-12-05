@@ -43,13 +43,13 @@ export class OrderNotesComponent implements OnInit {
 
   getOrderNotes() {
     if(!this.orderDetails) {
-       let localNotes = localStorage.getItem('customer_notes');
-       let subscriptionNotes = JSON.parse(localStorage.getItem('subscriptionNotes'));
+      let localNotes = localStorage.getItem('customer_notes');
+      let subscriptionNotes = JSON.parse(localStorage.getItem('subscriptionNotes'));
       if(this.singlePaymentOrder) {
         this.orderNotes = localNotes ? localNotes : '';
         this.sharedService.setOrderNotes(this.orderNotes);
       }
-      if(this.subscriptionItemIndex !== undefined && subscriptionNotes.length > 0) {
+      if(this.subscriptionItemIndex !== undefined && subscriptionNotes && subscriptionNotes.length > 0) {
         this.orderNotes = subscriptionNotes[this.subscriptionItemIndex];
       }
     }
