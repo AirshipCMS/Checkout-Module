@@ -58,6 +58,15 @@ export class CheckoutComponent implements OnInit {
     this.sharedService.subscriptionNotes$.subscribe(notes => this.subscriptionNotes = notes);
   }
 
+  clearCustomerInfo() {
+    delete this.account;
+    delete this.user.account;
+    delete localStorage.account;
+    delete localStorage.shipping_address;
+    delete localStorage.stripe_token;
+    delete localStorage.subscriptionAddresses;
+  }
+
   getUserProfile() {
     this.auth.getProfile()
       .subscribe(

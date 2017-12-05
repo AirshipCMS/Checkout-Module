@@ -3,6 +3,7 @@
   <p *ngIf="user?.scope === 'user'">You are securely logged in as {{ user?.email }}</p>
   <p *ngIf="user?.scope !== 'user'">You are securely logged in as administrator {{ user?.email }}</p>
   <p *ngIf="user?.scope !== 'user' && account">You are completing checkout as {{ account?.user.email }}</p>
+  <p *ngIf="user?.scope !== 'user' && account" (click)="clearCustomerInfo()">Select Different Customer</p>
   <div *ngIf="(singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0) && account">
     <payment-method
       [user]="user"
