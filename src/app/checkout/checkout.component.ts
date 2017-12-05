@@ -114,8 +114,14 @@ export class CheckoutComponent implements OnInit {
     let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken);
     subscriptionCart.items.map((item, i) => {
       let cart = { items: [item] };
-      let address = this.subscriptionAddresses[i];
-      let orderNotes = this.subscriptionNotes[i];
+      let address;
+      let orderNotes = '';
+      if(!environment.skip_subscription_shipping) {
+        address = this.subscriptionAddresses[i];
+      }
+      if(this.subscriptionNotes) {
+        orderNotes = this.subscriptionNotes[i];
+      }
       if(environment.skip_subscription_shipping || (environment.has_no_shipments && item.has_no_shipments)) {
         address = environment.default_address;
       }
