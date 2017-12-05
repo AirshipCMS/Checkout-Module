@@ -43,7 +43,7 @@ export class PaymentMethodComponent implements OnInit {
     this.stripe.createToken(this.cardElement)
       .then((res) => {
         if(Object.keys(this.account).length > 0) { //if user doesn't have an account.
-          this.addCardAndSetAsDefault(res.token.id);
+          this.addCardAndSetAsDefault(res);
         } else {
           this.token = res.token.id;
           this.creditCard = res.token.card;
@@ -53,8 +53,8 @@ export class PaymentMethodComponent implements OnInit {
       });
   }
 
-  addCardAndSetAsDefault(token:string) {
-    this.service.addCard(this.user.scope, this.account.id, token)
+  addCardAndSetAsDefault(res: any) {
+    this.service.addCard(this.user.scope, this.account.id, res.token.id)
       .pipe(mergeMap(card => this.service.setCreditCard(card, this.user, this.account)))
       .subscribe(
         creditCard => {

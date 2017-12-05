@@ -35,12 +35,12 @@ export class PaymentMethodService {
     return this.http.get(`${environment.domain}/api/${endpoint}`, { headers: this.headers });
   }
 
-  addCard(scope: string, account_id: number, card: any) {
+  addCard(scope: string, account_id: number, source: any) {
     let endpoint = 'account/cards';
     if(scope !== 'user') endpoint = `accounts/${account_id}/cards`;
     let body = {
       stripe_payload: {
-        source: card.id
+        source
       }
     };
     return this.http.post(`${environment.domain}/api/${endpoint}`, body, { headers: this.headers });
