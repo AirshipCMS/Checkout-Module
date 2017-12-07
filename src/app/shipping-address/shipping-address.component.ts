@@ -99,18 +99,18 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   saveAddress() {
+    this.address = this.service.formattAddress(this.form.value);
     if(Object.keys(this.account).length > 0) {
-      this.address = this.service.formattAddress(this.form.value);
       this.service.saveAddress(this.address, this.user, this.account)
         .subscribe(
           address => {
+            this.service.saveSinglePaymentAddress(address);
             this.accountAddresses.push(address);
             this.address = address;
           },
           err => this.service.handleError(err)
         );
     }
-    this.address = this.service.formattAddress(this.form.value);
     if(this.subscriptionItemIndex !== undefined) {
       this.subscriptionAddresses[this.subscriptionItemIndex] = this.service.formattAddress(this.service.scrubAddress(this.address));
       this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
@@ -119,6 +119,7 @@ export class ShippingAddressComponent implements OnInit {
       this.service.saveSinglePaymentAddress(this.form.value);
       this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
     }
+    this.editaddress = false;
   }
 
   getStates(country) {
