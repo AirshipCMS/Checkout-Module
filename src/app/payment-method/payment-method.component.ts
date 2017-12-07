@@ -55,12 +55,13 @@ export class PaymentMethodComponent implements OnInit {
 
   addCardAndSetAsDefault(res: any) {
     this.service.addCard(this.user.scope, this.account.id, res.token.id)
-      .pipe(mergeMap(card => this.service.setCreditCard(card, this.user, this.account)))
+      .pipe(mergeMap(card => this.service.setCreditCard(res.id, this.user, this.account)))
       .subscribe(
         creditCard => {
           this.creditCard = creditCard;
           this.accountCards.push(this.creditCard);
           this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
+          this.editCreditCard = false;
         },
         err => console.error(err)
       );
