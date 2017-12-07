@@ -53,16 +53,21 @@ export class ShippingAddressComponent implements OnInit {
   ngOnInit() {
     this.countries = this.service.countries;
     this.subscriptionAddresses = this.service.getSubscriptionAddresses();
-    if(!this.subscriptionAddresses && this.subscriptionCart) {
-      this.subscriptionAddresses = [];
-      this.subscriptionCart.items.forEach((item) => {
-        this.subscriptionAddresses.push({});
-      });
-    }
     if(this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
       this.address = this.service.formattAddress(this.account.postal_addresses[0]);
       this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
+    }
+    if(!this.subscriptionAddresses && this.subscriptionCart) {
+      this.subscriptionAddresses = [];
+      this.subscriptionCart.items.forEach((item) => {
+        if(this.account && Object.keys(this.account).length > 0) {
+          this.subscriptionAddresses.push(this.account.postal_addresses[0]);
+        } else {
+          this.subscriptionAddresses.push({});
+        }
+      });
+      this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
     }
     this.getAddress();
   }
