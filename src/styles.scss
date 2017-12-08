@@ -15,22 +15,21 @@
   }
 }
 
-.clearfix{
-  clear: both;
+.container-body{
+  display: flex;
+  flex-flow: row wrap;
+  // clear: ---
 }
 
-.left,.right{
-  display: inline-block;
-  vertical-align: top;
+.container-body-left{
+  flex: 1 0 70%;
+  // width: ---
+  // for small media query it is flex: 0 0 100%
 }
-
-.left{
-  width: 70%;
-}
-
-.right{
-  width: 29%;
-  background-color: #F4F4F4;
+.container-body-left{
+  flex: 0 0 30%;
+  // width: ---
+  // for small media query it is flex: 0 0 100%
 }
 
 .hidden{

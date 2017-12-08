@@ -2,8 +2,8 @@
   <div class="container-header">
     <h4>Single-Payment Order</h4>
   </div>
-  <div class="clearfix">
-    <div class="left">
+  <div class="container-body">
+    <div class="container-body-left">
       <shipping-address *ngIf="!skipShipping" [user]="user" [account]="account" [orderDetails]="orderDetails" [singlePaymentOrder]="true"></shipping-address>
       <div *ngIf="!skipShipping">
         <label>Shipping Type</label>
@@ -33,7 +33,7 @@
         <order-notes [orderDetails]="orderDetails" [singlePaymentOrder]="true"></order-notes>
       </div>
     </div>
-    <div class="right">
+    <div class="container-body-right">
       <app-cart
         (shippingCalculated)="shippingCalculated($event)"
         [creditCard]="creditCard"

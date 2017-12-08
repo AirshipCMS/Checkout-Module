@@ -2,8 +2,8 @@
   <div class="container-header">
     <h4>Subscription</h4>
   </div>
-  <div class="clearfix">
-    <div class="left">
+  <div class="container-body">
+    <div class="container-body-left">
       <shipping-address *ngIf="!skipShipping && !hasNoShipments || (hasNoShipments && !item.has_no_shipments)" [user]="user" [account]="account" [orderDetails]="orderDetails" [subscriptionCart]="subscriptionCart" [subscriptionItemIndex]="i"></shipping-address>
       <div *ngIf="!skipShipping && !hasNoShipments || (hasNoShipments && !item.has_no_shipments)">
         <label>Shipping Type</label>
@@ -33,7 +33,7 @@
         <order-notes [orderDetails]="orderDetails" [subscriptionItemIndex]="i" [subscriptionCart]="subscriptionCart"></order-notes>
       </div>
     </div>
-    <div class="right">
+    <div class="container-body-right">
       <div *ngIf="orderDetails">
         <h4>{{ plans[i].product_title }}</h4>
         <p>{{ plans[i].name }} - {{ plans[i].price.usd/100 | currency: 'USD' }} every {{ item?.stripe_data.plan.interval }}</p>
