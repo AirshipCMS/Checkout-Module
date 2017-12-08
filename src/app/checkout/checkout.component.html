@@ -31,7 +31,7 @@
   </div>
   <div class="checkout-buttons" *ngIf="account">
     <a class="button" href="/cart">Back to Cart</a>
-    <button type="button" (click)="placeOrder()" [disabled]="!creditCard && !singlePaymentAddress">Place Order</button>
+    <button type="button" (click)="placeOrder()" [disabled]="!creditCard && !singlePaymentAddress && processing">Place Order</button>
   </div>
 </div>
 <!-- <div *ngIf="loading" class="loader">loading</div> -->

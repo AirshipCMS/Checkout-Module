@@ -35,6 +35,7 @@ export class CheckoutComponent implements OnInit {
   stripeToken : string;
   checkoutResponse : any;
   subscriptionNotes : Array<any>;
+  processing : boolean;
 
   constructor(
     private auth: AuthService,
@@ -116,6 +117,7 @@ export class CheckoutComponent implements OnInit {
   }
 
   placeOrder() {
+    this.processing = true;
     let checkoutStreams = [];
     let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
     let singlePaymentAddress = this.singlePaymentAddress;
@@ -140,13 +142,19 @@ export class CheckoutComponent implements OnInit {
     if(this.subscriptionCart.items.length === 0) {
       singlePaymentOrder.subscribe(
         res => this.checkoutComplete(res),
-        err => this.service.handleError(err)
+        err => {
+          this.service.handleError(err);
+          this.processing = false;
+        }
       );
     }
     if(this.singleOrderCart.items.length === 0) {
       Observable.forkJoin(checkoutStreams).subscribe(
         res => this.checkoutComplete(res),
-        err => this.service.handleError(err)
+        err => {
+          this.service.handleError(err);
+          this.processing = false;
+        }
       );
     }
 
@@ -154,7 +162,10 @@ export class CheckoutComponent implements OnInit {
       checkoutStreams.push(singlePaymentOrder);
       Observable.forkJoin(checkoutStreams).subscribe(
         res => this.checkoutComplete(res),
-        err => this.service.handleError(err)
+        err => {
+          this.service.handleError(err);
+          this.processing = false;
+        }
       );
     }
   }
