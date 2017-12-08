@@ -4,7 +4,7 @@
     <div>
       <div>
         <h4 class="product-title cart-label">{{ item.product_title }}</h4>
-        <p class="cart-item-quantity">{{ item.quanitity }}</p>
+        <p class="cart-item-quantity">{{ item.quantity }}</p>
         <p class="cart-item-price" *ngIf="!orderDetails">{{ item.price.usd/100 | currency: "USD" }}</p>
         <p class="cart-item-price" *ngIf="orderDetails">{{ item.product_variations[0].price.usd/100 | currency: "USD" }}</p>
         <p class="cart-item-variations" *ngIf="!orderDetails">{{ item.product_variation_title }}</p>
