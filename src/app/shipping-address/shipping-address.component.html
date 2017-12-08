@@ -1,7 +1,7 @@
-<div>
+<div class="shipping-address-container">
   <label>Shipping Address</label>
   <button class="inline-button" type="button" *ngIf="address && !editaddress && !orderDetails" (click)="editaddress = true">Change Address</button>
-  <form *ngIf="!address || editaddress" [formGroup]="form">
+  <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
     <label *ngIf="address || accountAddresses" for="change_address_option">
       Existing Address
       <input id="change_address_option" type="radio" formControlName="change_address_option" value="existing">
@@ -10,69 +10,69 @@
       New Address
       <input id="change_address_option" type="radio" formControlName="change_address_option" value="new">
     </label>
-    <div *ngIf="form.value.change_address_option === 'new'">
-      <div class="inline-field">
+    <div class="new-shipping-address" *ngIf="form.value.change_address_option === 'new'">
+      <div class="shipping-field inline-field">
         <label>First Name*</label>
         <input type="text" formControlName="first_name" required [(ngModel)]="first_name">
       </div>
-      <div class="inline-field">
+      <div class="shipping-field inline-field">
         <label>Last Name*</label>
         <input type="text" formControlName="last_name" required [(ngModel)]="last_name">
       </div>
-      <div>
+      <div class="shipping-field">
         <label>Country*</label>
         <select [(ngModel)]="country" required formControlName="country" (ngModelChange)="getStates($event)">
           <option>Select One</option>
           <option *ngFor="let country of countries" [ngValue]="country">{{ country.name }}</option>
         </select>
       </div>
-      <div>
+      <div class="shipping-field form-width-field">
         <label>Shipping Address 1*</label>
         <input type="text" formControlName="address_1" required [(ngModel)]="address_1">
       </div>
-      <div>
+      <div class="shipping-field form-width-field">
         <label>Shipping Address 2</label>
         <input type="text" formControlName="address_2" [(ngModel)]="address_2">
       </div>
-      <div>
+      <div class="shipping-field">
         <label>City*</label>
         <input type="text" formControlName="city" required [(ngModel)]="city">
       </div>
-      <div class="inline-field">
+      <div class="shipping-field inline-field">
         <label>State/Province/Region/Other*</label>
         <select [(ngModel)]="state" required formControlName="state">
           <option disabled="" selected="">Select One</option>
           <option *ngFor="let state of states.items" [ngValue]="state">{{ state.name }}</option>
         </select>
       </div>
-      <div *ngIf="state?.name === 'Other'" class="inline-field">
+      <div *ngIf="state?.name === 'Other'" class="shipping-field inline-field">
         <label>Other</label>
         <input type="text" name="other_location_text" formControlName="other_location_text">
       </div>
-      <div>
+      <div class="shipping-field">
         <label>Zip/Postal Code*</label>
         <input type="text" formControlName="zipcode" required [(ngModel)]="zipcode">
       </div>
-      <div>
+      <div class="shipping-field">
         <label>Phone</label>
         <input type="text" formControlName="phone_number" [(ngModel)]="phone_number">
       </div>
     </div>
-    <div *ngIf="form.value.change_address_option === 'existing'">
-      <select formControlName="address_options">
+    <div class="existing-shipping-address" *ngIf="form.value.change_address_option === 'existing'">
+      <select class="shipping-field" formControlName="address_options">
         <option selected="" disabled="">Select One</option>
         <option *ngFor="let address of accountAddresses" [ngValue]="address">
           {{ address?.first_name }} {{ address.last_name }} - {{ address?.address_1 }} {{ address?.address_2 }} {{ address?.city }}, {{ address?.state }} {{ address?.zipcode }}
         </option>
       </select>
-      <div *ngIf="form.value.change_address_option === 'existing'">
+      <div class="existing-shipping-address-buttons" *ngIf="form.value.change_address_option === 'existing'">
         <button type="button" (click)="editaddress = !editaddress">Cancel</button>
         <button type="button" (click)="setAddress(form.value.address_options)">Save</button>
       </div>
     </div>
     <button [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>
   </form>
-  <div *ngIf="address && !editaddress">
+  <div class="selected-shipping-address" *ngIf="address && !editaddress">
     <p>{{ address?.first_name }} {{ address?.last_name }}</p>
     <p>{{ address?.address_1 }}</p>
     <p>{{ address?.address_2 }}</p>

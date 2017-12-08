@@ -2,16 +2,16 @@
   <div class="container-header">
     <h4>Select Customer Account</h4>
   </div>
-  <div class="clearfix">
-    <div class="left">
-      <form [formGroup]="form">
-        <select formControlName="account">
+  <div class="container-body">
+    <div class="container-body-left">
+      <form [formGroup]="form" class="select-customer-form">
+        <select formControlName="account" class="select-customer-dropdown">
           <option>Select One</option>
           <option *ngFor="let account of accounts" [ngValue]="account">{{ account?.user.email }}</option>
         </select>
       </form>
     </div>
-    <div class="right">
+    <div class="container-body-right">
       <div>
         <p>Select the Customer you want to create a order for.</p>
       </div>

@@ -6,7 +6,7 @@
     <div class="container-body-left">
       <label for="card-element">Credit or Debit Card</label>
       <button *ngIf="creditCard && !editCreditCard" type="button" (click)="editCreditCard = true">Change Card</button>
-      <div [ngClass]="{'hidden':creditCard && !editCreditCard}">
+      <div class="payment-method-fields" [ngClass]="{'hidden':creditCard && !editCreditCard}">
         <div>
           <label *ngIf="creditCard && accountCards" for="change_card_option_new">
             New Credit or Debit Card
@@ -33,7 +33,7 @@
           </div>
         </div>
       </div>
-      <div *ngIf="creditCard && !editCreditCard">
+      <div class="default-credit-card" *ngIf="creditCard && !editCreditCard">
         <div>
           <p>{{ creditCard?.brand }} ending *{{ creditCard?.last4 }}</p>
         </div>

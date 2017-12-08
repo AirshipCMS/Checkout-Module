@@ -5,30 +5,30 @@
   <div class="container-body">
     <div class="container-body-left">
       <shipping-address *ngIf="!skipShipping" [user]="user" [account]="account" [orderDetails]="orderDetails" [singlePaymentOrder]="true"></shipping-address>
-      <div *ngIf="!skipShipping">
+      <div class="container-shipping-type" *ngIf="!skipShipping">
         <label>Shipping Type</label>
         <shipping-type [orderDetails]="orderDetails"></shipping-type>
       </div>
-      <div *ngIf="orderDetails">
+      <div class="container-order-number" *ngIf="orderDetails">
         <label>Order Number</label>
         <p>#{{ orderDetails?.single_payment.order_number }}</p>
       </div>
-      <div *ngIf="orderDetails">
+      <div class="container-order-date" *ngIf="orderDetails">
         <label>Order Date</label>
         <p *ngIf="orderDetails">{{ orderDetails?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
-      <div *ngIf="orderDetails">
+      <div class="container-customer-id" *ngIf="orderDetails">
         <label>Customer ID</label>
         <p>{{ orderDetails?.customer.email }}</p>
         <p>{{ orderDetails?.customer.stripe_customer_id }}</p>
       </div>
-      <div>
+      <div class="container-billing">
         <label>Billing</label>
         <p *ngIf="shippingCalculationPending && !orderDetails">Pending...</p>
         <p *ngIf="!shippingCalculationPending && !orderDetails">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
         <p *ngIf="orderDetails">{{ orderDetails?.single_payment.payment.stripe_card_raw_json_data.brand }} ending *{{ orderDetails?.single_payment.payment.stripe_card_raw_json_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ orderDetails?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
-      <div>
+      <div class="container-order-notes">
         <label>Order Notes</label>
         <order-notes [orderDetails]="orderDetails" [singlePaymentOrder]="true"></order-notes>
       </div>

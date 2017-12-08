@@ -1,4 +1,4 @@
-<select *ngIf="!orderDetails" [(ngModel)]="shippingType" (ngModelChange)="saveShippingType($event)">
+<select class="shipping-type" *ngIf="!orderDetails" [(ngModel)]="shippingType" (ngModelChange)="saveShippingType($event)">
   <option *ngFor="let option of options" [ngValue]="option">{{ option }}</option>
 </select>
-<p *ngIf="orderDetails">{{ orderDetails?.single_payment.customer_notes }}</p>
+<p class="shipping-type" *ngIf="orderDetails">{{ orderDetails?.single_payment.customer_notes }}</p>

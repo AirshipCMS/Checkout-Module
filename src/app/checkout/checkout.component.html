@@ -1,10 +1,10 @@
-<div *ngIf="!loading">  
+<div *ngIf="!loading" class="checkout-container">  
   <h1>Secure Checkout</h1>
-  <p *ngIf="user?.scope === 'user'">You are securely logged in as {{ user?.email }}</p>
-  <p *ngIf="user?.scope !== 'user'">You are securely logged in as administrator {{ user?.email }}</p>
-  <p *ngIf="user?.scope !== 'user' && account">You are completing checkout as {{ account?.user.email }}</p>
-  <p *ngIf="user?.scope !== 'user' && account" (click)="clearCustomerInfo()">Select Different Customer</p>
-  <div *ngIf="(singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0) && account">
+  <p class="authentication-text" *ngIf="user?.scope === 'user'">You are securely logged in as {{ user?.email }}</p>
+  <p class="authentication-text admin" *ngIf="user?.scope !== 'user'">You are securely logged in as administrator {{ user?.email }}</p>
+  <p class="authentication-text" *ngIf="user?.scope !== 'user' && account">You are completing checkout as {{ account?.user.email }}</p>
+  <p class="select-customer-button" *ngIf="user?.scope !== 'user' && account" (click)="clearCustomerInfo()">Select Different Customer</p>
+  <div class="checkout-body" *ngIf="(singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0) && account">
     <payment-method
       [user]="user"
       [account]="account"
@@ -25,13 +25,13 @@
     ></subscription-order>
   </div>
   <select-customer-account *ngIf="user?.scope !== 'user' && !account"></select-customer-account>
-  <div *ngIf="singleOrderCart?.items.length === 0 && subscriptionCart?.items.length === 0">
+  <div class="empty-cart" *ngIf="singleOrderCart?.items.length === 0 && subscriptionCart?.items.length === 0">
     <p>You have no items in your cart.</p>
     <a href="/">Continue Shopping</a>
   </div>
-  <div *ngIf="account">
+  <div class="checkout-buttons" *ngIf="account">
     <a class="button" href="/cart">Back to Cart</a>
     <button type="button" (click)="placeOrder()" [disabled]="!creditCard && !singlePaymentAddress">Place Order</button>
   </div>
 </div>
-<div *ngIf="loading" class="loader">loading</div>
+<!-- <div *ngIf="loading" class="loader">loading</div> -->
