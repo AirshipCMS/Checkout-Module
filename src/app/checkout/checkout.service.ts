@@ -32,12 +32,6 @@ export class CheckoutService {
     return this.http.post(`${environment.domain}/api/${endpoint}`, order, { headers: this.headers });
   }
 
-  clearLocalStorage() {
-    for(var key in localStorage) {
-      if(key !== 'id_token') localStorage.removeItem(key);
-    }
-  }
-
   handleError(err) {
     console.error(err);
   }

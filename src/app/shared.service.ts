@@ -60,4 +60,10 @@ export class SharedService {
     this.subscriptionNotesSubject.next(orderNotes);
   }
 
+  clearLocalStorage() {
+    for(var key in localStorage) {
+      if(key !== 'id_token' && key !== 'customer_notes' && key !== 'subscriptionNotes') localStorage.removeItem(key);
+    }
+  }
+
 }

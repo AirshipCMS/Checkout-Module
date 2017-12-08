@@ -42,6 +42,7 @@ export class ReceiptComponent implements OnInit {
         plans
       });
     }
+    this.sharedService.clearLocalStorage();
   }
 
 }

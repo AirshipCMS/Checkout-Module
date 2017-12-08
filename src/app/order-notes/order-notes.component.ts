@@ -21,7 +21,7 @@ export class OrderNotesComponent implements OnInit {
   constructor(private sharedService: SharedService) { }
 
   ngOnInit() {
-    this.singlePaymentNotes = localStorage.getItem('') ? JSON.parse(localStorage.getItem('subscriptionNotes')) : [];
+    this.subscriptionNotes = localStorage.getItem('subscriptionNotes') ? JSON.parse(localStorage.getItem('subscriptionNotes')) : [];
     if(this.subscriptionNotes.length === 0 && this.subscriptionCart) {
       this.subscriptionCart.items.forEach((item) => {
         this.subscriptionNotes.push('');
@@ -42,15 +42,19 @@ export class OrderNotesComponent implements OnInit {
   }
 
   getOrderNotes() {
-    if(!this.orderDetails) {
-      let localNotes = localStorage.getItem('customer_notes');
-      let subscriptionNotes = JSON.parse(localStorage.getItem('subscriptionNotes'));
-      if(this.singlePaymentOrder) {
-        this.orderNotes = localNotes ? localNotes : '';
-        this.sharedService.setOrderNotes(this.orderNotes);
+    let localNotes = localStorage.getItem('customer_notes');
+    let subscriptionNotes = JSON.parse(localStorage.getItem('subscriptionNotes'));
+    if(this.singlePaymentOrder) {
+      this.orderNotes = localNotes ? localNotes : '';
+      this.sharedService.setOrderNotes(this.orderNotes);
+      if(this.orderDetails) {
+        delete localStorage.customer_notes;
       }
-      if(this.subscriptionItemIndex !== undefined && subscriptionNotes && subscriptionNotes.length > 0) {
-        this.orderNotes = subscriptionNotes[this.subscriptionItemIndex];
+    }
+    if(this.subscriptionItemIndex !== undefined && subscriptionNotes && subscriptionNotes.length > 0) {
+      this.orderNotes = this.subscriptionNotes[this.subscriptionItemIndex];
+      if(this.orderDetails) {
+        delete localStorage.subscriptionNotes;
       }
     }
   }

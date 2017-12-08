@@ -172,7 +172,6 @@ export class CheckoutComponent implements OnInit {
 
   checkoutComplete(res: any) {
     this.sharedService.checkoutResponse = res;
-    this.service.clearLocalStorage();
     this.router.navigate(['/checkout#receipt']);
   }
 
