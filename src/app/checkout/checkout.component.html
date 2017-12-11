@@ -32,7 +32,7 @@
   <div class="checkout-buttons" *ngIf="account">
     <a class="button" href="/cart">Back to Cart</a>
     <p *ngIf="orderFailed" class="checkout-error">There was an error processing your order</p>
-    <button type="button" (click)="placeOrder()" [disabled]="!creditCard && !singlePaymentAddress && processing">Place Order</button>
+    <button type="button" (click)="placeOrder()" [disabled]="!creditCard || !singlePaymentAddress || processing">Place Order</button>
   </div>
 </div>
 <!-- <div *ngIf="loading" class="loader">loading</div> -->
