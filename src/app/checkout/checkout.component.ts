@@ -36,6 +36,7 @@ export class CheckoutComponent implements OnInit {
   checkoutResponse : any;
   subscriptionNotes : Array<any>;
   processing : boolean;
+  orderFailed : boolean;
 
   constructor(
     private auth: AuthService,
@@ -144,7 +145,7 @@ export class CheckoutComponent implements OnInit {
         res => this.checkoutComplete(res),
         err => {
           this.service.handleError(err);
-          this.processing = false;
+          this.checkoutComplete(err);
         }
       );
     }
@@ -153,7 +154,7 @@ export class CheckoutComponent implements OnInit {
         res => this.checkoutComplete(res),
         err => {
           this.service.handleError(err);
-          this.processing = false;
+          this.checkoutComplete(err);
         }
       );
     }
@@ -164,15 +165,20 @@ export class CheckoutComponent implements OnInit {
         res => this.checkoutComplete(res),
         err => {
           this.service.handleError(err);
-          this.processing = false;
+          this.checkoutComplete(err);
         }
       );
     }
   }
 
   checkoutComplete(res: any) {
-    this.sharedService.checkoutResponse = res;
-    this.router.navigate(['/checkout#receipt']);
+    if(res.ok) {
+      this.sharedService.checkoutResponse = res;
+      this.router.navigate(['/checkout#receipt']);
+    } else {
+      this.processing = false;
+      this.orderFailed = true;
+    }
   }
 
 }
