@@ -11,6 +11,7 @@ import { SharedService } from '../shared.service';
 export class ReceiptComponent implements OnInit {
 
   orderDetails : any;
+  failedOrders : Array<any> = [];
 
   constructor(public sharedService: SharedService) {}
 
@@ -22,20 +23,30 @@ export class ReceiptComponent implements OnInit {
       let plans = [];
       let products = {};
       let single_payment = {};
+      let account = {};
+      let customer = {};
+      let shipping_address = {};
       this.sharedService.checkoutResponse.forEach((item) => {
-        if(item.products.items.length > 0) {
-          products = item.products;
-          single_payment = item.single_payment;
-        }
-        if(item.subscriptions.length > 0) {
-          subscriptions.items.push(item.subscriptions[0]);
-          plans.push(item.plans[0]);
+        if(item.account) {
+          if(item.products.items.length > 0) {
+            products = item.products;
+            single_payment = item.single_payment;
+            shipping_address = item.shipping_address;
+            account = item.account;
+            customer = item.customer;
+          }
+          if(item.subscriptions.length > 0) {
+            subscriptions.items.push(item.subscriptions[0]);
+            plans.push(item.plans[0]);
+          }
+        } else {
+          this.failedOrders.push(item);
         }
       });
       this.orderDetails = Object.assign({}, {
-        account: this.sharedService.checkoutResponse[0].account,
-        shipping_address: this.sharedService.checkoutResponse[0].shipping_address,
-        customer: this.sharedService.checkoutResponse[0].customer,
+        account,
+        shipping_address,
+        customer,
         single_payment,
         products,
         subscriptions,

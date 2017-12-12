@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, Input, ChangeDetectorRef } from '
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
+import 'rxjs/add/operator/map';
 
 import { AuthService } from '../auth.service';
 import { CartService } from '../cart';
@@ -123,7 +124,7 @@ export class CheckoutComponent implements OnInit {
     let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
     let singlePaymentAddress = this.singlePaymentAddress;
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
-    let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken);
+    let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken).toPromise().catch(err => err);
     subscriptionCart.items.map((item, i) => {
       let cart = { items: [item] };
       let address;
@@ -137,25 +138,16 @@ export class CheckoutComponent implements OnInit {
       if(environment.skip_subscription_shipping || (environment.has_no_shipments && item.has_no_shipments)) {
         address = environment.default_address;
       }
-      checkoutStreams.push(this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken));
+      checkoutStreams.push(this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken).toPromise().catch(err => err));
     });
 
     if(this.subscriptionCart.items.length === 0) {
-      singlePaymentOrder.subscribe(
-        res => this.checkoutComplete(res),
-        err => {
-          this.service.handleError(err);
-          this.checkoutComplete(err);
-        }
-      );
+      singlePaymentOrder.then(res => this.checkoutComplete(res));
     }
     if(this.singleOrderCart.items.length === 0) {
       Observable.forkJoin(checkoutStreams).subscribe(
         res => this.checkoutComplete(res),
-        err => {
-          this.service.handleError(err);
-          this.checkoutComplete(err);
-        }
+        err => this.checkoutComplete(err)
       );
     }
 
@@ -163,19 +155,29 @@ export class CheckoutComponent implements OnInit {
       checkoutStreams.push(singlePaymentOrder);
       Observable.forkJoin(checkoutStreams).subscribe(
         res => this.checkoutComplete(res),
-        err => {
-          this.service.handleError(err);
-          this.checkoutComplete(err);
-        }
+        err => this.checkoutComplete(err)
       );
     }
   }
 
   checkoutComplete(res: any) {
-    if(res.ok) {
+    let success = false;
+    if(Array.isArray(res)) {
+      res.forEach((item) => {
+        if(item.account) {
+          success = true;
+        }
+      });
+    } else {
+      if(res.account) {
+        success = true;
+      }
+    }
+    if(success) {
       this.sharedService.checkoutResponse = res;
       this.router.navigate(['/checkout#receipt']);
     } else {
+      //if all requests failed
       this.processing = false;
       this.orderFailed = true;
     }

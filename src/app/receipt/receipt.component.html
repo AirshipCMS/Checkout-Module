@@ -8,4 +8,5 @@
       [orderDetails]="orderDetails"
     ></subscription-order>
   </div>
+  <p *ngIf="failedOrders.length > 0">{{ failedOrders.length }} orders failed to process.</p>
 </div>
