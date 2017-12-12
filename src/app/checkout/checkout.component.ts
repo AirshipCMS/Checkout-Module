@@ -38,6 +38,7 @@ export class CheckoutComponent implements OnInit {
   subscriptionNotes : Array<any>;
   processing : boolean;
   orderFailed : boolean;
+  activeSubscriptions : Array<any> = [];
 
   constructor(
     private auth: AuthService,
@@ -61,6 +62,20 @@ export class CheckoutComponent implements OnInit {
     this.sharedService.subscriptionNotes$.subscribe(notes => this.subscriptionNotes = notes);
   }
 
+  getCustomerSubscriptions() {
+    if(Object.keys(this.account).length > 0) {
+      this.service.getCustomerSubscriptions(this.user, this.account.id)
+        .subscribe(
+          res => {
+            if(Array.isArray(res)) {
+              this.activeSubscriptions = res.filter((item) => !_.isEmpty(item.subscription) && item.subscription.stripe_data.status !== 'canceled');
+            }
+          },
+          err => this.service.handleError(err)
+        );
+    }
+  }
+
   clearCustomerInfo() {
     delete this.account;
     delete this.user.account;
@@ -82,6 +97,7 @@ export class CheckoutComponent implements OnInit {
             } else {
               this.account = {};
               this.loading = false;
+              this.getCustomerSubscriptions();
               this.ref.detectChanges();
             }
           } else {
@@ -90,6 +106,7 @@ export class CheckoutComponent implements OnInit {
               this.getAccount(account);
             } else {
               this.loading = false;
+              this.getCustomerSubscriptions();
             }
           }
         },
@@ -107,6 +124,7 @@ export class CheckoutComponent implements OnInit {
           this.account = res;
           this.user.account = res;
           this.loading = false;
+          this.getCustomerSubscriptions();
           this.ref.detectChanges();
         },
         err => this.auth.handleError(err)

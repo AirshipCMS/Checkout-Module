@@ -33,6 +33,14 @@ export class CheckoutService {
     return this.http.post(`${environment.domain}/api/${endpoint}`, order, { headers: this.headers });
   }
 
+  getCustomerSubscriptions(user: any, account_id: number) {
+    let endpoint = `${environment.domain}/api/account/orders`;
+    if(user.scope !== 'user') {
+      endpoint = `${environment.domain}/api/accounts/${account_id}/orders`;
+    }
+    return this.http.get(endpoint, { headers: this.headers });
+  }
+
   handleError(err) {
     console.error(err);
   }
