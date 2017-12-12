@@ -34,7 +34,7 @@ export class ShippingAddressService {
           break;
 
         case "state":
-          if(value.name) address[key] = value.name;
+          if(value.code) address[key] = value.code;
           break;
 
         case "other_location_text":
@@ -61,8 +61,8 @@ export class ShippingAddressService {
   }
 
   saveAddress(address: any, user: any, account: any) {
-    let endpoint = 'account/postal_address';
-    if(user.scope !== 'user') endpoint = `accounts/${account.id}/postal_address`;
+    // let endpoint = 'account/postal_address';
+    let endpoint = `accounts/${account.id}/postal_address`;
     return this.http.post(`${environment.domain}/api/${endpoint}`, this.scrubAddress(address), { headers: this.headers });
   }
 

@@ -53,7 +53,7 @@ export class ShippingAddressComponent implements OnInit {
   ngOnInit() {
     this.countries = this.service.countries;
     this.subscriptionAddresses = this.service.getSubscriptionAddresses();
-    if(this.account && Object.keys(this.account).length > 0) {
+    if(this.singlePaymentOrder && this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
       this.address = this.service.formattAddress(this.account.postal_addresses[0]);
       this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
@@ -67,7 +67,6 @@ export class ShippingAddressComponent implements OnInit {
           this.subscriptionAddresses.push({});
         }
       });
-      this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
     }
     this.getAddress();
   }
@@ -77,6 +76,7 @@ export class ShippingAddressComponent implements OnInit {
     this.editaddress = false;
     if(this.singlePaymentOrder) {
       this.sharedService.setShippingAddress(this.address);
+      this.service.saveSinglePaymentAddress(this.address);
     } else {
       if(this.subscriptionAddresses) {
         this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
@@ -109,8 +109,6 @@ export class ShippingAddressComponent implements OnInit {
       this.service.saveAddress(this.address, this.user, this.account)
         .subscribe(
           address => {
-            this.service.saveSinglePaymentAddress(address);
-            this.accountAddresses.push(address);
             this.address = address;
           },
           err => this.service.handleError(err)
