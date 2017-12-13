@@ -1,11 +1,9 @@
-<div class="misc-data-container" *ngIf="miscData">
+<div class="misc-data-container" *ngIf="hasMiscData">
   <label>Other Data</label>
   <div class="misc-data-body">
     <div class="misc-data-item" *ngFor="let item of miscData | keys">
       <p class="misc-data-product-title">{{ item.key }}</p>
-      <p>- {{ item.key }}: {{ item.value.plan }}</p>
-      <p>- {{ item.key }}: {{ item.value.plan_id }}</p>
-      <div class="misc-data-item" *ngFor="let item of value | keys">
+      <div class="misc-data-item" *ngFor="let item of item.value | keys">
         <p>- {{ item.key }}: {{ item.value }}</p>
       </div>
     </div>

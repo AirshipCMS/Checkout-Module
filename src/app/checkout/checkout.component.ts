@@ -29,6 +29,8 @@ export class CheckoutComponent implements OnInit {
   loading : boolean;
   creditCard : any;
   singlePaymentAddress : any;
+  singlePaymentMiscData;
+  subscriptionMiscData;
   subscriptionAddresses : Array<any>;
   singlePaymentNotes : string;
   singleOrderCart : any;
@@ -60,6 +62,8 @@ export class CheckoutComponent implements OnInit {
     this.sharedService.subscriptionAddresses$.subscribe(addresses => this.subscriptionAddresses = addresses);
     this.sharedService.account$.subscribe(account => this.account = account);
     this.sharedService.subscriptionNotes$.subscribe(notes => this.subscriptionNotes = notes);
+    this.sharedService.singlePaymentOrderMiscData$.subscribe(miscData => this.singlePaymentMiscData = miscData);
+    this.sharedService.subscriptionOrdersMiscData$.subscribe(miscData => this.subscriptionMiscData = miscData);
   }
 
   getCustomerSubscriptions() {
@@ -69,7 +73,6 @@ export class CheckoutComponent implements OnInit {
           res => {
             if(Array.isArray(res)) {
               this.activeSubscriptions = res.filter((item) => !_.isEmpty(item.subscription) && item.subscription.stripe_data.status !== 'canceled');
-              console.log(this.activeSubscriptions.length >= 25)
             }
           },
           err => this.service.handleError(err)
@@ -143,11 +146,13 @@ export class CheckoutComponent implements OnInit {
     let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
     let singlePaymentAddress = this.singlePaymentAddress;
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
-    let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken).toPromise().catch(err => err);
+    this.singleOrderCart.misc_data = this.singlePaymentMiscData;
+    let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData).toPromise().catch(err => err);
     subscriptionCart.items.map((item, i) => {
       let cart = { items: [item] };
       let address;
       let orderNotes = '';
+      let miscData = {};
       if(!environment.skip_subscription_shipping) {
         address = this.subscriptionAddresses[i];
       }
@@ -157,7 +162,11 @@ export class CheckoutComponent implements OnInit {
       if(environment.skip_subscription_shipping || (environment.has_no_shipments && item.has_no_shipments)) {
         address = environment.default_address;
       }
-      checkoutStreams.push(this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken).toPromise().catch(err => err));
+      if(this.subscriptionMiscData) {
+        miscData = this.subscriptionMiscData[i];
+        cart.items[0].misc_data = this.subscriptionMiscData[i];
+      }
+      checkoutStreams.push(this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken, miscData).toPromise().catch(err => err));
     });
 
     if(this.subscriptionCart.items.length === 0) {

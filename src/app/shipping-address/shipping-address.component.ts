@@ -92,8 +92,7 @@ export class ShippingAddressComponent implements OnInit {
     } else {
       let singlePaymentAddress = this.service.getSinglePaymentAddress();
       let subscriptionAddresses = this.service.getSubscriptionAddresses();
-      if(this.subscriptionItemIndex !== undefined && subscriptionAddresses) {
-        this.address = this.subscriptionAddresses[this.subscriptionItemIndex];
+      if(this.subscriptionItemIndex !== undefined) {
         this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
       }
       if(this.singlePaymentOrder && singlePaymentAddress) {

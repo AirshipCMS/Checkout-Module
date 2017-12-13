@@ -21,6 +21,7 @@ export class CartService {
     formattedCart.items = cart.items.map((item) => {
       delete item.product_plan;
       delete item.has_no_shipments;
+      // delete item.misc_data;
       if(item.type !== 'plan') delete item.type;
       return item;
     });

@@ -1,9 +1,5 @@
 import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
-import { CartComponent } from '../cart';
-import { OrderNotesComponent } from '../order-notes';
-import { ShippingAddressComponent } from '../shipping-address';
-import { ShippingTypeComponent } from '../shipping-type';
 import { environment } from '../../environments/environment';
 
 @Component({
@@ -17,6 +13,7 @@ export class SinglePaymentOrderComponent implements OnInit {
   @Input() user;
   @Input() account;
   @Input() orderDetails : any;
+  @Input() singleOrderCart;
   shippingCalculationPending : boolean = true;
   orderTotal : number;
   @Input() creditCard : any;

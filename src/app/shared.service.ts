@@ -9,6 +9,8 @@ export class SharedService {
   
   checkoutResponse : any;
   shippingAddress$ : Observable<any>;
+  singlePaymentOrderMiscData$ : Observable<any>;
+  subscriptionOrdersMiscData$ : Observable<any>;
   orderNotes$ : Observable<any>;
   shippingType$ : Observable<any>;
   account$ : Observable<any>;
@@ -20,6 +22,8 @@ export class SharedService {
   private accountSubject : ReplaySubject<any>;
   private subscriptionAddressesSubject : ReplaySubject<any>;
   private subscriptionNotesSubject : ReplaySubject<any>;
+  private singlePaymentOrderMiscDataSubject : ReplaySubject<any>;
+  private subscriptionOrdersMiscDataSubject : ReplaySubject<any>;
 
   constructor() {
     this.shippingAddressSubject = new ReplaySubject<any>();
@@ -34,6 +38,10 @@ export class SharedService {
     this.subscriptionAddresses$ = this.subscriptionAddressesSubject.asObservable();
     this.subscriptionNotesSubject = new ReplaySubject<any>();
     this.subscriptionNotes$ = this.subscriptionNotesSubject.asObservable();
+    this.singlePaymentOrderMiscDataSubject = new ReplaySubject<any>();
+    this.singlePaymentOrderMiscData$ = this.singlePaymentOrderMiscDataSubject.asObservable();
+    this.subscriptionOrdersMiscDataSubject = new ReplaySubject<any>();
+    this.subscriptionOrdersMiscData$ = this.subscriptionOrdersMiscDataSubject.asObservable();
   }
 
   setShippingAddress(shippingAddress: any) {
@@ -42,6 +50,14 @@ export class SharedService {
 
   setOrderNotes(orderNotes: string) {
     this.orderNotesSubject.next(orderNotes);
+  }
+
+  setSinglePaymentMiscData(miscData) {
+    this.singlePaymentOrderMiscDataSubject.next(miscData);
+  }
+
+  setSubscriptionMiscData(miscData) {
+    this.subscriptionOrdersMiscDataSubject.next(miscData);
   }
 
   setShippingType(shippingType: string) {
