@@ -17,6 +17,7 @@ import { OrderNotesComponent } from './order-notes/order-notes.component';
 import { SharedService } from './shared.service';
 import { SubscriptionOrderComponent } from './subscription-order/subscription-order.component';
 import { SelectCustomerAccountComponent } from './select-customer-account/select-customer-account.component';
+import { MiscDataComponent } from './misc-data/misc-data.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { SelectCustomerAccountComponent } from './select-customer-account/select
     ShippingTypeComponent,
     OrderNotesComponent,
     SubscriptionOrderComponent,
-    SelectCustomerAccountComponent
+    SelectCustomerAccountComponent,
+    MiscDataComponent
   ],
   imports: [
     BrowserModule,
