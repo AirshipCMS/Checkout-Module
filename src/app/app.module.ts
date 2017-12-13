@@ -18,6 +18,7 @@ import { SharedService } from './shared.service';
 import { SubscriptionOrderComponent } from './subscription-order/subscription-order.component';
 import { SelectCustomerAccountComponent } from './select-customer-account/select-customer-account.component';
 import { MiscDataComponent } from './misc-data/misc-data.component';
+import { KeysPipe } from './keys.pipe';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { MiscDataComponent } from './misc-data/misc-data.component';
     OrderNotesComponent,
     SubscriptionOrderComponent,
     SelectCustomerAccountComponent,
-    MiscDataComponent
+    MiscDataComponent,
+    KeysPipe
   ],
   imports: [
     BrowserModule,
