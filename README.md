@@ -10,7 +10,7 @@ run `cp src/environments/environment.prod.ts src/environments/environment.alpha.
 in `src/environments/environment.alpha.ts` set `production` to `false`.
 Enter your domain and stripe key.
 
-## Development
+## Dev Server
 
 ### Alpha
 Run `ng serve --env=alpha`.
@@ -35,6 +35,9 @@ All files will build into `/dist`
 If your build requires shipping, be sure the options in the Shipping Type dropdown matches the avaliable options in the `shipping_type` column of the `shipping_tables` table exactly.
 
 ## Environment Variables
+
+production: `src/environments/environment.prod.ts`
+alpha: `src/environments/environment.alpha.ts`
 
 `domain` is required and should be your airship site domain: `domain.airshipcms.io`.
 
