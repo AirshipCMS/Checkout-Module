@@ -36,6 +36,7 @@ export class ReceiptComponent implements OnInit {
             customer = item.customer;
           }
           if(item.subscriptions.length > 0) {
+            item.subscriptions[0].misc_data = item.plans[0].misc_data;
             subscriptions.items.push(item.subscriptions[0]);
             plans.push(item.plans[0]);
           }
