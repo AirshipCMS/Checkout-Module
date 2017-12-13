@@ -63,12 +63,13 @@ export class CheckoutComponent implements OnInit {
   }
 
   getCustomerSubscriptions() {
-    if(Object.keys(this.account).length > 0) {
+    if(this.account && Object.keys(this.account).length > 0) {
       this.service.getCustomerSubscriptions(this.user, this.account.id)
         .subscribe(
           res => {
             if(Array.isArray(res)) {
               this.activeSubscriptions = res.filter((item) => !_.isEmpty(item.subscription) && item.subscription.stripe_data.status !== 'canceled');
+              console.log(this.activeSubscriptions.length >= 25)
             }
           },
           err => this.service.handleError(err)

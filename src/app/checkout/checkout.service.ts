@@ -8,10 +8,14 @@ import { environment } from '../../environments/environment';
 export class CheckoutService {
   headers: HttpHeaders;
   storageProperties : Array<any>;
+  requiredSingleOrderProps : Array<any>;
+  requiredSubscriptionOrderProps : Array<any>;
 
   constructor(private http: HttpClient) {
     let id_token : string = localStorage.getItem('id_token');
     this.headers = new HttpHeaders().set('Authorization', `bearer ${id_token}`);
+    this.requiredSingleOrderProps = ['id', 'aerostat_id', 'quantity', 'product_title', 'product_variation_title'];
+    this.requiredSubscriptionOrderProps = ['id', 'aerostat_id', 'quantity', 'plan'];
   }
 
   checkout(shipping_address: any, user: any, account: any, cart: any, customer_notes: string, stripe_token: string) {

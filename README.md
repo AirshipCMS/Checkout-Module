@@ -1,27 +1,49 @@
 # CheckoutModule
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.5.0.
+## Setup
 
-## Development server
+clone this repo.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+To install dependencies, run `npm install`
 
-## Code scaffolding
+run `cp src/environments/environment.prod.ts src/environments/environment.alpha.ts`
+in `src/environments/environment.alpha.ts` set `production` to `false`.
+Enter your domain and stripe key.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Development
+
+### Alpha
+Run `ng serve --env=alpha`.
+
+### Prod
+Run `ng serve --env=prod`.
+
+Navigate to `http://localhost:4200/checkout`. The app will automatically reload if you change any of the source files.
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `-prod` flag for a production build.
+### Alpha
+Run `ng build --prod --env=alpha`
 
-## Running unit tests
+### Prod
+Run `ng build --prod --env=prod`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+All files will build into `/dist`
 
-## Running end-to-end tests
+## Shipping Type
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+If your build requires shipping, be sure the options in the Shipping Type dropdown matches the avaliable options in the `shipping_type` column of the `shipping_tables` table exactly.
 
-## Further help
+## Environment Variables
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+`domain` is required and should be your airship site domain: `domain.airshipcms.io`.
+
+`stripe_publish_key` is required for Stripe.
+
+`skip_single_payment_shipping` must be a boolean. To skip shipping address and shipping type for Single Payment Orders, set this to true.
+
+`skip_subscription_shipping` must be a boolean. To skip shipping address and shipping type for Subscription Orders, set this to true.
+
+`has_no_shipments` must be a boolean. To conditionally skip shipping address and shipping type for certain Subscription Orders, set this to true. In your Subscription Collection, create a `checkbox` field named `Has No Shipments`. Check the box for items with no shipments.
+
+If `skip_single_payment_shipping`, `skip_subscription_shipping` or `has_no_shipments` is set to `true`, go to `src/environments/default-vendor-address.ts`. Enter a default address. If no default address is entered, checkout will fail.
