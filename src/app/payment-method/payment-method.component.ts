@@ -58,8 +58,6 @@ export class PaymentMethodComponent implements OnInit {
       .pipe(mergeMap(card => this.service.setCreditCard(res.id, this.user, this.account)))
       .subscribe(
         creditCard => {
-          this.creditCard = creditCard;
-          this.accountCards.push(this.creditCard);
           this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
           this.editCreditCard = false;
         },
