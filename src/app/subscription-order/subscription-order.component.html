@@ -4,38 +4,38 @@
   </div>
   <div class="container-body">
     <div class="container-body-left">
-      <shipping-address *ngIf="!skipShipping && !hasNoShipments || (hasNoShipments && !item.has_no_shipments)" [user]="user" [account]="account" [orderDetails]="orderDetails" [subscriptionCart]="subscriptionCart" [subscriptionItemIndex]="i"></shipping-address>
+      <shipping-address *ngIf="!skipShipping && !hasNoShipments || (hasNoShipments && !item.has_no_shipments)" [user]="user" [account]="account" [receipt]="receipt" [subscriptionCart]="subscriptionCart" [subscriptionItemIndex]="i"></shipping-address>
       <div class="container-shipping-type" *ngIf="!skipShipping && !hasNoShipments || (hasNoShipments && !item.has_no_shipments)">
         <label>Shipping Type</label>
-        <shipping-type [orderDetails]="orderDetails"></shipping-type>
+        <shipping-type [receipt]="receipt"></shipping-type>
       </div>
-      <div class="container-order-number" *ngIf="orderDetails">
+      <div class="container-order-number" *ngIf="receipt">
         <label>Order Number</label>
         <p>#{{ item?.stripe_data.metadata.order_number }}</p>
       </div>
-      <div class="container-order-date" *ngIf="orderDetails">
+      <div class="container-order-date" *ngIf="receipt">
         <label>Order Date</label>
-        <p *ngIf="orderDetails">{{ orderDetails?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
+        <p *ngIf="receipt">{{ receipt?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
-      <div class="container-customer-id" *ngIf="orderDetails">
+      <div class="container-customer-id" *ngIf="receipt">
         <label>Customer ID</label>
-        <p>{{ orderDetails?.customer.email }}</p>
-        <p>{{ orderDetails?.customer.stripe_customer_id }}</p>
+        <p>{{ receipt?.customer.email }}</p>
+        <p>{{ receipt?.customer.stripe_customer_id }}</p>
       </div>
       <div class="container-billing">
         <label>Billing</label>
-        <p *ngIf="shippingCalculationPending && !orderDetails">Pending...</p>
-        <p *ngIf="!shippingCalculationPending && !orderDetails">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
-        <!-- <p *ngIf="orderDetails">{{ item?.stripe_data.brand }} ending *{{ item?.stripe_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ item?.created_at | date: 'MM/dd/yyyy' }}</p> -->
+        <p *ngIf="shippingCalculationPending && !receipt">Pending...</p>
+        <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
+        <!-- <p *ngIf="receipt">{{ item?.stripe_data.brand }} ending *{{ item?.stripe_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ item?.created_at | date: 'MM/dd/yyyy' }}</p> -->
       </div>
       <div class="container-order-notes">
         <label>Order Notes</label>
-        <order-notes [orderDetails]="orderDetails" [subscriptionItemIndex]="i" [subscriptionCart]="subscriptionCart"></order-notes>
+        <order-notes [receipt]="receipt" [subscriptionItemIndex]="i" [subscriptionCart]="subscriptionCart"></order-notes>
       </div>
-      <misc-data [orderDetails]="orderDetails" [subscriptionItemIndex]="i" [subscriptionItem]="item" [subscriptionCart]="subscriptionCart"></misc-data>
+      <misc-data [receipt]="receipt" [subscriptionItemIndex]="i" [subscriptionItem]="item" [subscriptionCart]="subscriptionCart"></misc-data>
     </div>
     <div class="container-body-right">
-      <div class="container-order-details" *ngIf="orderDetails">
+      <div class="container-order-details" *ngIf="receipt">
         <h4>{{ plans[i].product_title }}</h4>
         <p>{{ plans[i].name }} - {{ plans[i].price.usd/100 | currency: 'USD' }} every {{ item?.stripe_data.plan.interval }}</p>
         <p *ngIf="item?.stripe_data.plan.trial_period_days && item?.stripe_data.plan.trial_period_days > 0">Trial Period Days: {{ item?.stripe_data.plan.trial_period_days }}</p>
@@ -45,7 +45,7 @@
         <p *ngIf="item?.stripe_data.plan.trial_period_days && item?.stripe_data.plan.trial_period_days > 0">Trail End: {{ item?.stripe_data.trial_end*1000 | date: 'MM/dd/yyyy' }}</p>
         <p>Current Term: {{ item?.stripe_data.current_period_start*1000 | date: 'MM/dd/yyyy' }} - {{ item?.stripe_data.current_period_end*1000 | date: 'MM/dd/yyyy' }}</p>
       </div>
-      <div *ngIf="!orderDetails">
+      <div *ngIf="!receipt">
         <h4>{{ item?.product_title }}</h4>
         <p>{{ item?.product_plan.name }} - {{ item?.price.usd/100 | currency: 'USD' }} every {{ item?.product_plan.interval }}</p>
         <p *ngIf="item?.product_plan.trial_days && item?.product_plan.trial_days > 0">Trial Period Days: {{ item?.product_plan.trial_days }}</p>

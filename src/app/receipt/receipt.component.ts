@@ -10,14 +10,14 @@ import { SharedService } from '../shared.service';
 })
 export class ReceiptComponent implements OnInit {
 
-  orderDetails : any;
+  receipt : any;
   failedOrders : Array<any> = [];
 
   constructor(public sharedService: SharedService) {}
 
   ngOnInit() {
     if(this.sharedService.checkoutResponse.products) {
-      this.orderDetails = this.sharedService.checkoutResponse;
+      this.receipt = this.sharedService.checkoutResponse;
     } else {
       let subscriptions = { items: [] };
       let plans = [];
@@ -26,6 +26,7 @@ export class ReceiptComponent implements OnInit {
       let account = {};
       let customer = {};
       let shipping_address = {};
+      let subscription_addresses = [];
       this.sharedService.checkoutResponse.forEach((item) => {
         if(item.account) {
           if(item.products.items.length > 0) {
@@ -36,6 +37,7 @@ export class ReceiptComponent implements OnInit {
             customer = item.customer;
           }
           if(item.subscriptions.length > 0) {
+            subscription_addresses.push(item.shipping_address);
             item.subscriptions[0].misc_data = item.plans[0].misc_data;
             subscriptions.items.push(item.subscriptions[0]);
             plans.push(item.plans[0]);
@@ -44,7 +46,8 @@ export class ReceiptComponent implements OnInit {
           this.failedOrders.push(item);
         }
       });
-      this.orderDetails = Object.assign({}, {
+      this.receipt = Object.assign({}, {
+        subscription_addresses,
         account,
         shipping_address,
         customer,

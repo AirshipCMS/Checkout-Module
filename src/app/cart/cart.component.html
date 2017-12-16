@@ -5,10 +5,10 @@
       <div>
         <h4 class="product-title cart-label">{{ item.product_title }}</h4>
         <p class="cart-item-quantity">{{ item.quantity }}</p>
-        <p class="cart-item-price" *ngIf="!orderDetails">{{ item.price.usd/100 | currency: "USD" }}</p>
-        <p class="cart-item-price" *ngIf="orderDetails">{{ item.product_variations[0].price.usd/100 | currency: "USD" }}</p>
-        <p class="cart-item-variations" *ngIf="!orderDetails">{{ item.product_variation_title }}</p>
-        <p class="cart-item-variations" *ngIf="orderDetails">{{ item.product_variations[0].product_variation_title }}</p>
+        <p class="cart-item-price" *ngIf="!receipt">{{ item.price.usd/100 | currency: "USD" }}</p>
+        <p class="cart-item-price" *ngIf="receipt">{{ item.product_variations[0].price.usd/100 | currency: "USD" }}</p>
+        <p class="cart-item-variations" *ngIf="!receipt">{{ item.product_variation_title }}</p>
+        <p class="cart-item-variations" *ngIf="receipt">{{ item.product_variations[0].product_variation_title }}</p>
       </div>
     </div>
   </div>
@@ -40,7 +40,7 @@
       <p class="total" *ngIf="!pending">{{ total | currency: "USD" }}</p>
     </div>
   </div>
-  <div class="cart-charge-details" *ngIf="!pending && !orderDetails">
+  <div class="cart-charge-details" *ngIf="!pending && !receipt">
     <p>{{ creditCard?.brand }} ending *{{creditCard?.last4 }} will be charged {{ total | currency: "USD" }}</p>
   </div>
 </div>

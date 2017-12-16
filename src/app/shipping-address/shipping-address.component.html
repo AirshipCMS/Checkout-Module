@@ -1,6 +1,6 @@
 <div class="shipping-address-container">
   <label>Shipping Address</label>
-  <button class="inline-button" type="button" *ngIf="address && !editaddress && !orderDetails" (click)="editaddress = true">Change Address</button>
+  <button class="inline-button" type="button" *ngIf="address && !editaddress && !receipt" (click)="editaddress = true">Change Address</button>
   <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
     <label *ngIf="address || accountAddresses" for="change_address_option">
       Existing Address

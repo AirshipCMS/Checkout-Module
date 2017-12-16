@@ -12,7 +12,7 @@ export class SinglePaymentOrderComponent implements OnInit {
 
   @Input() user;
   @Input() account;
-  @Input() orderDetails : any;
+  @Input() receipt : any;
   @Input() singleOrderCart;
   shippingCalculationPending : boolean = true;
   orderTotal : number;

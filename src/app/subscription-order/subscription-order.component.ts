@@ -15,7 +15,7 @@ export class SubscriptionOrderComponent implements OnInit {
   @Input() account : any;
   @Input() creditCard : any;
   @Input() subscriptionCart : any;
-  @Input() orderDetails : any;
+  @Input() receipt : any;
   plans : Array<any> = [];
   skipShipping : boolean;
   hasNoShipments : boolean;
@@ -25,9 +25,9 @@ export class SubscriptionOrderComponent implements OnInit {
   ngOnInit() {
     this.skipShipping = environment.skip_subscription_shipping;
     this.hasNoShipments = environment.has_no_shipments;
-    if(this.orderDetails) {
-      this.subscriptionCart = this.orderDetails.subscriptions;
-      this.plans = this.orderDetails.plans;
+    if(this.receipt) {
+      this.subscriptionCart = this.receipt.subscriptions;
+      this.plans = this.receipt.plans;
     }
   }
 

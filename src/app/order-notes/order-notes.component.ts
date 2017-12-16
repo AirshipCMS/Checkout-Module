@@ -11,7 +11,7 @@ import { SharedService } from '../shared.service';
 export class OrderNotesComponent implements OnInit {
 
   orderNotes : string = '';
-  @Input() orderDetails : any;
+  @Input() receipt : any;
   @Input() singlePaymentOrder;
   @Input() subscriptionItemIndex : number;
   @Input() subscriptionCart : any;
@@ -47,13 +47,13 @@ export class OrderNotesComponent implements OnInit {
     if(this.singlePaymentOrder) {
       this.orderNotes = localNotes ? localNotes : '';
       this.sharedService.setOrderNotes(this.orderNotes);
-      if(this.orderDetails) {
+      if(this.receipt) {
         delete localStorage.customer_notes;
       }
     }
     if(this.subscriptionItemIndex !== undefined && subscriptionNotes && subscriptionNotes.length > 0) {
       this.orderNotes = this.subscriptionNotes[this.subscriptionItemIndex];
-      if(this.orderDetails) {
+      if(this.receipt) {
         delete localStorage.subscriptionNotes;
       }
     }

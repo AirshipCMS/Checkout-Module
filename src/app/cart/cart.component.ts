@@ -24,7 +24,7 @@ export class CartComponent implements OnInit {
   pending : boolean = true;
   shippingAddress : any;
   @Input() creditCard : any;
-  @Input() orderDetails: any;
+  @Input() receipt: any;
 
   constructor(private service: CartService, private sharedService: SharedService) {
   }
@@ -32,7 +32,7 @@ export class CartComponent implements OnInit {
   ngOnInit() {
     this.cart = this.service.singleOrderCart;
     this.subtotal = this.service.calculateSubtotal();
-    if(!this.orderDetails) {
+    if(!this.receipt) {
       if(!environment.skip_single_payment_shipping) {
         this.sharedService.shippingAddress$.subscribe(
           address => {
@@ -51,13 +51,13 @@ export class CartComponent implements OnInit {
         }
       )
     }
-    if(this.orderDetails) {
-      this.cart = this.orderDetails.products;
-      this.shipping = this.orderDetails.products.totals.shipping_cost.usd/100;
-      this.tax = this.orderDetails.products.totals.tax.usd/100;
-      this.handling = this.orderDetails.products.totals.handling_cost.usd/100;
-      this.total = this.orderDetails.products.totals.total.usd/100;
-      this.subtotal = this.orderDetails.products.totals.subtotal.usd/100;
+    if(this.receipt) {
+      this.cart = this.receipt.products;
+      this.shipping = this.receipt.products.totals.shipping_cost.usd/100;
+      this.tax = this.receipt.products.totals.tax.usd/100;
+      this.handling = this.receipt.products.totals.handling_cost.usd/100;
+      this.total = this.receipt.products.totals.total.usd/100;
+      this.subtotal = this.receipt.products.totals.subtotal.usd/100;
     }
   }
 

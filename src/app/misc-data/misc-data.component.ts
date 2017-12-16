@@ -18,14 +18,14 @@ export class MiscDataComponent implements OnInit {
   @Input() subscriptionItemIndex: number;
   subscriptionMiscData: Array<any> = [];
   @Input() miscData = {};
-  @Input() orderDetails;
+  @Input() receipt;
   hasMiscData: boolean;
 
   constructor(private sharedService: SharedService) {
   }
 
   ngOnInit() {
-    if(this.orderDetails === undefined) {
+    if(this.receipt === undefined) {
       if(this.subscriptionItem !== undefined && this.subscriptionItem.misc_data !== undefined) {
         this.subscriptionCart.items.forEach((item) => {
           this.subscriptionMiscData.push({})
@@ -58,10 +58,12 @@ export class MiscDataComponent implements OnInit {
       if(this.subscriptionItem !== undefined) {
         this.miscData = this.subscriptionItem.misc_data;
       } else {
-        this.miscData = this.orderDetails.single_payment.misc_data;
+        this.miscData = this.receipt.single_payment.misc_data;
       }
     }
-    this.hasMiscData = Object.keys(this.miscData).length > 0;
+    if(this.miscData && Object.keys(this.miscData).length > 0) {
+      this.hasMiscData = true;
+    }
   }
 
 }

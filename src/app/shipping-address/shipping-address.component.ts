@@ -26,7 +26,7 @@ export class ShippingAddressComponent implements OnInit {
   changeCardOption : string = 'existing';
   singlePaymentAddress : any;
   subscriptionAddresses : Array<any>;
-  @Input() orderDetails : any;
+  @Input() receipt : any;
   @Input() user;
   @Input() account;
   @Input() subscriptionCart : any;
@@ -87,8 +87,12 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   getAddress() {
-    if(this.orderDetails) { //receipt
-      this.address = this.orderDetails.shipping_address;
+    if(this.receipt) { //receipt
+      if(this.singlePaymentOrder) {
+        this.address = this.receipt.shipping_address;
+      } else {
+        this.address = this.receipt.subscription_addresses[this.subscriptionItemIndex];
+      }
     } else {
       let singlePaymentAddress = this.service.getSinglePaymentAddress();
       let subscriptionAddresses = this.service.getSubscriptionAddresses();

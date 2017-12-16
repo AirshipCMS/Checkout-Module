@@ -143,11 +143,14 @@ export class CheckoutComponent implements OnInit {
   placeOrder() {
     this.processing = true;
     let checkoutStreams = [];
+    let singlePaymentOrder;
     let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
     let singlePaymentAddress = this.singlePaymentAddress;
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
     this.singleOrderCart.misc_data = this.singlePaymentMiscData;
-    let singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData).toPromise().catch(err => err);
+    if(this.singleOrderCart && this.singleOrderCart.items.length > 0) {
+      singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData).toPromise().catch(err => err);
+    }
     subscriptionCart.items.map((item, i) => {
       let cart = { items: [item] };
       let address;

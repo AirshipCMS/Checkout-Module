@@ -14,7 +14,7 @@ export class ShippingTypeComponent implements OnInit {
 
   options : Array<any>;
   shippingType : string;
-  @Input() orderDetails: any;
+  @Input() receipt: any;
 
   constructor(private service: ShippingTypeService, private sharedService: SharedService) {
     this.options = this.service.shippingTypes;

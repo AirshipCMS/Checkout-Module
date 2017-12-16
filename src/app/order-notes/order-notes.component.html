@@ -1,2 +1,2 @@
-<textarea class="order-notes" *ngIf="!orderDetails" value="{{orderNotes}}" ([ngModel])="orderNotes" (keyup)="saveOrderNotes($event)" placeholder="Add notes to this order..."></textarea>
-<p class="order-notes" *ngIf="orderDetails">{{ orderNotes }}</p>
+<textarea class="order-notes" *ngIf="!receipt" value="{{orderNotes}}" ([ngModel])="orderNotes" (keyup)="saveOrderNotes($event)" placeholder="Add notes to this order..."></textarea>
+<p class="order-notes" *ngIf="receipt">{{ orderNotes }}</p>
