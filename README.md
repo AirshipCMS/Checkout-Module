@@ -8,15 +8,17 @@ To install dependencies, run `npm install`
 
 run `cp src/environments/environment.prod.ts src/environments/environment.alpha.ts`
 in `src/environments/environment.alpha.ts` set `production` to `false`.
-Enter your domain and stripe key.
+Enter a stripe key.
 
 ## Dev Server
 
 ### Alpha
-Run `ng serve --env=alpha`.
+in the file `proxy.conf.alpha.json`, change `target` to your airshipcms site.
+Run `npm run alpha`.
 
 ### Prod
-Run `ng serve --env=prod`.
+in the file `proxy.conf.prod.json`, change `target` to your airshipcms site.
+Run `npm run prod`.
 
 Navigate to `http://localhost:4200/checkout`. The app will automatically reload if you change any of the source files.
 
@@ -38,8 +40,6 @@ If your build requires shipping, be sure the options in the Shipping Type dropdo
 
 production: `src/environments/environment.prod.ts`
 alpha: `src/environments/environment.alpha.ts`
-
-`domain` is required and should be your airship site domain: `domain.airshipcms.io`.
 
 `stripe_publish_key` is required for Stripe.
 

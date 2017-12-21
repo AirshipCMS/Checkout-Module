@@ -8,7 +8,10 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "alpha": "ng serve --env=alpha --proxy-config proxy.conf.alpha.json",
+    "beta": "ng serve --env=alpha --proxy-config proxy.conf.beta.json",
+    "prod": "ng serve --env=prod --proxy-config proxy.conf.prod.json"
   },
   "private": true,
   "dependencies": {

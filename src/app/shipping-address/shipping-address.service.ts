@@ -3,7 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Countries } from './countries';
 import { States } from './states';
-import { environment } from '../../environments/environment';
 
 @Injectable()
 export class ShippingAddressService {
@@ -63,7 +62,7 @@ export class ShippingAddressService {
   saveAddress(address: any, user: any, account: any) {
     // let endpoint = 'account/postal_address';
     let endpoint = `accounts/${account.id}/postal_address`;
-    return this.http.post(`${environment.domain}/api/${endpoint}`, this.scrubAddress(address), { headers: this.headers });
+    return this.http.post(`/api/${endpoint}`, this.scrubAddress(address), { headers: this.headers });
   }
 
   saveSubscriptionAddresses(addresses: Array<any>) {

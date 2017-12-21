@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { environment } from '../../environments/environment';
-
 @Injectable()
 export class PaymentMethodService {
 
@@ -32,7 +30,7 @@ export class PaymentMethodService {
   getAccountCards(scope: string, account_id: number) {
     let endpoint = 'account/cards';
     if(scope !== 'user') endpoint = `accounts/${account_id}/cards`;
-    return this.http.get(`${environment.domain}/api/${endpoint}`, { headers: this.headers });
+    return this.http.get(`/api/${endpoint}`, { headers: this.headers });
   }
 
   addCard(scope: string, account_id: number, source: any) {
@@ -43,7 +41,7 @@ export class PaymentMethodService {
         source
       }
     };
-    return this.http.post(`${environment.domain}/api/${endpoint}`, body, { headers: this.headers });
+    return this.http.post(`/api/${endpoint}`, body, { headers: this.headers });
   }
 
   setCreditCard(default_source: any, user: any, account: any) {
@@ -60,7 +58,7 @@ export class PaymentMethodService {
       }
     }
 
-    return this.http.put(`${environment.domain}/api/${endpoint}`, body, { headers: this.headers });
+    return this.http.put(`/api/${endpoint}`, body, { headers: this.headers });
   }
 
   handleError(err) {

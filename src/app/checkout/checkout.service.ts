@@ -2,8 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 
-import { environment } from '../../environments/environment';
-
 @Injectable()
 export class CheckoutService {
   headers: HttpHeaders;
@@ -34,13 +32,13 @@ export class CheckoutService {
       misc_data
     };
     if(stripe_token) order['stripe_token'] = stripe_token;
-    return this.http.post(`${environment.domain}/api/${endpoint}`, order, { headers: this.headers });
+    return this.http.post(`/api/${endpoint}`, order, { headers: this.headers });
   }
 
   getCustomerSubscriptions(user: any, account_id: number) {
-    let endpoint = `${environment.domain}/api/account/orders`;
+    let endpoint = `/api/account/orders`;
     if(user.scope !== 'user') {
-      endpoint = `${environment.domain}/api/accounts/${account_id}/orders`;
+      endpoint = `/api/accounts/${account_id}/orders`;
     }
     return this.http.get(endpoint, { headers: this.headers });
   }

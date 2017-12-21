@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { environment } from '../../environments/environment';
-
 @Injectable()
 export class SelectCustomerAccountService {
 
@@ -14,7 +12,7 @@ export class SelectCustomerAccountService {
   }
 
   getAccounts() {
-    return this.http.get(`${environment.domain}/api/accounts`, { headers: this.headers });
+    return this.http.get(`/api/accounts`, { headers: this.headers });
   }
 
   handleError(err) {

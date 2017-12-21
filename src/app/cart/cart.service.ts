@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { environment } from '../../environments/environment';
-
 @Injectable()
 export class CartService {
 
@@ -57,7 +55,7 @@ export class CartService {
     }
     body['cart'] = this.scrubCart(this.singleOrderCart);
     body['shipping_type'] = shippingType;
-    return this.http.put(`${environment.domain}/api/shipping`, body);
+    return this.http.put(`/api/shipping`, body);
   }
 
   handleError(err) {
