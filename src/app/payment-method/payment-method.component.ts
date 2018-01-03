@@ -42,7 +42,7 @@ export class PaymentMethodComponent implements OnInit {
   createToken() {
     this.stripe.createToken(this.cardElement)
       .then((res) => {
-        if(Object.keys(this.account).length > 0) { //if user doesn't have an account.
+        if(Object.keys(this.account).length > 0) {
           this.addCardAndSetAsDefault(res);
         } else {
           this.token = res.token.id;

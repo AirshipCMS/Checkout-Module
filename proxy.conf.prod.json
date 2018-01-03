@@ -1,6 +1,6 @@
 {
   "/api": {
-    "target": "https://domain.airshipcms-prod.io",
+    "target": "https://domain.airshipcms.io",
     "secure": true,
     "changeOrigin": true
   }

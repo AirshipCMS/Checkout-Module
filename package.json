@@ -5,8 +5,8 @@
   "scripts": {
     "ng": "ng",
     "start": "webpack-dev-server --port=4200",
-    "build": "ng build --prod --output-hashing none --env-prod && node concat",
-    "build-alpha": "ng build --prod --output-hashing none --env-alpha && node concat",
+    "build": "ng build --prod --env=prod --output-hashing none && node concat",
+    "build-alpha": "ng build --env=alpha --prod --output-hashing none && node concat",
     "test": "karma start ./karma.conf.js",
     "lint": "ng lint",
     "e2e": "protractor ./protractor.conf.js",
