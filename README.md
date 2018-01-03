@@ -25,12 +25,17 @@ Navigate to `http://localhost:4200/checkout`. The app will automatically reload 
 ## Build
 
 ### Alpha
-Run `ng build --prod --env=alpha`
+Run `npm run build-alpha`
 
 ### Prod
-Run `ng build --prod --env=prod`
+Run `npm run build-prod`
 
-All files will build into `/dist`
+All files will build into `/dist`.
+
+In your airship project:
+drop `airship-checkout.min.js` into `compartmnets/assets/scripts`.
+drop `airship-checkout.min.css` into `compartmnets/assets/styles`.
+include these files in `templates/checkout.html`
 
 ## Shipping Type
 
