@@ -48,10 +48,10 @@ alpha: `src/environments/environment.alpha.ts`
 
 `stripe_publish_key` is required for Stripe.
 
-`skip_single_payment_shipping` must be a boolean. To skip shipping address and shipping type for Single Payment Orders, set this to true.
+`skip_single_payment_shipping` boolean. To skip shipping address and shipping type for Single Payment Orders, set this to true.
 
-`skip_subscription_shipping` must be a boolean. To skip shipping address and shipping type for Subscription Orders, set this to true.
+`skip_subscription_shipping` boolean. To skip shipping address and shipping type for Subscription Orders, set this to true.
 
-`has_no_shipments` must be a boolean. To conditionally skip shipping address and shipping type for certain Subscription Orders, set this to true. In your Subscription Collection, create a `checkbox` field named `Has No Shipments`. Check the box for items with no shipments.
+`has_no_shipments` boolean. To conditionally skip shipping address and shipping type for certain Subscription Orders, set this to true. In your Subscription Collection, create a `checkbox` field named `Has No Shipments`. Check the box for items with no shipments.
 
 If `skip_single_payment_shipping`, `skip_subscription_shipping` or `has_no_shipments` is set to `true`, go to `src/environments/default-vendor-address.ts`. Enter a default address. If no default address is entered, checkout will fail.

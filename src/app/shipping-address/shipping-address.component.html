@@ -1,6 +1,6 @@
 <div class="shipping-address-container">
   <label>Shipping Address</label>
-  <button class="inline-button" type="button" *ngIf="address && !editaddress && !receipt" (click)="editaddress = true">Change Address</button>
+  <button class="inline-button button" type="button" *ngIf="address && !editaddress && !receipt" (click)="editaddress = true">Change Address</button>
   <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
     <label *ngIf="address || accountAddresses" for="change_address_option">
       Existing Address
@@ -66,11 +66,11 @@
         </option>
       </select>
       <div class="existing-shipping-address-buttons" *ngIf="form.value.change_address_option === 'existing'">
-        <button type="button" (click)="editaddress = !editaddress">Cancel</button>
-        <button type="button" (click)="setAddress(form.value.address_options)">Save</button>
+        <button class="button" type="button" (click)="editaddress = !editaddress">Cancel</button>
+        <button class="button" type="button" (click)="setAddress(form.value.address_options)">Save</button>
       </div>
     </div>
-    <button [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>
+    <button class="button" [disabled]="form.status === 'INVALID'" type="button" (click)="saveAddress()">Save Address</button>
   </form>
   <div class="selected-shipping-address" *ngIf="address && !editaddress">
     <p>{{ address?.first_name }} {{ address?.last_name }}</p>
