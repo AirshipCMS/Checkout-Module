@@ -31,10 +31,10 @@
     <a href="/">Continue Shopping</a>
   </div>
   <div class="checkout-buttons" *ngIf="account">
-    <a class="button" href="/cart">Back to Cart</a>
+    <a class="button back-to-cart-button" href="/cart">Back to Cart</a>
     <p *ngIf="orderFailed" class="checkout-error">There was an error processing your order.</p>
     <p *ngIf="activeSubscriptions.length >= 25" class="checkout-error">Subscriptions can't be added to this account. An account may only have 25 subscriptions.</p>
-    <button class="button" type="button" (click)="placeOrder()" [disabled]="!creditCard || !singlePaymentAddress || processing || activeSubscriptions.length >= 25">Place Order</button>
+    <button class="button place-order-button" type="button" (click)="placeOrder()" [disabled]="!creditCard || !singlePaymentAddress || processing || activeSubscriptions.length >= 25">Place Order</button>
   </div>
 </div>
 <!-- <div *ngIf="loading" class="loader">loading</div> -->

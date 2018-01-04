@@ -1,44 +1,40 @@
-<div>
+<div class="cart-items">
   <h4>Items</h4>
   <div class="cart-item" *ngFor="let item of cart.items">
-    <div>
-      <div>
-        <h4 class="product-title cart-label">{{ item.product_title }}</h4>
-        <p class="cart-item-quantity">{{ item.quantity }}</p>
-        <p class="cart-item-price" *ngIf="!receipt">{{ item.price.usd/100 | currency: "USD" }}</p>
-        <p class="cart-item-price" *ngIf="receipt">{{ item.product_variations[0].price.usd/100 | currency: "USD" }}</p>
-        <p class="cart-item-variations" *ngIf="!receipt">{{ item.product_variation_title }}</p>
-        <p class="cart-item-variations" *ngIf="receipt">{{ item.product_variations[0].product_variation_title }}</p>
-      </div>
+    <div class="cart-item-description">
+      <h4 class="product-title cart-label">{{ item.product_title }}</h4>
+      <p class="cart-item-variations" *ngIf="receipt">{{ item.product_variations[0].product_variation_title }}</p>
+      <p class="cart-item-variations" *ngIf="!receipt">{{ item.product_variation_title }}</p>
     </div>
+    <p class="cart-item-quantity">{{ item.quantity }}</p>
+    <p class="cart-item-price" *ngIf="!receipt">{{ item.price.usd/100 | currency: "USD" }}</p>
+    <p class="cart-item-price" *ngIf="receipt">{{ item.product_variations[0].price.usd/100 | currency: "USD" }}</p>
   </div>
-  <div class="cart-prices">
+  <div class="cart-totals">
     <div class="cart-subtotal">
-      <h4 class="subtotal cart-label">Subtotal</h4>
-      <p class="subtotal">{{ subtotal | currency: "USD" }}</p>
+      <h4 class="subtotal-title cart-label">Subtotal</h4>
+      <p class="cart-item-subtotal">{{ subtotal | currency: "USD" }}</p>
     </div>
     <div class="cart-shipping">
-      <h4 class="shipping cart-label">Shipping</h4>
-      <p class="shipping" *ngIf="pending">{{ shipping }}</p>
-      <p class="shipping" *ngIf="!pending">{{ shipping | currency: "USD" }}</p>
+      <h4 class="shipping-title cart-label">Shipping</h4>
+      <p class="cart-item-shipping" *ngIf="pending">{{ shipping }}</p>
+      <p class="cart-item-shipping" *ngIf="!pending">{{ shipping | currency: "USD" }}</p>
     </div>
     <div class="cart-tax">
-      <h4 class="tax cart-label">Tax</h4>
-      <p class="tax" *ngIf="pending">{{ tax }}</p>
-      <p class="tax" *ngIf="!pending">{{ tax | currency: "USD" }}</p>
+      <h4 class="tax-title cart-label">Tax</h4>
+      <p class="cart-item-tax" *ngIf="pending">{{ tax }}</p>
+      <p class="cart-item-tax" *ngIf="!pending">{{ tax | currency: "USD" }}</p>
     </div>
     <div class="cart-handling">
-      <h4 class="handling cart-label">Handling</h4>
-      <p class="handling" *ngIf="pending">{{ handling }}</p>
-      <p class="handling" *ngIf="!pending">{{ handling | currency: "USD" }}</p>
+      <h4 class="handling-title cart-label">Handling</h4>
+      <p class="cart-item-handling" *ngIf="pending">{{ handling }}</p>
+      <p class="cart-item-handling" *ngIf="!pending">{{ handling | currency: "USD" }}</p>
     </div>
   </div>
-  <div class="cart-prices">
-    <div class="cart-total">
-      <h4 class="total cart-label">Total</h4>
-      <p class="total" *ngIf="pending">{{ total }}</p>
-      <p class="total" *ngIf="!pending">{{ total | currency: "USD" }}</p>
-    </div>
+  <div class="cart-total">
+    <h4 class="total-title cart-label">Total</h4>
+    <p class="cart-item-total" *ngIf="pending">{{ total }}</p>
+    <p class="cart-item-total" *ngIf="!pending">{{ total | currency: "USD" }}</p>
   </div>
   <div class="cart-charge-details" *ngIf="!pending && !receipt">
     <p>{{ creditCard?.brand }} ending *{{creditCard?.last4 }} will be charged {{ total | currency: "USD" }}</p>
