@@ -54,7 +54,12 @@ export class CheckoutComponent implements OnInit {
 
   ngOnInit() {
     this.loading = true;
-    this.getUserProfile();
+    if(localStorage.getItem('id_token') !== null) {
+      this.getUserProfile();
+    } else {
+      this.auth.isAuthenticated = false;
+      this.auth.login();
+    }
     this.singleOrderCart = this.cartService.singleOrderCart;
     this.subscriptionCart = this.cartService.subscriptionCart;
     this.sharedService.orderNotes$.subscribe(singlePaymentNotes => this.singlePaymentNotes = singlePaymentNotes);

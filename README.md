@@ -28,7 +28,7 @@ Navigate to `http://localhost:4200/checkout`. The app will automatically reload 
 Run `npm run build-alpha`
 
 ### Prod
-Run `npm run build-prod`
+Run `npm run build`
 
 All files will build into `/dist`.
 
