@@ -2,12 +2,12 @@
   <label>Shipping Address</label>
   <button class="inline-button button" type="button" *ngIf="address && !editaddress && !receipt" (click)="editaddress = true">Change Address</button>
   <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
-    <label *ngIf="address || accountAddresses" for="change_address_option">
-      <input id="change_address_option" type="radio" formControlName="change_address_option" value="existing">
+    <label *ngIf="address || accountAddresses" for="change_address_option_new">
+      <input id="change_address_option_existing" type="radio" formControlName="change_address_option" value="existing">
       Existing Address
     </label>
-    <label *ngIf="address || accountAddresses" for="change_address_option">
-      <input id="change_address_option" type="radio" formControlName="change_address_option" value="new">
+    <label *ngIf="address || accountAddresses" for="change_address_option_new">
+      <input id="change_address_option_new" type="radio" formControlName="change_address_option" value="new">
       New Address
     </label>
     <div class="new-shipping-address" *ngIf="form.value.change_address_option === 'new'">
@@ -70,8 +70,8 @@
         </option>
       </select>
       <div class="existing-shipping-address-buttons" *ngIf="form.value.change_address_option === 'existing'">
-        <button class="button" type="button" (click)="editaddress = !editaddress">Cancel</button>
-        <button class="button" type="button" (click)="setAddress(form.value.address_options)">Save</button>
+        <button class="button cancel-button" type="button" (click)="editaddress = !editaddress">Cancel</button>
+        <button class="button save-button" type="button" (click)="setAddress(form.value.address_options)">Save</button>
       </div>
     </div>
   </form>
