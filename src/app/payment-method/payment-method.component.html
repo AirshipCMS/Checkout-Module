@@ -14,8 +14,8 @@
           </label>
           <div [ngClass]="{'airship-hidden': changeCardOption === 'existing'}" id="card-element"></div>
           <div class="update-card-buttons" *ngIf="changeCardOption === 'new'">
-            <button class="button cancel-button" *ngIf="editCreditCard" type="button" (click)="editCreditCard = !editCreditCard">Cancel</button>
-            <button class="button add-button" type="button" (click)="createToken()">Add Card</button>
+            <button class="button cancel-button" *ngIf="editCreditCard" type="button" (click)="editCreditCard = !editCreditCard" [disabled]="processing">Cancel</button>
+            <button class="button add-button" type="button" (click)="createToken()" [disabled]="processing">{{ processing? "Adding Card..." : "Add Card" }}</button>
           </div>
         </div>
         <div class="payment-method-existing" *ngIf="creditCard && accountCards">
@@ -33,6 +33,8 @@
           </div>
         </div>
       </div>
+      <p class="error-message" *ngIf="addCardFailed">Failed to add card.</p>
+      <p class="success-message" *ngIf="cardAdded">Card Added.</p>
       <div class="default-credit-card" *ngIf="creditCard && !editCreditCard">
         <p>{{ creditCard?.brand }} ending *{{ creditCard?.last4 }}</p>
       </div>

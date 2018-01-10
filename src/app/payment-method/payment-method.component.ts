@@ -24,6 +24,9 @@ export class PaymentMethodComponent implements OnInit {
   token;
   editCreditCard : boolean = false;
   checked: boolean = false;
+  processing: boolean = false;
+  addCardFailed: boolean = false;
+  cardAdded: boolean = false;
   @Input() user;
   @Input() account;
   @Output() creditCardSaved = new EventEmitter();
@@ -40,11 +43,14 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   createToken() {
+    this.processing = true;
+    this.addCardFailed = false;
     this.stripe.createToken(this.cardElement)
       .then((res) => {
         if(Object.keys(this.account).length > 0) {
           this.addCardAndSetAsDefault(res);
         } else {
+          this.processing = false;
           this.token = res.token.id;
           this.creditCard = res.token.card;
           this.service.saveLocalCard(this.creditCard, this.token);
@@ -54,14 +60,25 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   addCardAndSetAsDefault(res: any) {
+    this.addCardFailed = false;
     this.service.addCard(this.user.scope, this.account.id, res.token.id)
       .pipe(mergeMap(card => this.service.setCreditCard(res.id, this.user, this.account)))
       .subscribe(
         creditCard => {
           this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
           this.editCreditCard = false;
+          this.processing = false;
+          this.cardAdded = true;
+          setTimeout(() => {
+            this.cardAdded = false;
+          }, 2000)
         },
-        err => console.error(err)
+
+        err => {
+          console.error(err);
+          this.processing = false;
+          this.addCardFailed = true;
+        }
       );
   }
 
