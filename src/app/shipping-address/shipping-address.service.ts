@@ -26,7 +26,7 @@ export class ShippingAddressService {
   formatAddress(address: any) {
     let formattedAddress;
     for(const [key, value] of Object.entries(address)) {
-      address['other_location'] = false;
+      address['other_location'] = address['state'] === '';
       switch (key) {
         case "country":
           if(value.code) address[key] = value.code;

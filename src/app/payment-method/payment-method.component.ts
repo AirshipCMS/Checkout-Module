@@ -16,7 +16,7 @@ declare var Stripe;
 })
 export class PaymentMethodComponent implements OnInit {
 
-  accountCards : Array<any>;
+  accountCards : Array<any> = [];
   creditCard;
   cardElement;
   changeCardOption : string = 'new';

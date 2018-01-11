@@ -55,8 +55,10 @@ export class ShippingAddressComponent implements OnInit {
     this.subscriptionAddresses = this.service.getSubscriptionAddresses();
     if(this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
-      this.address = this.service.formatAddress(this.account.postal_addresses[0]);
-      this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
+      if(this.account.postal_addresses && this.account.postal_addresses.length > 0) {
+        this.address = this.service.formatAddress(this.account.postal_addresses[0]);
+        this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
+      }
     }
     if(!this.subscriptionAddresses && this.subscriptionCart) {
       this.subscriptionAddresses = [];

@@ -10,8 +10,7 @@
         <shipping-type [receipt]="receipt"></shipping-type>
       </div>
       <div class="order-number-container" *ngIf="receipt">
-        <label>Order Number</label>
-        <p>#{{ item?.stripe_data.metadata.order_number }}</p>
+        <p>Subscription Receipt #{{ item?.stripe_data.metadata.order_number }}</p>
       </div>
       <div class="order-date-container" *ngIf="receipt">
         <label>Order Date</label>

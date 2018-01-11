@@ -10,8 +10,7 @@
         <shipping-type [receipt]="receipt"></shipping-type>
       </div>
       <div class="order-number-container" *ngIf="receipt">
-        <label>Order Number</label>
-        <p>#{{ receipt?.single_payment.order_number }}</p>
+        <p>Single-Payment Order Receipt #{{ receipt?.single_payment.order_number }}</p>
       </div>
       <div class="order-date-container" *ngIf="receipt">
         <label>Order Date</label>

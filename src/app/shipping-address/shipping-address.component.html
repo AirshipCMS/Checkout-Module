@@ -2,15 +2,15 @@
   <label>Shipping Address</label>
   <button class="inline-button button" type="button" *ngIf="address && !editaddress && !receipt" (click)="editaddress = true">Change Address</button>
   <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
-    <label *ngIf="address || accountAddresses" for="change_address_option_existing">
+    <label *ngIf="address && accountAddresses.length > 0" for="change_address_option_existing">
       <input id="change_address_option_existing" type="radio" formControlName="change_address_option" value="existing">
       Existing Address
     </label>
-    <label *ngIf="address || accountAddresses" for="change_address_option_new">
+    <label *ngIf="address && accountAddresses.length > 0" for="change_address_option_new">
       <input id="change_address_option_new" type="radio" formControlName="change_address_option" value="new">
       New Address
     </label>
-    <div class="new-shipping-address" *ngIf="form.value.change_address_option === 'new'">
+    <div class="new-shipping-address" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
       <div class="shipping-field inline-field">
         <label>First Name*</label>
         <input type="text" formControlName="first_name" required [(ngModel)]="first_name">
@@ -62,7 +62,7 @@
         <button type="button save-button" (click)="saveAddress()">Save</button>
       </div>
     </div>
-    <div class="existing-shipping-address" *ngIf="form.value.change_address_option === 'existing'">
+    <div class="existing-shipping-address" *ngIf="form.value.change_address_option === 'existing' && accountAddresses.length > 0">
       <select class="shipping-field" formControlName="address_options">
         <option selected="" disabled="">Select One</option>
         <option *ngFor="let address of accountAddresses" [ngValue]="address">
@@ -79,6 +79,6 @@
     <p>{{ address?.first_name }} {{ address?.last_name }}</p>
     <p>{{ address?.address_1 }}</p>
     <p>{{ address?.address_2 }}</p>
-    <p>{{ address?.city }}, {{ address?.state }} {{ address?.zipcode }}</p>
+    <p>{{ address?.city }}, {{ address?.other_location ? address?.other_location_text : address?.state }} {{ address?.zipcode }}</p>
   </div>
 </div>

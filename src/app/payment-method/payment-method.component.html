@@ -8,7 +8,7 @@
       <button class="button inline-button" *ngIf="creditCard && !editCreditCard" type="button" (click)="editCreditCard = true">Change Card</button>
       <div class="payment-method-fields" [ngClass]="{'airship-hidden':creditCard && !editCreditCard}">
         <div class="payment-method-new">
-          <label *ngIf="creditCard && accountCards" for="change_card_option_new">
+          <label *ngIf="creditCard && accountCards.length > 0" for="change_card_option_new">
             <input id="change_card_option_new" type="radio" [(ngModel)]="changeCardOption" value="new">
             New Credit or Debit Card
           </label>
@@ -18,14 +18,14 @@
             <button class="button add-button" type="button" (click)="createToken()" [disabled]="processing">{{ processing? "Adding Card..." : "Add Card" }}</button>
           </div>
         </div>
-        <div class="payment-method-existing" *ngIf="creditCard && accountCards">
+        <div class="payment-method-existing" *ngIf="creditCard && accountCards.length > 0">
           <label for="change_card_option_existing">
             <input id="change_card_option_existing" type="radio" [(ngModel)]="changeCardOption" value="existing">
             Existing Card
           </label>
           <select *ngIf="changeCardOption === 'existing'" [(ngModel)]="cardOptions">
             <option selected="" disabled="">Select One</option>
-            <option *ngFor="let card of accountCards" [ngValue]="card">{{ card?.brand }} ending *{{ card.last4 }}</option>
+            <option *ngFor="let card of accountCards.length > 0" [ngValue]="card">{{ card?.brand }} ending *{{ card.last4 }}</option>
           </select>
           <div class="update-card-buttons" *ngIf="changeCardOption === 'existing'">
             <button class="button cancel-button" type="button" (click)="editCreditCard = !editCreditCard">Cancel</button>
