@@ -23,7 +23,7 @@ export class ShippingAddressService {
     return this.states.find((item, i) => i === country.StateGroupID);
   }
 
-  formattAddress(address: any) {
+  formatAddress(address: any) {
     let formattedAddress;
     for(const [key, value] of Object.entries(address)) {
       address['other_location'] = false;
@@ -34,6 +34,7 @@ export class ShippingAddressService {
 
         case "state":
           if(value.code) address[key] = value.code;
+          if(value.name) address[key] = value.name;
           break;
 
         case "other_location_text":

@@ -55,7 +55,7 @@ export class ShippingAddressComponent implements OnInit {
     this.subscriptionAddresses = this.service.getSubscriptionAddresses();
     if(this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
-      this.address = this.service.formattAddress(this.account.postal_addresses[0]);
+      this.address = this.service.formatAddress(this.account.postal_addresses[0]);
       this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
     }
     if(!this.subscriptionAddresses && this.subscriptionCart) {
@@ -72,7 +72,7 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   setAddress(address: any) {
-    this.address = this.service.scrubAddress(this.service.formattAddress(address));
+    this.address = this.service.scrubAddress(this.service.formatAddress(address));
     this.editaddress = false;
     if(this.singlePaymentOrder) {
       this.sharedService.setShippingAddress(this.address);
@@ -97,29 +97,29 @@ export class ShippingAddressComponent implements OnInit {
       let singlePaymentAddress = this.service.getSinglePaymentAddress();
       let subscriptionAddresses = this.service.getSubscriptionAddresses();
       if(this.subscriptionItemIndex !== undefined) {
-        this.address = this.subscriptionAddresses[this.subscriptionItemIndex];
+        this.address = this.service.formatAddress(this.subscriptionAddresses[this.subscriptionItemIndex]);
         this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
       }
       if(this.singlePaymentOrder && singlePaymentAddress) {
-        this.address = this.service.formattAddress(singlePaymentAddress);
+        this.address = this.service.formatAddress(singlePaymentAddress);
         this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
       }
     }
   }
 
   saveAddress() {
-    this.address = this.service.formattAddress(this.form.value);
+    this.address = this.service.formatAddress(this.form.value);
     if(Object.keys(this.account).length > 0) {
       this.service.saveAddress(this.address, this.user, this.account)
         .subscribe(
           address => {
-            this.address = address;
+            this.address = this.service.formatAddress(address);
           },
           err => this.service.handleError(err)
         );
     }
     if(this.subscriptionItemIndex !== undefined) {
-      this.subscriptionAddresses[this.subscriptionItemIndex] = this.service.formattAddress(this.service.scrubAddress(this.address));
+      this.subscriptionAddresses[this.subscriptionItemIndex] = this.service.formatAddress(this.service.scrubAddress(this.address));
       this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
       this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
     } else {
