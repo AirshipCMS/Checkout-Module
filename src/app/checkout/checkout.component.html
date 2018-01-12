@@ -38,7 +38,7 @@
   </div>
   <div class="field checkout-buttons" *ngIf="account">
     <div class="control">
-      <button type="button" (click)="backToCart()" class="button back-to-cart-button">Back to Cart</a>
+      <button type="button" (click)="backToCart()" class="button back-to-cart-button">Back to Cart</button>
     </div>
     <p *ngIf="orderFailed" class="checkout-error">There was an error processing your order.</p>
     <p *ngIf="activeSubscriptions.length >= 25" class="checkout-error">Subscriptions can't be added to this account. An account may only have 25 subscriptions.</p>
