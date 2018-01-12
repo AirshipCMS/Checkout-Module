@@ -6,10 +6,6 @@
   <div class="container-body">
     <div class="container-body-left">
       <shipping-address *ngIf="!skipShipping && !hasNoShipments || (hasNoShipments && !item.has_no_shipments)" [user]="user" [account]="account" [receipt]="receipt" [subscriptionCart]="subscriptionCart" [subscriptionItemIndex]="i"></shipping-address>
-      <div class="shipping-type-container" *ngIf="!skipShipping && !hasNoShipments || (hasNoShipments && !item.has_no_shipments)">
-        <label>Shipping Type</label>
-        <shipping-type [receipt]="receipt"></shipping-type>
-      </div>
       <div class="order-number-container" *ngIf="receipt">
         <label>Order Number</label>
         <p>#{{ item?.stripe_data.metadata.order_number }}</p>
