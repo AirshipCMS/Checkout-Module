@@ -6,7 +6,7 @@ export class ShippingTypeService {
   shippingTypes : Array<any>;
 
   constructor() {
-    this.shippingTypes = ['Standard', 'Expedited'];
+    this.shippingTypes = ['USPS', 'FedEx',  'UPS'];
   }
 
   saveShippingType(shippingType:string) {
@@ -15,7 +15,7 @@ export class ShippingTypeService {
 
   getSavedShippingType() {
     let localShippingType = localStorage.getItem('shipping_type');
-    let shippingType = localShippingType ? localShippingType : 'Standard';
+    let shippingType = localShippingType ? localShippingType : 'USPS';
     return shippingType;
   }
 

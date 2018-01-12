@@ -47,14 +47,18 @@ export class PaymentMethodComponent implements OnInit {
     this.addCardFailed = false;
     this.stripe.createToken(this.cardElement)
       .then((res) => {
-        if(Object.keys(this.account).length > 0) {
-          this.addCardAndSetAsDefault(res);
+        if(res.token) {
+          if(Object.keys(this.account).length > 0) {
+            this.addCardAndSetAsDefault(res);
+          } else {
+            this.processing = false;
+            this.token = res.token.id;
+            this.creditCard = res.token.card;
+            this.service.saveLocalCard(this.creditCard, this.token);
+            this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
+          }
         } else {
           this.processing = false;
-          this.token = res.token.id;
-          this.creditCard = res.token.card;
-          this.service.saveLocalCard(this.creditCard, this.token);
-          this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
         }
       });
   }
@@ -65,6 +69,7 @@ export class PaymentMethodComponent implements OnInit {
       .pipe(mergeMap(card => this.service.setCreditCard(res.id, this.user, this.account)))
       .subscribe(
         creditCard => {
+          this.creditCard = res.token.card;
           this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
           this.editCreditCard = false;
           this.processing = false;

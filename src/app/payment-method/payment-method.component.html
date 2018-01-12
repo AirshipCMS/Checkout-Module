@@ -25,7 +25,7 @@
           </label>
           <select *ngIf="changeCardOption === 'existing'" [(ngModel)]="cardOptions">
             <option selected="" disabled="">Select One</option>
-            <option *ngFor="let card of accountCards.length > 0" [ngValue]="card">{{ card?.brand }} ending *{{ card.last4 }}</option>
+            <option *ngFor="let card of accountCards" [ngValue]="card">{{ card?.brand }} ending *{{ card.last4 }}</option>
           </select>
           <div class="update-card-buttons" *ngIf="changeCardOption === 'existing'">
             <button class="button cancel-button" type="button" (click)="editCreditCard = !editCreditCard">Cancel</button>
