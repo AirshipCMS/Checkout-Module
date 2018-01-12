@@ -2,7 +2,7 @@
   <label *ngIf="!receipt || (receipt && miscData)">Other Data</label>
   <div class="misc-data-items">
     <div class="misc-data-item" *ngFor="let item of miscData | keys">
-      <p>{{ miscData[item.key].product_title }}, {{ miscData[item.key].product_variation }}</p>
+      <p>{{ miscData[item.key].product_title }}, {{ miscData[item.key].product_variation ? miscData[item.key].product_variation : miscData[item.key].plan }}</p>
       <p class="misc-data-variation" *ngFor="let item of item.value | keys">- {{ item.key }}: {{ item.value }}</p>
     </div>
   </div>

@@ -37,6 +37,7 @@ export class MiscDataComponent implements OnInit {
         });
         this.miscData[miscDataKey]['plan'] = `${this.subscriptionItem.product_plan.name} every ${this.subscriptionItem.product_plan.interval}`;
         this.miscData[miscDataKey]['plan_id'] = this.subscriptionItem.id;
+        this.miscData[miscDataKey]['product_title'] = this.subscriptionItem.product_title;
         this.subscriptionMiscData[this.subscriptionItemIndex] = this.miscData;
         this.sharedService.setSubscriptionMiscData(this.subscriptionMiscData);
       }
