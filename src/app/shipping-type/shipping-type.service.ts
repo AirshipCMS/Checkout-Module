@@ -3,10 +3,7 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ShippingTypeService {
 
-  shippingTypes : Array<any>;
-
   constructor() {
-    this.shippingTypes = ['USPS', 'FedEx',  'UPS'];
   }
 
   saveShippingType(shippingType:string) {

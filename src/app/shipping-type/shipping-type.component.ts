@@ -2,6 +2,7 @@ import { Component, OnInit, ViewEncapsulation, Input } from '@angular/core';
 
 import { ShippingTypeService } from './shipping-type.service';
 import { SharedService } from '../shared.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'shipping-type',
@@ -17,7 +18,7 @@ export class ShippingTypeComponent implements OnInit {
   @Input() receipt: any;
 
   constructor(private service: ShippingTypeService, private sharedService: SharedService) {
-    this.options = this.service.shippingTypes;
+    this.options = environment.shipping_types;
   }
 
   ngOnInit() {
