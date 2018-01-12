@@ -1,3 +1,7 @@
-<label *ngIf="!receipt || (receipt && orderNotes && orderNotes !== '')">Order Notes</label>
-<textarea class="order-notes" *ngIf="!receipt" value="{{orderNotes}}" ([ngModel])="orderNotes" (keyup)="saveOrderNotes($event)" placeholder="Add notes to this order..."></textarea>
+<div class="field"> 
+  <label class="label" *ngIf="!receipt || (receipt && orderNotes && orderNotes !== '')">Order Notes</label>
+  <div class="control">
+    <textarea class="text-area order-notes" *ngIf="!receipt" value="{{orderNotes}}" ([ngModel])="orderNotes" (keyup)="saveOrderNotes($event)" placeholder="Add notes to this order..."></textarea>
+  </div>
+</div>
 <p class="order-notes" *ngIf="receipt && orderNotes && orderNotes !== ''">{{ orderNotes }}</p>

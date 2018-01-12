@@ -1,4 +1,9 @@
-<select class="shipping-type" *ngIf="!receipt" [(ngModel)]="shippingType" (ngModelChange)="saveShippingType($event)">
-  <option *ngFor="let option of options" [ngValue]="option">{{ option }}</option>
-</select>
+<div class="field">
+  <label class="label">Shipping Type</label>
+  <div class="control">    
+    <select class="shipping-type select" *ngIf="!receipt" [(ngModel)]="shippingType" (ngModelChange)="saveShippingType($event)">
+      <option *ngFor="let option of options" [ngValue]="option">{{ option }}</option>
+    </select>
+  </div>
+</div>
 <p class="shipping-type" *ngIf="receipt">{{ receipt?.single_payment.shipping_type }}</p>

@@ -7,24 +7,23 @@
     <div class="container-body-left">
       <shipping-address *ngIf="!skipShipping" [user]="user" [account]="account" [receipt]="receipt" [singlePaymentOrder]="true"></shipping-address>
       <div class="shipping-type-container" *ngIf="!skipShipping">
-        <label>Shipping Type</label>
         <shipping-type [receipt]="receipt"></shipping-type>
       </div>
       <div class="order-number-container" *ngIf="receipt">
-        <label>Order Number</label>
+        <label class="label">Order Number</label>
         <p>#{{ receipt?.single_payment.order_number }}</p>
       </div>
       <div class="order-date-container" *ngIf="receipt">
-        <label>Order Date</label>
+        <label class="label">Order Date</label>
         <p *ngIf="receipt">{{ receipt?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
       <div class="customer-id-container" *ngIf="receipt">
-        <label>Customer ID</label>
+        <label class="label">Customer ID</label>
         <p>{{ receipt?.customer.email }}</p>
         <p>{{ receipt?.customer.stripe_customer_id }}</p>
       </div>
       <div class="billing-container">
-        <label>Billing</label>
+        <label class="label">Billing</label>
         <p *ngIf="shippingCalculationPending && !receipt">Pending...</p>
         <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charged {{ orderTotal | currency: 'USD'}}</p>
         <p *ngIf="receipt">{{ receipt?.single_payment.payment.stripe_card_raw_json_data.brand }} ending *{{ receipt?.single_payment.payment.stripe_card_raw_json_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ receipt?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>

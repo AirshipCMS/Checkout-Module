@@ -5,10 +5,14 @@
   <div class="container-body">
     <div class="container-body-left">
       <form [formGroup]="form" class="select-customer-form">
-        <select formControlName="account" class="select-customer-dropdown">
-          <option>Select One</option>
-          <option *ngFor="let account of accounts" [ngValue]="account">{{ account?.user.email }}</option>
-        </select>
+        <div class="field">
+          <div class="control">
+            <select formControlName="account" class="select-customer-dropdown">
+              <option>Select One</option>
+              <option *ngFor="let account of accounts" [ngValue]="account">{{ account?.user.email }}</option>
+            </select>
+          </div>
+        </div>
       </form>
     </div>
     <div class="container-body-right">
@@ -18,5 +22,8 @@
     </div>
   </div>
 </div>
-
-<button class="button" type="button" (click)="selectAccount(form.value.account)" [disabled]="form.status === 'INVALID'">Continue</button>
+<div class="field">
+  <div class="control">
+    <button class="button" type="button" (click)="selectAccount(form.value.account)" [disabled]="form.status === 'INVALID'">Continue</button>
+  </div>
+</div>

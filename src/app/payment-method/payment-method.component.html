@@ -4,34 +4,58 @@
   </div>
   <div class="container-body">
     <div class="container-body-left">
-      <label for="card-element">Credit or Debit Card</label>
-      <button class="button inline-button" *ngIf="creditCard && !editCreditCard" type="button" (click)="editCreditCard = true">Change Card</button>
+      <div class="field">
+        <label class="label" for="card-element">Credit or Debit Card</label>
+        <div class="control">
+          <button class="button inline-button" *ngIf="creditCard && !editCreditCard" type="button" (click)="editCreditCard = true">Change Card</button>
+        </div>
+      </div>
       <div class="payment-method-fields" [ngClass]="{'airship-hidden':creditCard && !editCreditCard}">
         <div class="payment-method-new">
-          <label *ngIf="creditCard && accountCards.length > 0" for="change_card_option_new">
-            <input id="change_card_option_new" type="radio" [(ngModel)]="changeCardOption" value="new">
-            New Credit or Debit Card
-          </label>
+          <div class="field">
+            <div class="control">
+              <label class="radio" *ngIf="creditCard && accountCards.length > 0" for="change_card_option_new">
+                <input id="change_card_option_new" type="radio" [(ngModel)]="changeCardOption" value="new">
+                New Credit or Debit Card
+              </label>
+            </div>
+          </div>
           <div [ngClass]="{'airship-hidden': changeCardOption === 'existing'}" id="card-element"></div>
           <p class="error-message" *ngIf="missingCardInfo">Please enter required Credit Card fields.</p>
-          <div class="update-card-buttons" *ngIf="changeCardOption === 'new'">
-            <button class="button cancel-button" *ngIf="editCreditCard" type="button" (click)="editCreditCard = !editCreditCard" [disabled]="processing">Cancel</button>
-            <button class="button add-button" type="button" (click)="createToken()" [disabled]="processing">{{ processing? "Adding Card..." : "Add Card" }}</button>
+          <div class="field update-card-buttons is-grouped" *ngIf="changeCardOption === 'new'">
+            <div class="control">
+              <button class="button cancel-button" *ngIf="editCreditCard" type="button" (click)="editCreditCard = !editCreditCard" [disabled]="processing">Cancel</button>
+            </div>
+            <div class="control">
+              <button class="button add-button" type="button" (click)="createToken()" [disabled]="processing">{{ processing? "Adding Card..." : "Add Card" }}</button>
+            </div>
           </div>
         </div>
         <div class="payment-method-existing" *ngIf="creditCard && accountCards.length > 0">
-          <label for="change_card_option_existing">
-            <input id="change_card_option_existing" type="radio" [(ngModel)]="changeCardOption" value="existing">
-            Existing Card
-          </label>
-          <select *ngIf="changeCardOption === 'existing'" [(ngModel)]="cardOptions">
-            <option selected="" disabled="">Select One</option>
-            <option *ngFor="let card of accountCards" [ngValue]="card">{{ card?.brand }} ending *{{ card.last4 }}</option>
-          </select>
+          <div class="field">
+            <div class="control">
+              <label class="radio" for="change_card_option_existing">
+                <input id="change_card_option_existing" type="radio" [(ngModel)]="changeCardOption" value="existing">
+                Existing Card
+              </label>
+            </div>
+          </div>
+          <div class="field">
+            <div class="control">
+              <select class="select" *ngIf="changeCardOption === 'existing'" [(ngModel)]="cardOptions">
+                <option selected="" disabled="">Select One</option>
+                <option *ngFor="let card of accountCards" [ngValue]="card">{{ card?.brand }} ending *{{ card.last4 }}</option>
+              </select>
+            </div>
+          </div>
           <p class="error-message" *ngIf="cardOptions === undefined && noCardSelected">Select a Credit Card from the list, or add a New Credit Card as Default.</p>
-          <div class="update-card-buttons" *ngIf="changeCardOption === 'existing'">
-            <button class="button cancel-button" type="button" (click)="editCreditCard = !editCreditCard">Cancel</button>
-            <button class="button add-button" type="button" (click)="setCreditCard(cardOptions)">Set as Default</button>
+          <div class="field update-card-buttons is-grouped" *ngIf="changeCardOption === 'existing'">
+            <div class="control">
+              <button class="button cancel-button" type="button" (click)="editCreditCard = !editCreditCard">Cancel</button>
+            </div>
+            <div class="control">
+              <button class="button add-button" type="button" (click)="setCreditCard(cardOptions)">Set as Default</button>
+            </div>
           </div>
         </div>
       </div>
