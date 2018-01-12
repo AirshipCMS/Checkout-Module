@@ -6,11 +6,13 @@
     <div class="container-body-left">
       <div class="field">
         <label class="label" for="card-element">Credit or Debit Card</label>
+        <p *ngIf="loadingPaymentMethod">Loading...</p>
+        <p class="error-message" *ngIf="loadPaymentMethodError">Error getting Payment Method.</p>
         <div class="control">
           <button class="button inline-button" *ngIf="creditCard && !editCreditCard" type="button" (click)="editCreditCard = true">Change Card</button>
         </div>
       </div>
-      <div class="payment-method-fields" [ngClass]="{'airship-hidden':creditCard && !editCreditCard}">
+      <div class="payment-method-fields" [ngClass]="{'airship-hidden':(creditCard && !editCreditCard) || loadPaymentMethodError}">
         <div class="payment-method-new">
           <div class="field">
             <div class="control">
@@ -20,7 +22,7 @@
               </label>
             </div>
           </div>
-          <div [ngClass]="{'airship-hidden': changeCardOption === 'existing'}" id="card-element"></div>
+          <div [ngClass]="{'airship-visible': !loadingPaymentMethod && changeCardOption === 'new'}" id="card-element"></div>
           <p class="error-message" *ngIf="missingCardInfo">Please enter required Credit Card fields.</p>
           <div class="field update-card-buttons is-grouped" *ngIf="changeCardOption === 'new'">
             <div class="control">

@@ -29,6 +29,8 @@ export class PaymentMethodComponent implements OnInit {
   cardAdded: boolean = false;
   missingCardInfo: boolean = false;
   noCardSelected: boolean = false;
+  loadingPaymentMethod: boolean = false;
+  loadPaymentMethodError: boolean = false;
   @Input() user;
   @Input() account;
   @Output() creditCardSaved = new EventEmitter();
@@ -112,10 +114,12 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   getSavedCard(elements) {
+    this.loadingPaymentMethod = true;
     if(Object.keys(this.account).length === 0) {
       let localData = this.service.getLocalCard();
       this.creditCard = localData.card;
       this.token = localData.token;
+      this.loadingPaymentMethod = false;
       this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
     } else {
       this.service.getAccountCards(this.user.scope, this.account.id)
@@ -123,10 +127,15 @@ export class PaymentMethodComponent implements OnInit {
           res => {
             this.accountCards = res['data'];
             this.creditCard = this.accountCards.find((item) => item.id === this.account.customer.default_source);
+            this.loadingPaymentMethod = false;
             this.creditCardSaved.emit({ creditCard: this.creditCard });
             this.service.saveLocalCard(this.creditCard, this.token);
           },
-          err => this.service.handleError(err)
+          err => {
+            this.service.handleError(err);
+            this.loadingPaymentMethod = false;
+            this.loadPaymentMethodError = true;
+          }
         )
     }
   }
