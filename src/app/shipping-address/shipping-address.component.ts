@@ -26,6 +26,8 @@ export class ShippingAddressComponent implements OnInit {
   changeCardOption : string = 'existing';
   singlePaymentAddress : any;
   subscriptionAddresses : Array<any>;
+  newAddressInvalid: boolean = false;
+  noAddressSelected: boolean = false;
   @Input() receipt : any;
   @Input() user;
   @Input() account;
@@ -74,17 +76,21 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   setAddress(address: any) {
-    this.address = this.service.scrubAddress(this.service.formatAddress(address));
-    this.editaddress = false;
-    if(this.singlePaymentOrder) {
-      this.sharedService.setShippingAddress(this.address);
-      this.service.saveSinglePaymentAddress(this.address);
-    } else {
-      if(this.subscriptionAddresses) {
-        this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
-        this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
-        this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
+    if(address) {
+      this.address = this.service.scrubAddress(this.service.formatAddress(address));
+      this.editaddress = false;
+      if(this.singlePaymentOrder) {
+        this.sharedService.setShippingAddress(this.address);
+        this.service.saveSinglePaymentAddress(this.address);
+      } else {
+        if(this.subscriptionAddresses) {
+          this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
+          this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
+          this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
+        }
       }
+    } else {
+      this.noAddressSelected = true;
     }
   }
 
@@ -110,25 +116,30 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   saveAddress() {
-    this.address = this.service.formatAddress(this.form.value);
-    if(Object.keys(this.account).length > 0) {
-      this.service.saveAddress(this.address, this.user, this.account)
-        .subscribe(
-          address => {
-            this.address = this.service.formatAddress(address);
-          },
-          err => this.service.handleError(err)
-        );
-    }
-    if(this.subscriptionItemIndex !== undefined) {
-      this.subscriptionAddresses[this.subscriptionItemIndex] = this.service.formatAddress(this.service.scrubAddress(this.address));
-      this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
-      this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
+    this.newAddressInvalid = false;
+    if(this.form.valid) {
+      this.address = this.service.formatAddress(this.form.value);
+      if(Object.keys(this.account).length > 0) {
+        this.service.saveAddress(this.address, this.user, this.account)
+          .subscribe(
+            address => {
+              this.address = this.service.formatAddress(address);
+            },
+            err => this.service.handleError(err)
+          );
+      }
+      if(this.subscriptionItemIndex !== undefined) {
+        this.subscriptionAddresses[this.subscriptionItemIndex] = this.service.formatAddress(this.service.scrubAddress(this.address));
+        this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
+        this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
+      } else {
+        this.service.saveSinglePaymentAddress(this.form.value);
+        this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
+      }
+      this.editaddress = false;
     } else {
-      this.service.saveSinglePaymentAddress(this.form.value);
-      this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
+      this.newAddressInvalid = true;
     }
-    this.editaddress = false;
   }
 
   getStates(country) {

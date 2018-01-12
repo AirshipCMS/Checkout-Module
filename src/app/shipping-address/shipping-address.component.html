@@ -57,6 +57,7 @@
         <label>Phone</label>
         <input type="text" formControlName="phone_number" [(ngModel)]="phone_number">
       </div>
+      <p class="error-message" *ngIf="form.invalid && newAddressInvalid">Please fill out all required address fields.</p>
       <div class="new-shipping-address-buttons">
         <button type="button cancel-button" (click)="editaddress = !editaddress">Cancel</button>
         <button type="button save-button" (click)="saveAddress()">Save</button>
@@ -69,6 +70,7 @@
           {{ address?.first_name }} {{ address.last_name }} - {{ address?.address_1 }} {{ address?.address_2 }} {{ address?.city }}, {{ address?.state }} {{ address?.zipcode }}
         </option>
       </select>
+      <p class="error-message" *ngIf="noAddressSelected && (form.value.address_options === undefined || form.value.address_options === '')">Please select an address.</p>
       <div class="existing-shipping-address-buttons" *ngIf="form.value.change_address_option === 'existing'">
         <button class="button cancel-button" type="button" (click)="editaddress = !editaddress">Cancel</button>
         <button class="button save-button" type="button" (click)="setAddress(form.value.address_options)">Save</button>

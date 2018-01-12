@@ -27,6 +27,8 @@ export class PaymentMethodComponent implements OnInit {
   processing: boolean = false;
   addCardFailed: boolean = false;
   cardAdded: boolean = false;
+  missingCardInfo: boolean = false;
+  noCardSelected: boolean = false;
   @Input() user;
   @Input() account;
   @Output() creditCardSaved = new EventEmitter();
@@ -45,6 +47,8 @@ export class PaymentMethodComponent implements OnInit {
   createToken() {
     this.processing = true;
     this.addCardFailed = false;
+    this.missingCardInfo = false;
+    console.log(this.cardElement)
     this.stripe.createToken(this.cardElement)
       .then((res) => {
         if(res.token) {
@@ -59,6 +63,9 @@ export class PaymentMethodComponent implements OnInit {
           }
         } else {
           this.processing = false;
+          if(!this.cardElement._complete) {
+            this.missingCardInfo = true;
+          }
         }
       });
   }
@@ -88,15 +95,19 @@ export class PaymentMethodComponent implements OnInit {
   }
 
   setCreditCard(card:any) {
-    this.service.setCreditCard(card.id, this.user, this.account)
-      .subscribe(
-        res => {
-          this.creditCard = card;
-          this.creditCardSaved.emit({ creditCard : this.creditCard });
-          this.editCreditCard = false;
-        },
-        err => this.service.handleError(err)
-      )
+    if(card) {
+      this.service.setCreditCard(card.id, this.user, this.account)
+        .subscribe(
+          res => {
+            this.creditCard = card;
+            this.creditCardSaved.emit({ creditCard : this.creditCard });
+            this.editCreditCard = false;
+          },
+          err => this.service.handleError(err)
+        )
+    } else {
+      this.noCardSelected = true;
+    }
   }
 
   getSavedCard(elements) {

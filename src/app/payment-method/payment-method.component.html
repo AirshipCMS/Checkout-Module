@@ -13,6 +13,7 @@
             New Credit or Debit Card
           </label>
           <div [ngClass]="{'airship-hidden': changeCardOption === 'existing'}" id="card-element"></div>
+          <p class="error-message" *ngIf="missingCardInfo">Please enter required Credit Card fields.</p>
           <div class="update-card-buttons" *ngIf="changeCardOption === 'new'">
             <button class="button cancel-button" *ngIf="editCreditCard" type="button" (click)="editCreditCard = !editCreditCard" [disabled]="processing">Cancel</button>
             <button class="button add-button" type="button" (click)="createToken()" [disabled]="processing">{{ processing? "Adding Card..." : "Add Card" }}</button>
@@ -27,6 +28,7 @@
             <option selected="" disabled="">Select One</option>
             <option *ngFor="let card of accountCards" [ngValue]="card">{{ card?.brand }} ending *{{ card.last4 }}</option>
           </select>
+          <p class="error-message" *ngIf="cardOptions === undefined && noCardSelected">Select a Credit Card from the list, or add a New Credit Card as Default.</p>
           <div class="update-card-buttons" *ngIf="changeCardOption === 'existing'">
             <button class="button cancel-button" type="button" (click)="editCreditCard = !editCreditCard">Cancel</button>
             <button class="button add-button" type="button" (click)="setCreditCard(cardOptions)">Set as Default</button>
