@@ -41,15 +41,17 @@ export class MiscDataComponent implements OnInit {
         this.sharedService.setSubscriptionMiscData(this.subscriptionMiscData);
       }
       if(this.singleOrderCart !== undefined) {
-        this.singleOrderCart.items.forEach((item) => {
+        this.singleOrderCart.items.forEach((item, i) => {
           if(item.misc_data) {
-            let miscDataKey = item.product_title.replace(' ', '_').toLowerCase();
+            let miscDataKey = i;
             this.miscData[miscDataKey] = {};
             Object.entries(item.misc_data).forEach(([key, value]) => {
               this.miscData[miscDataKey][key] = value;
             });
             this.miscData[miscDataKey]['product_variation'] = item.product_variation_title;
             this.miscData[miscDataKey]['product_variation_id'] = item.id;
+            this.miscData[miscDataKey]['product_title'] = item.product_title;
+            this.miscData[miscDataKey]['quantity'] = item.quantity;
           }
         });
         this.sharedService.setSinglePaymentMiscData(this.miscData);

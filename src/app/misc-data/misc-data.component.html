@@ -1,8 +1,8 @@
 <div class="misc-data-container" *ngIf="hasMiscData">
-  <label *ngIf="!receipt || (receipt && miscData && Object.keys(miscData).length > 0)">Other Data</label>
+  <label *ngIf="!receipt || (receipt && miscData)">Other Data</label>
   <div class="misc-data-items">
     <div class="misc-data-item" *ngFor="let item of miscData | keys">
-      <p class="misc-data-product-title">{{ item.key }}</p>
+      <p>{{ miscData[item.key].product_title }}, {{ miscData[item.key].product_variation }}</p>
       <p class="misc-data-variation" *ngFor="let item of item.value | keys">- {{ item.key }}: {{ item.value }}</p>
     </div>
   </div>
