@@ -1,5 +1,5 @@
 <div class="misc-data-container" *ngIf="hasMiscData">
-  <label>Other Data</label>
+  <label *ngIf="!receipt || (receipt && miscData && Object.keys(miscData).length > 0)">Other Data</label>
   <div class="misc-data-body">
     <div class="misc-data-item" *ngFor="let item of miscData | keys">
       <p class="misc-data-product-title">{{ item.key }}</p>

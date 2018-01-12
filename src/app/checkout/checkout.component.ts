@@ -130,6 +130,7 @@ export class CheckoutComponent implements OnInit {
     this.auth.getAccount(this.user.scope, account)
       .subscribe(
         res => {
+          localStorage.setItem('account', JSON.stringify(res));
           this.account = res;
           this.user.account = res;
           this.loading = false;

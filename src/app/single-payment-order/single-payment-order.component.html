@@ -26,11 +26,10 @@
       <div class="billing-container">
         <label>Billing</label>
         <p *ngIf="shippingCalculationPending && !receipt">Pending...</p>
-        <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
+        <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charged {{ orderTotal | currency: 'USD'}}</p>
         <p *ngIf="receipt">{{ receipt?.single_payment.payment.stripe_card_raw_json_data.brand }} ending *{{ receipt?.single_payment.payment.stripe_card_raw_json_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ receipt?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
       <div class="container-order-notes">
-        <label>Order Notes</label>
         <order-notes [receipt]="receipt" [singlePaymentOrder]="true"></order-notes>
       </div>
       <misc-data [receipt]="receipt" [singleOrderCart]="singleOrderCart"></misc-data>

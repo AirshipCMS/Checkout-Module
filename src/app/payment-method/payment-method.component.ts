@@ -48,7 +48,6 @@ export class PaymentMethodComponent implements OnInit {
     this.processing = true;
     this.addCardFailed = false;
     this.missingCardInfo = false;
-    console.log(this.cardElement)
     this.stripe.createToken(this.cardElement)
       .then((res) => {
         if(res.token) {
@@ -73,11 +72,12 @@ export class PaymentMethodComponent implements OnInit {
   addCardAndSetAsDefault(res: any) {
     this.addCardFailed = false;
     this.service.addCard(this.user.scope, this.account.id, res.token.id)
-      .pipe(mergeMap(card => this.service.setCreditCard(res.id, this.user, this.account)))
+      .pipe(mergeMap(card => this.service.setCreditCard(card['id'], this.user, this.account)))
       .subscribe(
         creditCard => {
           this.creditCard = res.token.card;
-          this.creditCardSaved.emit({ creditCard : this.creditCard, token: this.token });
+          this.creditCardSaved.emit({ creditCard : this.creditCard });
+          this.service.saveLocalCard(this.creditCard, this.token);
           this.editCreditCard = false;
           this.processing = false;
           this.cardAdded = true;
@@ -101,6 +101,7 @@ export class PaymentMethodComponent implements OnInit {
           res => {
             this.creditCard = card;
             this.creditCardSaved.emit({ creditCard : this.creditCard });
+            this.service.saveLocalCard(this.creditCard, this.token);
             this.editCreditCard = false;
           },
           err => this.service.handleError(err)
@@ -123,6 +124,7 @@ export class PaymentMethodComponent implements OnInit {
             this.accountCards = res['data'];
             this.creditCard = this.accountCards.find((item) => item.id === this.account.customer.default_source);
             this.creditCardSaved.emit({ creditCard: this.creditCard });
+            this.service.saveLocalCard(this.creditCard, this.token);
           },
           err => this.service.handleError(err)
         )

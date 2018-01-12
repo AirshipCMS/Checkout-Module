@@ -21,12 +21,14 @@ export class ReceiptComponent implements OnInit {
     } else {
       let subscriptions = { items: [] };
       let plans = [];
+      let customers = [];
       let products = {};
       let single_payment = {};
       let account = {};
       let customer = {};
       let shipping_address = {};
       let subscription_addresses = [];
+      let creditCard = JSON.parse(localStorage.getItem('card'));
       this.sharedService.checkoutResponse.forEach((item) => {
         if(item.account) {
           if(item.products.items.length > 0) {
@@ -40,6 +42,7 @@ export class ReceiptComponent implements OnInit {
             subscription_addresses.push(item.shipping_address);
             item.subscriptions[0].misc_data = item.plans[0].misc_data;
             subscriptions.items.push(item.subscriptions[0]);
+            customers.push(item.customer);
             plans.push(item.plans[0]);
           }
         } else {
@@ -51,10 +54,12 @@ export class ReceiptComponent implements OnInit {
         account,
         shipping_address,
         customer,
+        customers,
         single_payment,
         products,
         subscriptions,
-        plans
+        plans,
+        creditCard
       });
     }
     this.sharedService.clearLocalStorage();

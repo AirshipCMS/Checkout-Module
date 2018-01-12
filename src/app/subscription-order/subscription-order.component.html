@@ -16,21 +16,21 @@
       </div>
       <div class="order-date-container" *ngIf="receipt">
         <label>Order Date</label>
-        <p *ngIf="receipt">{{ receipt?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
+        <p *ngIf="receipt">{{ item?.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
       <div class="customer-id-conatiner" *ngIf="receipt">
         <label>Customer ID</label>
-        <p>{{ receipt?.customer.email }}</p>
-        <p>{{ receipt?.customer.stripe_customer_id }}</p>
+        <p>{{ receipt?.customers[i].email }}</p>
+        <p>{{ receipt?.customers[i].stripe_customer_id }}</p>
       </div>
       <div class="billing-container">
         <label>Billing</label>
         <p *ngIf="shippingCalculationPending && !receipt">Pending...</p>
-        <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charge {{ orderTotal | currency: 'USD'}}</p>
+        <p *ngIf="receipt">{{ receipt?.creditCard.brand }} ending *{{ receipt?.creditCard.last4 }} will be charged {{ item?.stripe_data.plan.amount/100 | currency: 'USD'}}</p>
+        <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charged {{ orderTotal | currency: 'USD'}}</p>
         <!-- <p *ngIf="receipt">{{ item?.stripe_data.brand }} ending *{{ item?.stripe_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ item?.created_at | date: 'MM/dd/yyyy' }}</p> -->
       </div>
       <div class="order-notes-container">
-        <label>Order Notes</label>
         <order-notes [receipt]="receipt" [subscriptionItemIndex]="i" [subscriptionCart]="subscriptionCart"></order-notes>
       </div>
       <misc-data [receipt]="receipt" [subscriptionItemIndex]="i" [subscriptionItem]="item" [subscriptionCart]="subscriptionCart"></misc-data>
