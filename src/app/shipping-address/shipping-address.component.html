@@ -1,28 +1,43 @@
 <div class="shipping-address-container">
   <div class="field">
     <label class="label">Shipping Address</label>
-    <div class="control">
-      <button class="inline-button button" type="button" *ngIf="address && !editaddress && !receipt" (click)="editaddress = true">Change Address</button>
-    </div>
+    <button class="inline-button button" type="button" *ngIf="address && !editaddress && !receipt" (click)="editaddress = true">Change Address</button>
   </div>
   <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
-    <div class="field">
-      <div class="control">
-        <label class="radio" *ngIf="address && accountAddresses.length > 0" for="change_address_option_existing">
-          <input id="change_address_option_existing" type="radio" formControlName="change_address_option" value="existing">
-          Existing Address
-        </label>
+    <div class="control">
+      <label class="radio" *ngIf="address && accountAddresses.length > 0" for="change_address_option_existing">
+        <input id="change_address_option_existing" type="radio" formControlName="change_address_option" value="existing">
+        Existing Address
+      </label>
+    </div>
+    <div class="shipping-address-existing" [ngClass]="{'selected-method': form.value.change_address_option === 'existing'}" *ngIf="form.value.change_address_option === 'existing' && accountAddresses.length > 0">
+      <div class="field">
+        <div class="control">
+          <select class="select" formControlName="address_options">
+            <option selected="" disabled="">Select One</option>
+            <option *ngFor="let address of accountAddresses" [ngValue]="address">
+          {{ address?.first_name }} {{ address.last_name }} - {{ address?.address_1 }} {{ address?.address_2 }} {{ address?.city }}, {{ address?.state }} {{ address?.zipcode }}
+            </option>
+          </select>
+        </div>
+      </div>
+      <p class="error-message" *ngIf="noAddressSelected && (form.value.address_options === undefined || form.value.address_options === '')">Please select an address.</p>
+      <div class="existing-shipping-address-buttons field is-grouped" *ngIf="form.value.change_address_option === 'existing'">
+        <div class="control">
+          <button class="button cancel-button" type="button" (click)="editaddress = !editaddress">Cancel</button>
+        </div>
+        <div class="control">
+          <button class="button save-button" type="button" (click)="setAddress(form.value.address_options)">Save</button>
+        </div>
       </div>
     </div>
-    <div class="field">
-      <div class="control">
-        <label class="radio" *ngIf="address && accountAddresses.length > 0" for="change_address_option_new">
-          <input id="change_address_option_new" type="radio" formControlName="change_address_option" value="new">
-          New Address
-        </label>
-      </div>
+    <div class="control">
+      <label class="radio" *ngIf="address && accountAddresses.length > 0" for="change_address_option_new">
+        <input id="change_address_option_new" type="radio" formControlName="change_address_option" value="new">
+        New Address
+      </label>
     </div>
-    <div class="new-shipping-address" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
+    <div class="shipping-address-new" [ngClass]="{'selected-method': form.value.change_address_option === 'new'}" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
       <div class="shipping-field inline-field field">
         <label class="label">First Name*</label>
         <div class="control">
@@ -92,32 +107,11 @@
       <p class="error-message" *ngIf="form.invalid && newAddressInvalid">Please fill out all required address fields.</p>
       <div class="new-shipping-address-buttons field is-grouped">
         <div class="control">
-          <button type="button cancel-button" (click)="editaddress = !editaddress">Cancel</button>
+          <button type="button" class="button cancel-button" (click)="editaddress = !editaddress">Cancel</button>
         </div>      
         <div class="control">
-          <button type="button save-button" (click)="saveAddress()">Save</button>
+          <button type="button" class="button save-button" (click)="saveAddress()">Save</button>
         </div>      
-      </div>
-    </div>
-    <div class="existing-shipping-address" *ngIf="form.value.change_address_option === 'existing' && accountAddresses.length > 0">
-      <div class="field">
-        <div class="control">
-          <select class="select" formControlName="address_options">
-            <option selected="" disabled="">Select One</option>
-            <option *ngFor="let address of accountAddresses" [ngValue]="address">
-          {{ address?.first_name }} {{ address.last_name }} - {{ address?.address_1 }} {{ address?.address_2 }} {{ address?.city }}, {{ address?.state }} {{ address?.zipcode }}
-            </option>
-          </select>
-        </div>
-      </div>
-      <p class="error-message" *ngIf="noAddressSelected && (form.value.address_options === undefined || form.value.address_options === '')">Please select an address.</p>
-      <div class="existing-shipping-address-buttons field is-grouped" *ngIf="form.value.change_address_option === 'existing'">
-        <div class="control">
-          <button class="button cancel-button" type="button" (click)="editaddress = !editaddress">Cancel</button>
-        </div>
-        <div class="control">
-          <button class="button save-button" type="button" (click)="setAddress(form.value.address_options)">Save</button>
-        </div>
       </div>
     </div>
   </form>

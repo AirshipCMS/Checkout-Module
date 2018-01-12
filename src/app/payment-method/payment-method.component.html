@@ -4,23 +4,17 @@
   </div>
   <div class="container-body">
     <div class="container-body-left">
-      <div class="field">
-        <label class="label" for="card-element">Credit or Debit Card</label>
-        <p *ngIf="loadingPaymentMethod">Loading...</p>
-        <p class="error-message" *ngIf="loadPaymentMethodError">Error getting Payment Method.</p>
-        <div class="control">
-          <button class="button inline-button" *ngIf="creditCard && !editCreditCard" type="button" (click)="editCreditCard = true">Change Card</button>
-        </div>
-      </div>
+      <label class="label" for="card-element">Credit or Debit Card</label>
+      <p *ngIf="loadingPaymentMethod">Loading...</p>
+      <p class="error-message" *ngIf="loadPaymentMethodError">Error getting Payment Method.</p>
+      <button class="button inline-button" *ngIf="creditCard && !editCreditCard" type="button" (click)="editCreditCard = true">Change Card</button>
       <div class="payment-method-fields" [ngClass]="{'airship-hidden':(creditCard && !editCreditCard) || loadPaymentMethodError}">
-        <div class="payment-method-new">
-          <div class="field">
-            <div class="control">
-              <label class="radio" *ngIf="creditCard && accountCards.length > 0" for="change_card_option_new">
-                <input id="change_card_option_new" type="radio" [(ngModel)]="changeCardOption" value="new">
-                New Credit or Debit Card
-              </label>
-            </div>
+        <div class="payment-method-new" [ngClass]="{'selected-method': changeCardOption === 'new'}">
+          <div class="control">
+            <label class="radio" *ngIf="creditCard && accountCards.length > 0" for="change_card_option_new">
+              <input id="change_card_option_new" type="radio" [(ngModel)]="changeCardOption" value="new">
+              New Credit or Debit Card
+            </label>
           </div>
           <div [ngClass]="{'airship-visible': !loadingPaymentMethod && changeCardOption === 'new'}" id="card-element"></div>
           <p class="error-message" *ngIf="missingCardInfo">Please enter required Credit Card fields.</p>
@@ -33,14 +27,12 @@
             </div>
           </div>
         </div>
-        <div class="payment-method-existing" *ngIf="creditCard && accountCards.length > 0">
-          <div class="field">
-            <div class="control">
-              <label class="radio" for="change_card_option_existing">
-                <input id="change_card_option_existing" type="radio" [(ngModel)]="changeCardOption" value="existing">
-                Existing Card
-              </label>
-            </div>
+        <div class="payment-method-existing" [ngClass]="{'selected-method': changeCardOption === 'existing'}" *ngIf="creditCard && accountCards.length > 0">
+          <div class="control">
+            <label class="radio" for="change_card_option_existing">
+              <input id="change_card_option_existing" type="radio" [(ngModel)]="changeCardOption" value="existing">
+              Existing Card
+            </label>
           </div>
           <div class="field">
             <div class="control">

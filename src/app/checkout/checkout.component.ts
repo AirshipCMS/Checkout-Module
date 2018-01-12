@@ -220,4 +220,8 @@ export class CheckoutComponent implements OnInit {
     }
   }
 
+  backToCart() {
+    window.location.href = '/cart';
+  }
+
 }

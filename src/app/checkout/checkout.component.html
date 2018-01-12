@@ -3,7 +3,13 @@
   <p class="authentication-text" *ngIf="user?.scope === 'user'">You are securely logged in as {{ user?.email }}</p>
   <p class="authentication-text admin" *ngIf="user?.scope !== 'user'">You are securely logged in as administrator {{ user?.email }}</p>
   <p class="authentication-text" *ngIf="user?.scope !== 'user' && account">You are completing checkout as {{ account?.user.email }}</p>
-  <p class="select-customer-button" *ngIf="user?.scope !== 'user' && account" (click)="clearCustomerInfo()">Select Different Customer</p>
+  <div class="select-customer-button" *ngIf="user?.scope !== 'user' && account">
+    <div class="field">
+      <div class="control">
+        <button class="button" (click)="clearCustomerInfo()">Select Different Customer</button>
+      </div>
+    </div>
+  </div>
   <div class="checkout-body" *ngIf="(singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0) && account">
     <payment-method
       [user]="user"
@@ -31,7 +37,9 @@
     <a href="/">Continue Shopping</a>
   </div>
   <div class="field checkout-buttons" *ngIf="account">
-    <a class="button back-to-cart-button" href="/cart">Back to Cart</a>
+    <div class="control">
+      <button type="button" (click)="backToCart()" class="button back-to-cart-button">Back to Cart</a>
+    </div>
     <p *ngIf="orderFailed" class="checkout-error">There was an error processing your order.</p>
     <p *ngIf="activeSubscriptions.length >= 25" class="checkout-error">Subscriptions can't be added to this account. An account may only have 25 subscriptions.</p>
     <div class="control">
