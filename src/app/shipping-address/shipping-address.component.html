@@ -6,7 +6,7 @@
   <label class="label" *ngIf="receipt">Shipping Address</label>
   <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
     <div class="control">
-      <label class="radio" *ngIf="address && accountAddresses.length > 0" for="change_address_option_existing">
+      <label class="radio" *ngIf="accountAddresses.length > 0" for="change_address_option_existing">
         <input id="change_address_option_existing" type="radio" formControlName="change_address_option" value="existing">
         Existing Address
       </label>
@@ -33,7 +33,7 @@
       </div>
     </div>
     <div class="control">
-      <label class="radio" *ngIf="address && accountAddresses.length > 0" for="change_address_option_new">
+      <label class="radio" for="change_address_option_new">
         <input id="change_address_option_new" type="radio" formControlName="change_address_option" value="new">
         New Address
       </label>
