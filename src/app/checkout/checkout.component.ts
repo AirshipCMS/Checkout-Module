@@ -35,6 +35,7 @@ export class CheckoutComponent implements OnInit {
   singlePaymentNotes : string;
   singleOrderCart : any;
   subscriptionCart : any;
+  shippingType;
   stripeToken : string;
   checkoutResponse : any;
   subscriptionNotes : Array<any>;
@@ -69,6 +70,7 @@ export class CheckoutComponent implements OnInit {
     this.sharedService.subscriptionNotes$.subscribe(notes => this.subscriptionNotes = notes);
     this.sharedService.singlePaymentOrderMiscData$.subscribe(miscData => this.singlePaymentMiscData = miscData);
     this.sharedService.subscriptionOrdersMiscData$.subscribe(miscData => this.subscriptionMiscData = miscData);
+    this.sharedService.shippingType$.subscribe(shippingType => this.shippingType = shippingType);
   }
 
   getCustomerSubscriptions() {
@@ -87,6 +89,8 @@ export class CheckoutComponent implements OnInit {
 
   clearCustomerInfo() {
     delete this.account;
+    delete this.creditCard;
+    delete localStorage.card;
     delete this.user.account;
     delete localStorage.account;
     delete localStorage.shipping_address;
@@ -155,7 +159,7 @@ export class CheckoutComponent implements OnInit {
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
     this.singleOrderCart.misc_data = this.singlePaymentMiscData;
     if(this.singleOrderCart && this.singleOrderCart.items.length > 0) {
-      singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData).toPromise().catch(err => err);
+      singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData, this.shippingType).toPromise().catch(err => err);
     }
     subscriptionCart.items.map((item, i) => {
       let cart = { items: [item] };
@@ -175,7 +179,7 @@ export class CheckoutComponent implements OnInit {
         miscData = this.subscriptionMiscData[i];
         cart.items[0].misc_data = this.subscriptionMiscData[i];
       }
-      checkoutStreams.push(this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken, miscData).toPromise().catch(err => err));
+      checkoutStreams.push(this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken, miscData, this.shippingType).toPromise().catch(err => err));
     });
 
     if(this.subscriptionCart.items.length === 0) {

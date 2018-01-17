@@ -17,26 +17,26 @@
     </div>
     <div class="cart-shipping">
       <h4 class="shipping-title cart-label">Shipping</h4>
-      <p class="cart-item-shipping" *ngIf="pending">{{ shipping }}</p>
-      <p class="cart-item-shipping" *ngIf="!pending">{{ shipping | currency: "USD" }}</p>
+      <p class="cart-item-shipping" *ngIf="!receipt && pending">{{ shipping }}</p>
+      <p class="cart-item-shipping" *ngIf="receipt || !pending">{{ shipping | currency: "USD" }}</p>
     </div>
     <div class="cart-tax">
       <h4 class="tax-title cart-label">Tax</h4>
-      <p class="cart-item-tax" *ngIf="pending">{{ tax }}</p>
-      <p class="cart-item-tax" *ngIf="!pending">{{ tax | currency: "USD" }}</p>
+      <p class="cart-item-tax" *ngIf="!receipt && pending">{{ tax }}</p>
+      <p class="cart-item-tax" *ngIf="receipt || !pending">{{ tax | currency: "USD" }}</p>
     </div>
     <div class="cart-handling">
       <h4 class="handling-title cart-label">Handling</h4>
-      <p class="cart-item-handling" *ngIf="pending">{{ handling }}</p>
-      <p class="cart-item-handling" *ngIf="!pending">{{ handling | currency: "USD" }}</p>
+      <p class="cart-item-handling" *ngIf="!receipt && pending">{{ handling }}</p>
+      <p class="cart-item-handling" *ngIf="receipt || !pending">{{ handling | currency: "USD" }}</p>
     </div>
   </div>
   <div class="cart-total">
     <h4 class="total-title cart-label">Total</h4>
-    <p class="cart-item-total" *ngIf="pending">{{ total }}</p>
-    <p class="cart-item-total" *ngIf="!pending">{{ total | currency: "USD" }}</p>
+    <p class="cart-item-total" *ngIf="!receipt && pending">{{ total }}</p>
+    <p class="cart-item-total" *ngIf="receipt || !pending">{{ total | currency: "USD" }}</p>
   </div>
-  <div class="cart-charge-details" *ngIf="!pending && !receipt">
-    <p>{{ creditCard?.brand }} ending *{{creditCard?.last4 }} will be charged {{ total | currency: "USD" }}</p>
+  <div class="cart-charge-details" *ngIf="receipt || !pending && !receipt">
+    <p>{{ creditCard?.brand }} ending *{{creditCard?.last4 }} will be charged {{ total | currency: "USD" }} <span>USD</span></p>
   </div>
 </div>

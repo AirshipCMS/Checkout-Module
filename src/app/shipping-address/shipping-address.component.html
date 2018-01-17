@@ -1,8 +1,9 @@
 <div class="shipping-address-container">
-  <div class="field">
+  <div class="field" *ngIf="!receipt">
     <label class="label">Shipping Address</label>
     <button class="inline-button button" type="button" *ngIf="address && !editaddress && !receipt" (click)="editaddress = true">Change Address</button>
   </div>
+  <label class="label" *ngIf="receipt">Shipping Address</label>
   <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
     <div class="control">
       <label class="radio" *ngIf="address && accountAddresses.length > 0" for="change_address_option_existing">

@@ -16,7 +16,7 @@ export class CheckoutService {
     this.requiredSubscriptionOrderProps = ['id', 'aerostat_id', 'quantity', 'plan'];
   }
 
-  checkout(shipping_address: any, user: any, account: any, cart: any, customer_notes: string, stripe_token: string, misc_data) {
+  checkout(shipping_address: any, user: any, account: any, cart: any, customer_notes: string, stripe_token: string, misc_data, shipping_type) {
     let endpoint = 'checkout';
     let email = user.email;
     if(user.scope !== 'user') {
@@ -32,6 +32,7 @@ export class CheckoutService {
       misc_data
     };
     if(stripe_token) order['stripe_token'] = stripe_token;
+    if(shipping_type) order['shipping_type'] = shipping_type;
     return this.http.post(`/api/${endpoint}`, order, { headers: this.headers });
   }
 

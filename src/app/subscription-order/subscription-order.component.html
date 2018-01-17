@@ -22,8 +22,8 @@
       <div class="billing-container">
         <label class="label">Billing</label>
         <p *ngIf="shippingCalculationPending && !receipt">Pending...</p>
-        <p *ngIf="receipt">{{ receipt?.creditCard.brand }} ending *{{ receipt?.creditCard.last4 }} will be charged {{ item?.stripe_data.plan.amount/100 | currency: 'USD'}}</p>
-        <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charged {{ orderTotal | currency: 'USD'}}</p>
+        <p *ngIf="receipt">{{ receipt?.creditCard.brand }} ending *{{ receipt?.creditCard.last4 }} will be charged {{ item?.stripe_data.plan.amount/100 | currency: 'USD'}} <span>USD</span></p>
+        <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charged {{ item?.price.usd/100 | currency: 'USD'}} <span>USD</span></p>
         <!-- <p *ngIf="receipt">{{ item?.stripe_data.brand }} ending *{{ item?.stripe_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} on {{ item?.created_at | date: 'MM/dd/yyyy' }}</p> -->
       </div>
       <div class="order-notes-container">
@@ -34,7 +34,10 @@
     <div class="container-body-right">
       <div class="subscription-item">
         <h4 class="product-title cart-label">{{ receipt? plans[i].product_title : item.product_title }}</h4>
-        <p>{{ receipt ? plans[i].name : item?.product_plan.name }} - {{ receipt? plans[i].price.usd/100 : item?.price.usd/100 | currency: 'USD' }} every {{ receipt? item?.stripe_data.plan.interval : item?.product_plan.interval }}</p>
+        <p *ngIf="!receipt">{{ item?.product_plan.name }} - {{ item?.price.usd/100 | currency: 'USD' }} every {{ item?.product_plan.interval }}</p>
+
+        <p *ngIf="receipt">{{ plans[i].name }} - {{ plans[i].price.usd/100 | currency: 'USD' }} every {{ item?.stripe_data.plan.interval }}</p>
+
         <p *ngIf="!receipt && item?.product_plan.trial_days && item?.product_plan.trial_days > 0">Trial Period Days: {{ item?.product_plan.trial_days }}</p>
         <p *ngIf="receipt && item?.stripe_data.plan.trial_period_days && item?.stripe_data.plan.trial_period_days > 0">Trial Period Days: {{ item?.stripe_data.plan.trial_period_days }}</p>
         <h4 *ngIf="receipt">Subscription Term</h4>
