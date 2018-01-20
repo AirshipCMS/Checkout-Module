@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 import { SharedService } from '../shared.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-receipt',
@@ -17,6 +18,11 @@ export class ReceiptComponent implements OnInit {
 
   ngOnInit() {
     if(this.sharedService.checkoutResponse.products) {
+      environment.shipping_types.forEach((type) => {
+        if(this.sharedService.checkoutResponse.single_payment.shipping_type.toLowerCase() === type.toLowerCase()) {
+          this.sharedService.checkoutResponse.single_payment.shipping_type = type;
+        }
+      });
       this.receipt = this.sharedService.checkoutResponse;
     } else {
       let subscriptions = { items: [] };
@@ -34,6 +40,11 @@ export class ReceiptComponent implements OnInit {
           if(item.products.items.length > 0) {
             products = item.products;
             single_payment = item.single_payment;
+            environment.shipping_types.forEach((type) => {
+              if(single_payment['shipping_type'].toLowerCase() === type.toLowerCase()) {
+                single_payment['shipping_type'] = type;
+              }
+            });
             shipping_address = item.shipping_address;
             account = item.account;
             customer = item.customer;
