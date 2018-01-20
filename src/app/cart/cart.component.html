@@ -37,6 +37,6 @@
     <p class="cart-item-total" *ngIf="receipt || !pending">{{ total | currency: "USD" }}</p>
   </div>
   <div class="cart-charge-details" *ngIf="receipt || !pending && !receipt">
-    <p>{{ creditCard?.brand }} ending *{{creditCard?.last4 }} will be charged {{ total | currency: "USD" }} <span>USD</span></p>
+    <p>{{ receipt ? receipt?.single_payment.payment.stripe_card_raw_json_data.brand : creditCard?.brand }} ending *{{ receipt ? receipt?.single_payment.payment.stripe_card_raw_json_data.last4 : creditCard?.last4 }} will be charged {{ total | currency: "USD" }} <span>USD</span></p>
   </div>
 </div>
