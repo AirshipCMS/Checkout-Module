@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div class="control">
+    <div class="control" *ngIf="accountAddresses.length > 0">
       <label class="radio" for="change_address_option_new">
         <input id="change_address_option_new" type="radio" formControlName="change_address_option" value="new">
         New Address

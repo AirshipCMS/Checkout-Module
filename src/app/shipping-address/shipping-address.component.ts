@@ -54,15 +54,19 @@ export class ShippingAddressComponent implements OnInit {
 
   ngOnInit() {
     this.countries = this.service.countries;
-    this.subscriptionAddresses = this.service.getSubscriptionAddresses();
+    let subscriptionAddresses = this.service.getSubscriptionAddresses();
     if(this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
     }
-    if(!this.subscriptionAddresses && this.subscriptionCart) {
-      this.subscriptionAddresses = [];
-      this.subscriptionCart.items.forEach((item) => {
-        this.subscriptionAddresses.push({});
-      });
+    if(this.subscriptionCart) {
+      if(!subscriptionAddresses) {
+        this.subscriptionAddresses = [];
+        this.subscriptionCart.items.forEach((item) => {
+          this.subscriptionAddresses.push({});
+        });
+      } else {
+        this.subscriptionAddresses = subscriptionAddresses;
+      }
     }
     this.getAddress();
   }
@@ -77,6 +81,7 @@ export class ShippingAddressComponent implements OnInit {
       } else {
         if(this.subscriptionAddresses) {
           this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
+          console.log(this.subscriptionAddresses)
           this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
           this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
         }
@@ -94,6 +99,7 @@ export class ShippingAddressComponent implements OnInit {
         this.address = this.receipt.subscription_addresses[this.subscriptionItemIndex];
       }
     } else {
+      this.sharedService.subscriptionAddresses$.subscribe(addressess => this.subscriptionAddresses = addressess);
       let singlePaymentAddress = this.service.getSinglePaymentAddress();
       let subscriptionAddresses = this.service.getSubscriptionAddresses();
       if(this.subscriptionItemIndex !== undefined) {
