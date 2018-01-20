@@ -5,8 +5,8 @@
   </div>
   <div class="container-body">
     <div class="container-body-left">
-      <shipping-address *ngIf="!skipShipping" [user]="user" [account]="account" [receipt]="receipt" [singlePaymentOrder]="true"></shipping-address>
-      <div class="shipping-type-container" *ngIf="!skipShipping">
+      <shipping-address *ngIf="!skipShipping && !receipt" [user]="user" [account]="account" [receipt]="receipt" [singlePaymentOrder]="true"></shipping-address>
+      <div class="shipping-type-container" *ngIf="!skipShipping && !receipt">
         <shipping-type [receipt]="receipt"></shipping-type>
       </div>
       <div class="order-number-container" *ngIf="receipt">
@@ -27,6 +27,10 @@
         <p *ngIf="shippingCalculationPending && !receipt">Pending...</p>
         <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charged {{ orderTotal | currency: 'USD'}} <span>USD</span></p>
         <p *ngIf="receipt">{{ receipt?.single_payment.payment.stripe_card_raw_json_data.brand }} ending *{{ receipt?.single_payment.payment.stripe_card_raw_json_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} <span>USD</span> on {{ receipt?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
+      </div>
+      <shipping-address *ngIf="!skipShipping && receipt" [user]="user" [account]="account" [receipt]="receipt" [singlePaymentOrder]="true"></shipping-address>
+      <div class="shipping-type-container" *ngIf="!skipShipping && receipt">
+        <shipping-type [receipt]="receipt"></shipping-type>
       </div>
       <div class="order-notes-container">
         <order-notes [receipt]="receipt" [singlePaymentOrder]="true"></order-notes>
