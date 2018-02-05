@@ -126,10 +126,12 @@ export class PaymentMethodComponent implements OnInit {
         .subscribe(
           res => {
             this.accountCards = res['data'];
-            this.creditCard = this.accountCards.find((item) => item.id === this.account.customer.default_source);
+            if(this.accountCards.length > 0) {
+              this.creditCard = this.accountCards.find((item) => item.id === this.account.customer.default_source);
+              this.creditCardSaved.emit({ creditCard: this.creditCard });
+              this.service.saveLocalCard(this.creditCard, this.token);
+            }
             this.loadingPaymentMethod = false;
-            this.creditCardSaved.emit({ creditCard: this.creditCard });
-            this.service.saveLocalCard(this.creditCard, this.token);
           },
           err => {
             this.service.handleError(err);
