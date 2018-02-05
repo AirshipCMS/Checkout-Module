@@ -79,7 +79,7 @@ export class CartComponent implements OnInit {
         err => {
           let message = err.error.data.context.message;
           if(message === 'Inventory check failed.') {
-            this.shippingErrorMessage = message;
+            this.shippingErrorMessage = 'One of the items in your cart is out of stock';
           } else {
             this.shippingErrorMessage = 'There was an error calculating shipping.';
           }
