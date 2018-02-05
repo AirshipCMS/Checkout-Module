@@ -26,6 +26,7 @@ export class CartComponent implements OnInit {
   @Input() creditCard : any;
   @Input() receipt: any;
   shippingError: boolean = false;
+  shippingErrorMessage: string;
 
   constructor(private service: CartService, private sharedService: SharedService) {
   }
@@ -76,9 +77,14 @@ export class CartComponent implements OnInit {
           this.shippingCalculated.emit(this.total);
         },
         err => {
+          let message = err.error.data.context.message;
+          if(message === 'Inventory check failed.') {
+            this.shippingErrorMessage = message;
+          } else {
+            this.shippingErrorMessage = 'There was an error calculating shipping.';
+          }
           this.service.handleError(err);
           this.shippingError = true;
-          this.pending = false;
         }
       );
   }
