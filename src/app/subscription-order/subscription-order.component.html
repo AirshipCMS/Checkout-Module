@@ -14,7 +14,7 @@
         <label class="label">Order Date</label>
         <p *ngIf="receipt">{{ item?.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
-      <div class="customer-id-conatiner" *ngIf="receipt">
+      <div class="customer-id-container" *ngIf="receipt">
         <label class="label">Customer ID</label>
         <p>{{ receipt?.customers[i].email }}</p>
         <p>{{ receipt?.customers[i].stripe_customer_id }}</p>

@@ -5,14 +5,14 @@
   </div>
   <label class="label" *ngIf="receipt">Shipping Address</label>
   <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
-    <div class="control">
-      <label class="radio" *ngIf="accountAddresses.length > 0" for="change_address_option_existing">
-        <input id="change_address_option_existing" type="radio" formControlName="change_address_option" value="existing">
-        Existing Address
-      </label>
-    </div>
-    <div class="shipping-address-existing" [ngClass]="{'selected-method': form.value.change_address_option === 'existing'}" *ngIf="form.value.change_address_option === 'existing' && accountAddresses.length > 0">
-      <div class="field">
+    <div class="shipping-address-existing" [ngClass]="{'selected-method': form.value.change_address_option === 'existing'}" >
+      <div class="control">
+        <label class="radio" *ngIf="accountAddresses.length > 0" for="change_address_option_existing">
+          <input id="change_address_option_existing" type="radio" formControlName="change_address_option" value="existing">
+          Existing Address
+        </label>
+      </div>
+      <div class="field" *ngIf="form.value.change_address_option === 'existing' && accountAddresses.length > 0">
         <div class="control">
           <select class="select" formControlName="address_options">
             <option selected="" disabled="">Select One</option>
@@ -32,26 +32,26 @@
         </div>
       </div>
     </div>
-    <div class="control" *ngIf="accountAddresses.length > 0">
-      <label class="radio" for="change_address_option_new">
-        <input id="change_address_option_new" type="radio" formControlName="change_address_option" value="new">
-        New Address
-      </label>
-    </div>
-    <div class="shipping-address-new" [ngClass]="{'selected-method': form.value.change_address_option === 'new'}" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
-      <div class="shipping-field inline-field field">
+    <div class="shipping-address-new" [ngClass]="{'selected-method': form.value.change_address_option === 'new'}">
+      <div class="control" *ngIf="accountAddresses.length > 0">
+        <label class="radio" for="change_address_option_new">
+          <input id="change_address_option_new" type="radio" formControlName="change_address_option" value="new">
+          New Address
+        </label>
+      </div>
+      <div class="shipping-field inline-field field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">First Name*</label>
         <div class="control">
           <input class="input" type="text" formControlName="first_name" required [(ngModel)]="first_name">
         </div>
       </div>
-      <div class="shipping-field inline-field field">
+      <div class="shipping-field inline-field field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">Last Name*</label>
         <div class="control">
           <input class="input" type="text" formControlName="last_name" required [(ngModel)]="last_name">
         </div>
       </div>
-      <div class="shipping-field field">
+      <div class="shipping-field field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">Country*</label>
         <div class="control">
           <select class="select" [(ngModel)]="country" required formControlName="country" (ngModelChange)="getStates($event)">
@@ -60,25 +60,25 @@
           </select>
         </div>
       </div>
-      <div class="shipping-field form-width-field field">
+      <div class="shipping-field form-width-field field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">Shipping Address 1*</label>
         <div class="control">
           <input class="input" type="text" formControlName="address_1" required [(ngModel)]="address_1">
         </div>
       </div>
-      <div class="shipping-field form-width-field field">
+      <div class="shipping-field form-width-field field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">Shipping Address 2</label>
         <div class="control">
           <input class="input" type="text" formControlName="address_2" [(ngModel)]="address_2">
         </div>
       </div>
-      <div class="shipping-field field">
+      <div class="shipping-field field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">City*</label>
         <div class="control">
           <input class="input" type="text" formControlName="city" required [(ngModel)]="city">
         </div>
       </div>
-      <div class="shipping-field inline-field field">
+      <div class="shipping-field inline-field field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">State/Province/Region/Other*</label>
         <div class="control">
           <select class="select" [(ngModel)]="state" required formControlName="state">
@@ -87,26 +87,26 @@
           </select>
         </div>
       </div>
-      <div *ngIf="state?.name === 'Other'" class="shipping-field inline-field field">
+      <div class="shipping-field inline-field field" *ngIf="(form.value.change_address_option === 'new' || accountAddresses.length === 0) && state?.name === 'Other'">
         <label class="label">Other</label>
         <div class="control">
           <input class="input" type="text" name="other_location_text" formControlName="other_location_text">
         </div>     
       </div>
-      <div class="shipping-field">
+      <div class="shipping-field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">Zip/Postal Code*</label>
         <div class="control">
           <input class="input" type="text" formControlName="zipcode" required [(ngModel)]="zipcode">
         </div>     
       </div>
-      <div class="shipping-field">
+      <div class="shipping-field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">Phone</label>
         <div class="control">
           <input class="input" type="text" formControlName="phone_number" [(ngModel)]="phone_number">
         </div>     
       </div>
       <p class="error-message" *ngIf="form.invalid && newAddressInvalid">Please fill out all required address fields.</p>
-      <div class="new-shipping-address-buttons field is-grouped">
+      <div class="new-shipping-address-buttons field is-grouped" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <div class="control">
           <button type="button" class="button cancel-button" (click)="editaddress = !editaddress">Cancel</button>
         </div>      

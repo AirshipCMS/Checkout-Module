@@ -25,6 +25,7 @@ export class CartComponent implements OnInit {
   shippingAddress : any;
   @Input() creditCard : any;
   @Input() receipt: any;
+  shippingError: boolean = false;
 
   constructor(private service: CartService, private sharedService: SharedService) {
   }
@@ -62,6 +63,8 @@ export class CartComponent implements OnInit {
   }
 
   getShipping() {
+    this.shippingError = false;
+    this.pending = true;
     this.service.getShipping(this.shippingAddress, this.shippingType)
       .subscribe(
         res => {
@@ -72,7 +75,11 @@ export class CartComponent implements OnInit {
           this.pending = false;
           this.shippingCalculated.emit(this.total);
         },
-        err => this.service.handleError(err)
+        err => {
+          this.service.handleError(err);
+          this.shippingError = true;
+          this.pending = false;
+        }
       );
   }
 
