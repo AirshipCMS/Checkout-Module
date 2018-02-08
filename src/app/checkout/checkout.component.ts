@@ -92,10 +92,7 @@ export class CheckoutComponent implements OnInit {
     delete this.creditCard;
     delete localStorage.card;
     delete this.user.account;
-    delete localStorage.account;
-    delete localStorage.shipping_address;
-    delete localStorage.stripe_token;
-    delete localStorage.subscriptionAddresses;
+    this.sharedService.clearLocalStorage();
   }
 
   getUserProfile() {
@@ -106,14 +103,10 @@ export class CheckoutComponent implements OnInit {
           this.auth.isAuthenticated = true;
           this.user.email = JSON.parse(localStorage.getItem('profile')).email;
           if(this.user.scope === 'user') {
-            if(Object.keys(this.user.account).length > 0) {
-              this.getAccount(this.user.account);
-            } else {
-              this.account = {};
-              this.loading = false;
-              this.getCustomerSubscriptions();
-              this.ref.detectChanges();
-            }
+            this.getAccount({});
+            this.loading = false;
+            this.getCustomerSubscriptions();
+            this.ref.detectChanges();
           } else {
             let account = localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')) : this.account;
             if(account) {
@@ -142,7 +135,10 @@ export class CheckoutComponent implements OnInit {
           this.getCustomerSubscriptions();
           this.ref.detectChanges();
         },
-        err => this.auth.handleError(err)
+        err => {
+          this.auth.handleError(err);
+          this.account = {};
+        }
       )
   }
 

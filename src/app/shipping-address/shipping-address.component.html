@@ -5,7 +5,7 @@
   </div>
   <label class="label" *ngIf="receipt">Shipping Address</label>
   <form class="shipping-address-form" *ngIf="!address || editaddress" [formGroup]="form">
-    <div class="shipping-address-existing" [ngClass]="{'selected-method': form.value.change_address_option === 'existing'}" >
+    <div class="shipping-address-existing" *ngIf="accountAddresses.length > 0" [ngClass]="{'selected-method': form.value.change_address_option === 'existing'}" >
       <div class="control">
         <label class="radio" *ngIf="accountAddresses.length > 0" for="change_address_option_existing">
           <input id="change_address_option_existing" type="radio" formControlName="change_address_option" value="existing">

@@ -78,7 +78,7 @@ export class SharedService {
 
   clearLocalStorage() {
     for(var key in localStorage) {
-      if(key !== 'id_token' && key !== 'customer_notes' && key !== 'subscriptionNotes') localStorage.removeItem(key);
+      if(key !== 'id_token' && key !== 'customer_notes' && key !== 'subscriptionNotes' && key !== 'profile') localStorage.removeItem(key);
     }
   }
 
