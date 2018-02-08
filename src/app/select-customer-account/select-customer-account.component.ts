@@ -31,7 +31,7 @@ export class SelectCustomerAccountComponent implements OnInit {
       .subscribe(
         accounts => {
           this.accounts = accounts;
-          this.accounts = this.accounts.sort((a,b) => a.user.email - b.user.emial);
+          this.accounts = this.accounts.sort((a,b) => a.customer.email - b.customer.emial);
         },
         err => this.service.handleError(err)
       );

@@ -21,7 +21,7 @@ export class CheckoutService {
     let email = user.email;
     if(user.scope !== 'user') {
       endpoint = 'admin/checkout';
-      email = account.user.email;
+      email = account.customer.email;
     }
     cart['email'] = email;
     cart['customer_notes'] = customer_notes;

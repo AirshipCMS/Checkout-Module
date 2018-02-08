@@ -2,7 +2,7 @@
   <h1>Secure Checkout</h1>
   <p class="authentication-text" *ngIf="user?.scope === 'user'">You are securely logged in as {{ user?.email }}</p>
   <p class="authentication-text admin" *ngIf="user?.scope !== 'user'">You are securely logged in as administrator {{ user?.email }}</p>
-  <p class="authentication-text" *ngIf="user?.scope !== 'user' && account">You are completing checkout as {{ account?.user.email }}</p>
+  <p class="authentication-text" *ngIf="user?.scope !== 'user' && account">You are completing checkout as {{ account?.customer.email }}</p>
   <div class="select-customer-button" *ngIf="user?.scope !== 'user' && account">
     <div class="field">
       <div class="control">

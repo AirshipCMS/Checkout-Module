@@ -49,7 +49,7 @@ export class PaymentMethodService {
     let email = user.email;
     if(user.scope !== 'user') {
       endpoint = `customers/${account.customer.id}`;
-      email = account.user.email;
+      email = account.customer.email;
     }
     let body = {
       stripe_payload: {

@@ -9,7 +9,7 @@
           <div class="control">
             <select class="select" formControlName="account" class="select-customer-dropdown">
               <option>Select One</option>
-              <option *ngFor="let account of accounts" [ngValue]="account">{{ account?.user.email }}</option>
+              <option *ngFor="let account of accounts" [ngValue]="account">{{ account?.customer.email }}</option>
             </select>
           </div>
         </div>

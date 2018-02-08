@@ -104,6 +104,7 @@ export class CheckoutComponent implements OnInit {
         res => {
           this.user = res;
           this.auth.isAuthenticated = true;
+          this.user.email = JSON.parse(localStorage.getItem('profile')).email;
           if(this.user.scope === 'user') {
             if(Object.keys(this.user.account).length > 0) {
               this.getAccount(this.user.account);
