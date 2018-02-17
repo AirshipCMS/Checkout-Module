@@ -81,7 +81,6 @@ export class ShippingAddressComponent implements OnInit {
       } else {
         if(this.subscriptionAddresses) {
           this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
-          console.log(this.subscriptionAddresses)
           this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
           this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
         }
