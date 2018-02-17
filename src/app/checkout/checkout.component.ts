@@ -1,8 +1,9 @@
 import { Component, OnInit, ViewEncapsulation, Input, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/operator/map';
+import 'rxjs/add/observable/of';
+import { map } from 'rxjs/operators';
 
 import { AuthService } from '../auth.service';
 import { CartService } from '../cart';
@@ -42,6 +43,8 @@ export class CheckoutComponent implements OnInit {
   processing : boolean;
   orderFailed : boolean;
   activeSubscriptions : Array<any> = [];
+  subscriptionIndex: number = 0;
+  orderResponse: Array<any> = [];
 
   constructor(
     private auth: AuthService,
@@ -101,7 +104,7 @@ export class CheckoutComponent implements OnInit {
         res => {
           this.user = res;
           this.auth.isAuthenticated = true;
-          this.user.email = JSON.parse(localStorage.getItem('profile')).email;
+          this.user.email = this.user.auth0_user.email;
           if(this.user.scope === 'user') {
             this.getAccount({});
             this.loading = false;
@@ -156,46 +159,64 @@ export class CheckoutComponent implements OnInit {
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
     this.singleOrderCart.misc_data = this.singlePaymentMiscData;
     if(this.singleOrderCart && this.singleOrderCart.items.length > 0) {
-      singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData, this.shippingType).toPromise().catch(err => err);
+      singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData, this.shippingType);
     }
-    subscriptionCart.items.map((item, i) => {
-      let cart = { items: [item] };
-      let address;
-      let orderNotes = '';
-      let miscData = {};
-      if(!environment.skip_subscription_shipping) {
-        address = this.subscriptionAddresses[i];
-      }
-      if(this.subscriptionNotes) {
-        orderNotes = this.subscriptionNotes[i];
-      }
-      if(environment.skip_subscription_shipping || (environment.has_no_shipments && item.has_no_shipments)) {
-        address = environment.default_address;
-      }
-      if(this.subscriptionMiscData) {
-        miscData = this.subscriptionMiscData[i];
-        cart.items[0].misc_data = this.subscriptionMiscData[i];
-      }
-      checkoutStreams.push(this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken, miscData, this.shippingType).toPromise().catch(err => err));
-    });
-
     if(this.subscriptionCart.items.length === 0) {
       singlePaymentOrder.then(res => this.checkoutComplete(res));
     }
     if(this.singleOrderCart.items.length === 0) {
-      Observable.forkJoin(checkoutStreams).subscribe(
-        res => this.checkoutComplete(res),
-        err => this.checkoutComplete(err)
-      );
+      this.placeSubscriptionOrder();
     }
-
     if(this.singleOrderCart.items.length > 0 && this.subscriptionCart.items.length > 0) {
-      checkoutStreams.push(singlePaymentOrder);
-      Observable.forkJoin(checkoutStreams).subscribe(
-        res => this.checkoutComplete(res),
-        err => this.checkoutComplete(err)
-      );
+      singlePaymentOrder
+        .subscribe(singlePaymentOrderRes => {
+          this.orderResponse.push(singlePaymentOrderRes);
+          this.placeSubscriptionOrder();
+        }, err => {
+          this.orderFailed = true;
+          this.processing = false;
+        })
     }
+  }
+
+  placeSubscriptionOrder() {
+    setTimeout(() => {
+      if(this.subscriptionIndex === this.subscriptionCart.items.length) {
+        console.log(this.orderResponse);
+        this.checkoutComplete(this.orderResponse);
+      } else {
+        let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
+          let item = subscriptionCart.items[this.subscriptionIndex];
+          let cart = { items: [item] };
+          let address;
+          let orderNotes = '';
+          let miscData = {};
+          if(!environment.skip_subscription_shipping) {
+            address = this.subscriptionAddresses[this.subscriptionIndex];
+          }
+          if(this.subscriptionNotes) {
+            orderNotes = this.subscriptionNotes[this.subscriptionIndex];
+          }
+          if(environment.skip_subscription_shipping || (environment.has_no_shipments && item.has_no_shipments)) {
+            address = environment.default_address;
+          }
+          if(this.subscriptionMiscData) {
+            miscData = this.subscriptionMiscData[this.subscriptionIndex];
+            cart.items[0].misc_data = this.subscriptionMiscData[this.subscriptionIndex];
+          }
+          this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken, miscData, this.shippingType)
+            .subscribe(
+              res => {
+                this.subscriptionIndex++
+                this.orderResponse.push(res);
+                this.placeSubscriptionOrder();
+              }, err => {
+                this.subscriptionIndex++;
+                this.placeSubscriptionOrder();
+              }
+            )
+      }
+    }, 3000);
   }
 
   checkoutComplete(res: any) {
