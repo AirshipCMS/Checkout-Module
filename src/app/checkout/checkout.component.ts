@@ -153,36 +153,43 @@ export class CheckoutComponent implements OnInit {
   placeOrder() {
     this.processing = true;
     let checkoutStreams = [];
-    let singlePaymentOrder;
     let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
     let singlePaymentAddress = this.singlePaymentAddress;
     if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
     this.singleOrderCart.misc_data = this.singlePaymentMiscData;
     if(this.singleOrderCart && this.singleOrderCart.items.length > 0) {
-      singlePaymentOrder = this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData, this.shippingType);
     }
     if(this.subscriptionCart.items.length === 0) {
-      singlePaymentOrder.then(res => this.checkoutComplete(res));
+      this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData, this.shippingType)
+        .subscribe(
+          res => this.checkoutComplete(res),
+          err => {
+            this.orderFailed = true;
+            this.processing = false;
+          }
+        );
     }
     if(this.singleOrderCart.items.length === 0) {
       this.placeSubscriptionOrder();
     }
     if(this.singleOrderCart.items.length > 0 && this.subscriptionCart.items.length > 0) {
-      singlePaymentOrder
-        .subscribe(singlePaymentOrderRes => {
-          this.orderResponse.push(singlePaymentOrderRes);
-          this.placeSubscriptionOrder();
-        }, err => {
-          this.orderFailed = true;
-          this.processing = false;
-        })
+      this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData, this.shippingType)
+        .subscribe(
+          res => {
+            this.orderResponse.push(res);
+            this.placeSubscriptionOrder();
+          },
+          err => {
+            this.orderFailed = true;
+            this.processing = false;
+          }
+        );
     }
   }
 
   placeSubscriptionOrder() {
     setTimeout(() => {
       if(this.subscriptionIndex === this.subscriptionCart.items.length) {
-        console.log(this.orderResponse);
         this.checkoutComplete(this.orderResponse);
       } else {
         let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
