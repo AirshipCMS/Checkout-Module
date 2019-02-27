@@ -46,7 +46,7 @@ export class ShippingAddressComponent implements OnInit {
       state: ['', Validators.compose([Validators.required])],
       other_location_text: [''],
       zipcode: ['', Validators.compose([Validators.required, Validators.minLength(5), Validators.maxLength(10), FormValidator.validZipcode])],
-      phone_number: ['', Validators.compose([Validators.minLength(7), FormValidator.validPhoneNumber, Validators.maxLength(24)])],
+      phone_number: [''],
       change_address_option: [this.changeCardOption],
       address_options: ''
     });
