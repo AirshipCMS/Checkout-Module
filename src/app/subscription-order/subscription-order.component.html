@@ -34,9 +34,9 @@
     <div class="container-body-right">
       <div class="subscription-item">
         <h4 class="product-title cart-label">{{ receipt? plans[i].product_title : item.product_title }}</h4>
-        <p *ngIf="!receipt">{{ item?.product_plan.name }} - {{ item?.price.usd/100 | currency: 'USD' }} every {{ item?.product_plan.interval }} <span *ngIf="item.product_plan.trial_period_days && item.product_plan.trial_period_days != 0">({{item.product_plan.trial_period_days}}-day trial)</span></p>
+        <p *ngIf="!receipt">{{ item?.product_plan.name }} - {{ item?.price.usd/100 | currency: 'USD' }} every {{ item?.product_plan.interval_count }} {{ item?.product_plan.interval }}s <span *ngIf="item.product_plan.trial_period_days && item.product_plan.trial_period_days != 0">({{item.product_plan.trial_period_days}}-day trial)</span></p>
 
-        <p *ngIf="receipt">{{ plans[i].name }} - {{ plans[i].price.usd/100 | currency: 'USD' }} every {{ item?.stripe_data.plan.interval }} <span *ngIf="item?.stripe_data.plan.trial_period_days && item?.stripe_data.plan.trial_period_days != 0">({{item?.stripe_data.plan.trial_period_days}}-day trial)</span></p>
+        <p *ngIf="receipt">{{ plans[i].name }} - {{ plans[i].price.usd/100 | currency: 'USD' }} every {{ item?.stripe_data.plan.interval_count }} {{ item?.stripe_data.plan.interval }}s <span *ngIf="item?.stripe_data.plan.trial_period_days && item?.stripe_data.plan.trial_period_days != 0">({{item?.stripe_data.plan.trial_period_days}}-day trial)</span></p>
 
         <p *ngIf="!receipt && item?.product_plan.trial_days && item?.product_plan.trial_days > 0">Trial Period Days: {{ item?.product_plan.trial_days }}</p>
         <p *ngIf="receipt && item?.stripe_data.plan.trial_period_days && item?.stripe_data.plan.trial_period_days > 0">Trial Period Days: {{ item?.stripe_data.plan.trial_period_days }}</p>
