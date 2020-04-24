@@ -1,6 +1,6 @@
 # CheckoutModule
 
-Authenticated Checkout for Single Payment Orders and Subscriptions. If want support Guest Checkout, please see the [guest-checkout branch](https://github.com/AirshipCMS/Checkout-Module/tree/guest-checkout).
+Authenticated Checkout for Single Payment Orders and Subscriptions. If want to support Guest Checkout, please see the [guest-checkout branch](https://github.com/AirshipCMS/Checkout-Module/tree/guest-checkout).
 
 ## Setup
 
