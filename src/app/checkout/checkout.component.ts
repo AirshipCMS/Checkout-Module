@@ -57,6 +57,12 @@ export class CheckoutComponent implements OnInit {
   }
 
   ngOnInit() {
+    if(environment.skip_subscription_shipping) {
+      this.subscriptionAddresses = [environment.default_address]
+    }
+    if(environment.skip_single_payment_shipping) {
+      this.singlePaymentAddress = environment.default_address
+    }
     this.loading = true;
     if(localStorage.getItem('id_token') !== null) {
       this.getUserProfile();
