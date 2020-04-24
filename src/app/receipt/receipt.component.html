@@ -4,9 +4,6 @@
       *ngIf="receipt.products.items"
       [receipt]="receipt"
     ></single-payment-order>
-    <subscription-order
-      [receipt]="receipt"
-    ></subscription-order>
   </div>
   <p *ngIf="failedOrders.length > 0">{{ failedOrders.length }} orders failed to process.</p>
 </div>

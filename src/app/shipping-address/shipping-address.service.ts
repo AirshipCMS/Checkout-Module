@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Countries } from './countries';
 import { States } from './states';
@@ -9,15 +8,6 @@ export class ShippingAddressService {
 
   countries : Array<any> = Countries.items;
   states : Array<any> = States.StateGroups;
-  headers : HttpHeaders;
-  omitList : Array<any>;
-  accountOmitList : Array<any>;
-
-  constructor(private http: HttpClient) {
-    let id_token = localStorage.getItem('id_token');
-    this.headers = new HttpHeaders().set('authorization', `bearer ${id_token}`);
-    this.omitList = ['created_at', 'id', 'site_id', 'updated_at', '_pivot_account_id', '_pivot_postal_address_id', 'address_options', 'change_address_option'];
-  }
 
   getStates(country: any) {
     return this.states.find((item, i) => i === country.StateGroupID);
@@ -29,12 +19,12 @@ export class ShippingAddressService {
       address['other_location'] = address['state'] === '';
       switch (key) {
         case "country":
-          if(value.code) address[key] = value.code;
+          if(value['code']) address[key] = value['code'];
           break;
 
         case "state":
-          if(value.code) address[key] = value.code;
-          if(value.name) address[key] = value.name;
+          if(value['code']) address[key] = value['code'];
+          if(value['name']) address[key] = value['name'];
           break;
 
         case "other_location_text":
@@ -60,30 +50,9 @@ export class ShippingAddressService {
     localStorage.setItem('shipping_address', JSON.stringify(address));
   }
 
-  saveAddress(address: any, user: any, account: any) {
-    // let endpoint = 'account/postal_address';
-    let endpoint = `accounts/${account.id}/postal_address`;
-    return this.http.post(`/api/${endpoint}`, this.scrubAddress(address), { headers: this.headers });
-  }
-
-  saveSubscriptionAddresses(addresses: Array<any>) {
-    localStorage.setItem('subscriptionAddresses', JSON.stringify(addresses));
-  }
-
-  getSubscriptionAddresses() {
-    return JSON.parse(localStorage.getItem('subscriptionAddresses'));
-  }
-
   getSinglePaymentAddress() {
     let localAddress = JSON.parse(localStorage.getItem('shipping_address'));
     let address = localAddress ? localAddress : null;
-    return address;
-  }
-
-  scrubAddress(address: any) {
-    this.omitList.forEach((key) => {
-      delete address[key];
-    });
     return address;
   }
 

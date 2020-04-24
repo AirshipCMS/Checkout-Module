@@ -13,10 +13,6 @@ import { SharedService } from '../shared.service';
 export class MiscDataComponent implements OnInit {
 
   @Input() singleOrderCart;
-  @Input() subscriptionCart;
-  @Input() subscriptionItem;
-  @Input() subscriptionItemIndex: number;
-  subscriptionMiscData: Array<any> = [];
   @Input() miscData = {};
   @Input() receipt;
   hasMiscData: boolean;
@@ -25,25 +21,10 @@ export class MiscDataComponent implements OnInit {
   }
 
   ngOnInit() {
-    if(this.receipt === undefined) {
-      if(this.subscriptionItem !== undefined && this.subscriptionItem.misc_data !== undefined) {
-        this.subscriptionCart.items.forEach((item) => {
-          this.subscriptionMiscData.push({})
-        });
-        let miscDataKey = this.subscriptionItem.product_title.replace(' ', '_').toLowerCase();
-        this.miscData[miscDataKey] = {};
-        Object.entries(this.subscriptionItem.misc_data).forEach(([key, value]) => {
-          this.miscData[miscDataKey][key] = value;
-        });
-        this.miscData[miscDataKey]['plan'] = `${this.subscriptionItem.product_plan.name} every ${this.subscriptionItem.product_plan.interval}`;
-        this.miscData[miscDataKey]['plan_id'] = this.subscriptionItem.id;
-        this.miscData[miscDataKey]['product_title'] = this.subscriptionItem.product_title;
-        this.subscriptionMiscData[this.subscriptionItemIndex] = this.miscData;
-        this.sharedService.setSubscriptionMiscData(this.subscriptionMiscData);
-      }
-      if(this.singleOrderCart !== undefined) {
+    if (this.receipt === undefined) {
+      if (this.singleOrderCart !== undefined) {
         this.singleOrderCart.items.forEach((item, i) => {
-          if(item.misc_data) {
+          if (item.misc_data) {
             let miscDataKey = i;
             this.miscData[miscDataKey] = {};
             Object.entries(item.misc_data).forEach(([key, value]) => {
@@ -58,13 +39,9 @@ export class MiscDataComponent implements OnInit {
         this.sharedService.setSinglePaymentMiscData(this.miscData);
       }
     } else {
-      if(this.subscriptionItem !== undefined) {
-        this.miscData = this.subscriptionItem.misc_data;
-      } else {
-        this.miscData = this.receipt.single_payment.misc_data;
-      }
+      this.miscData = this.receipt.single_payment.misc_data;
     }
-    if(this.miscData && Object.keys(this.miscData).length > 0) {
+    if (this.miscData && Object.keys(this.miscData).length > 0) {
       this.hasMiscData = true;
     }
   }

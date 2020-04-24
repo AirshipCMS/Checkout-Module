@@ -123,7 +123,6 @@
 .receipt-container .misc-data-item + .misc-data-item,
 .receipt-container .cart-charge-details,
 .receipt-container .payment-method-container,
-.receipt-container .subscription-order-container,
 .checkout-container .single-payment-order-container,
 .checkout-container .shipping-type-container,
 .checkout-container .billing-container,
@@ -131,13 +130,8 @@
 .checkout-container .misc-data-container,
 .checkout-container .misc-data-item + .misc-data-item,
 .checkout-container .cart-charge-details,
-.checkout-container .payment-method-container,
-.checkout-container .subscription-order-container{
+.checkout-container .payment-method-container{
   margin-top: 20px;
-}
-
-.receipt-container .subscription-order-container{
-  margin-bottom: 60px;
 }
 
 .checkout-container .payment-method-new{

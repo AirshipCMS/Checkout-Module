@@ -10,8 +10,6 @@ import { environment } from '../../environments/environment';
 })
 export class SinglePaymentOrderComponent implements OnInit {
 
-  @Input() user;
-  @Input() account;
   @Input() receipt : any;
   @Input() singleOrderCart;
   shippingCalculationPending : boolean = true;

@@ -5,8 +5,8 @@ import { CheckoutComponent } from './checkout';
 import { ReceiptComponent } from './receipt';
 
 const AppRoutes : Routes = [
-  { path: 'checkout', component: CheckoutComponent },
-  { path: 'checkout#receipt', component: ReceiptComponent }
+  { path: 'guest-checkout', component: CheckoutComponent },
+  { path: 'guest-checkout#receipt', component: ReceiptComponent }
 ]
 
 export const appRoutingProviders : any[] = [];

@@ -1,5 +1,7 @@
 # CheckoutModule
 
+Guest Checkout for Single Payment Orders only. For authenticated Checkout and Subscription Orders, see the [master branch](https://github.com/AirshipCMS/Checkout-Module).
+
 ## Setup
 
 clone this repo.
@@ -20,7 +22,7 @@ Run `npm run alpha`.
 in the file `proxy.conf.prod.json`, change `target` to your airshipcms site.
 Run `npm run prod`.
 
-Navigate to `http://localhost:4200/checkout`. The app will automatically reload if you change any of the source files.
+Navigate to `http://localhost:4200/guest-checkout`. The app will automatically reload if you change any of the source files.
 
 ## Build
 
@@ -33,9 +35,9 @@ Run `npm run build`
 All files will build into `/dist`.
 
 In your airship project:
-drop `airship-checkout.min.js` into `compartmnets/assets/scripts`.
-drop `airship-checkout.min.css` into `compartmnets/assets/styles`.
-include these files in `templates/checkout.html`
+drop `airship-guest-checkout.min.js` into `compartmnets/assets/scripts`.
+drop `airship-guest-checkout.min.css` into `compartmnets/assets/styles`.
+include these files in `templates/guest-checkout.html`
 
 ## Shipping Types
 
@@ -50,7 +52,6 @@ export const environment = {
   production: true,
   stripe_publish_key: 'xxxxxxx',
   skip_single_payment_shipping: false,
-  skip_subscription_shipping: false,
   has_no_shipments: false,
   default_address: defaultVendorAddress,
   shipping_types: ['USPS', 'FedEx',  'UPS']
@@ -66,10 +67,8 @@ alpha: `src/environments/environment.alpha.ts`
 
 `skip_single_payment_shipping` boolean. To skip shipping address and shipping type for Single Payment Orders, set this to true.
 
-`skip_subscription_shipping` boolean. To skip shipping address and shipping type for Subscription Orders, set this to true.
-
 `has_no_shipments` boolean. To conditionally skip shipping address and shipping type for certain Subscription Orders, set this to true. In your Subscription Collection, create a `checkbox` field named `Has No Shipments`. Check the box for items with no shipments.
 
 `shipping_types`
 
-If `skip_single_payment_shipping`, `skip_subscription_shipping` or `has_no_shipments` is set to `true`, go to `src/environments/default-vendor-address.ts`. Enter a default address. If no default address is entered, checkout will fail.
+If `skip_single_payment_shipping` or `has_no_shipments` is set to `true`, go to `src/environments/default-vendor-address.ts`. Enter a default address. If no default address is entered, checkout will fail.

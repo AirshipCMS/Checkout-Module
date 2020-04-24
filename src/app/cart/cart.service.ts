@@ -5,7 +5,6 @@ import { HttpClient } from '@angular/common/http';
 export class CartService {
 
   cart : any;
-  subscriptionCart : any = { items: [] };
   singleOrderCart : any = { items: [] };
 
   constructor(private http: HttpClient) {
@@ -37,7 +36,6 @@ export class CartService {
 
   checkCartItemTypes() {
     this.cart.items.forEach((item) => {
-      if(item.type === 'plan') this.subscriptionCart.items.push(item);
       if(item.type !== 'plan') this.singleOrderCart.items.push(item);
     });
   }

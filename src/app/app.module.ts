@@ -7,7 +7,6 @@ import { AppComponent } from './app.component';
 import { CheckoutComponent } from './checkout';
 import { ReceiptComponent } from './receipt';
 import { appRoutingProviders, routing } from './app.routes';
-import { AuthService } from './auth.service';
 import { CartComponent } from './cart';
 import { PaymentMethodComponent } from './payment-method';
 import { SinglePaymentOrderComponent } from './single-payment-order';
@@ -15,8 +14,6 @@ import { ShippingAddressComponent } from './shipping-address';
 import { ShippingTypeComponent } from './shipping-type/shipping-type.component';
 import { OrderNotesComponent } from './order-notes/order-notes.component';
 import { SharedService } from './shared.service';
-import { SubscriptionOrderComponent } from './subscription-order/subscription-order.component';
-import { SelectCustomerAccountComponent } from './select-customer-account/select-customer-account.component';
 import { MiscDataComponent } from './misc-data/misc-data.component';
 import { KeysPipe } from './keys.pipe';
 
@@ -31,8 +28,6 @@ import { KeysPipe } from './keys.pipe';
     ShippingAddressComponent,
     ShippingTypeComponent,
     OrderNotesComponent,
-    SubscriptionOrderComponent,
-    SelectCustomerAccountComponent,
     MiscDataComponent,
     KeysPipe
   ],
@@ -43,7 +38,7 @@ import { KeysPipe } from './keys.pipe';
     FormsModule,
     routing
   ],
-  providers: [appRoutingProviders, AuthService, SharedService],
+  providers: [appRoutingProviders, SharedService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
