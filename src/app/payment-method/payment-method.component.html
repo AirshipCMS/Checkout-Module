@@ -16,6 +16,12 @@
               New Credit or Debit Card
             </label>
           </div>
+          <div *ngIf="!loadingPaymentMethod && changeCardOption === 'new'" class="shipping-field inline-field field">
+            <label class="label">Name*</label>
+            <div class="control">
+              <input class="input" type="text" required [(ngModel)]="ccName">
+            </div>
+          </div>
           <div [ngClass]="{'airship-visible': !loadingPaymentMethod && changeCardOption === 'new'}" id="card-element"></div>
           <p class="error-message" *ngIf="missingCardInfo">Please enter required Credit Card fields.</p>
           <div class="field update-card-buttons is-grouped" *ngIf="changeCardOption === 'new'">

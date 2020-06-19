@@ -31,6 +31,7 @@ export class PaymentMethodComponent implements OnInit {
   noCardSelected: boolean = false;
   loadingPaymentMethod: boolean = false;
   loadPaymentMethodError: boolean = false;
+  ccName: string = '';
   @Input() user;
   @Input() account;
   @Output() creditCardSaved = new EventEmitter();
@@ -50,7 +51,7 @@ export class PaymentMethodComponent implements OnInit {
     this.processing = true;
     this.addCardFailed = false;
     this.missingCardInfo = false;
-    this.stripe.createToken(this.cardElement)
+    this.stripe.createToken(this.cardElement, { name: this.ccName})
       .then((res) => {
         if(res.token) {
           if(Object.keys(this.account).length > 0) {
