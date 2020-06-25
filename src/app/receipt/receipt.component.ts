@@ -12,69 +12,58 @@ import { Router } from '@angular/router';
 })
 export class ReceiptComponent implements OnInit {
 
-  receipt : any;
-  failedOrders : Array<any> = [];
+  receipt: any = {
+    subscriptions: [],
+    single_payment: null,
+    single_payment_has_shipments: null
+  };
+  failedOrders: Array<any> = [];
 
-  constructor(public sharedService: SharedService, public router: Router) {}
+  constructor(public sharedService: SharedService, public router: Router) { }
+
+  setShippingType = (type) => environment.shipping_types.filter((shipping_type) => type.toLowerCase() === shipping_type.toLowerCase())[0]
 
   ngOnInit() {
-    if(this.sharedService.checkoutResponse) {
-      if(this.sharedService.checkoutResponse.products) {
-        environment.shipping_types.forEach((type) => {
-          if(this.sharedService.checkoutResponse.single_payment.shipping_type.toLowerCase() === type.toLowerCase()) {
-            this.sharedService.checkoutResponse.single_payment.shipping_type = type;
+    if (this.sharedService.checkoutResponse) {
+
+      let subscriptions = { items: [] };
+      let plans = [];
+      let subscription_addresses = [];
+      let creditCard = JSON.parse(localStorage.getItem('card'));
+      let account;
+      let customer;
+      this.sharedService.checkoutResponse.forEach(order => {
+        account = order.account;
+        customer = order.customer;
+        if (order.single_payment.id && order.shipping_address) {
+          this.receipt['single_payment_has_shipments'] = {
+            ...order.single_payment,
+            shipping_address: order.shipping_address,
+            products: order.products
           }
-        });
-        this.receipt = this.sharedService.checkoutResponse;
-      } else {
-        let subscriptions = { items: [] };
-        let plans = [];
-        let customers = [];
-        let products = {};
-        let single_payment = {};
-        let account = {};
-        let customer = {};
-        let shipping_address = {};
-        let subscription_addresses = [];
-        let creditCard = JSON.parse(localStorage.getItem('card'));
-        this.sharedService.checkoutResponse.forEach((item) => {
-          if(item.account) {
-            if(item.products.items.length > 0) {
-              products = item.products;
-              single_payment = item.single_payment;
-              environment.shipping_types.forEach((type) => {
-                if(single_payment['shipping_type'].toLowerCase() === type.toLowerCase()) {
-                  single_payment['shipping_type'] = type;
-                }
-              });
-              shipping_address = item.shipping_address;
-              account = item.account;
-              customer = item.customer;
-            }
-            if(item.subscriptions.length > 0) {
-              subscription_addresses.push(item.shipping_address);
-              item.subscriptions[0].misc_data = item.plans[0].misc_data;
-              subscriptions.items.push(item.subscriptions[0]);
-              customers.push(item.customer);
-              plans.push(item.plans[0]);
-            }
-          } else {
-            this.failedOrders.push(item);
+        }
+        if (order.single_payment.id && order.shipping_address === null) {
+          this.receipt['single_payment'] = { ...order.single_payment, products: order.products }
+        }
+        if (order.subscriptions.length > 0) {
+          let subscriptionOrder = {
+            ...order.subscriptions
           }
-        });
-        this.receipt = Object.assign({}, {
-          subscription_addresses,
-          account,
-          shipping_address,
-          customer,
-          customers,
-          single_payment,
-          products,
-          subscriptions,
-          plans,
-          creditCard
-        });
-      }
+          subscription_addresses.push(order.shipping_address);
+          subscriptions.items.push(subscriptionOrder);
+          plans.push(order.plans[0]);
+        }
+      })
+
+      this.receipt = {
+        ...this.receipt,
+        subscription_addresses,
+        account,
+        customer,
+        subscriptions,
+        plans,
+        creditCard
+      };
       this.sharedService.clearLocalStorage();
     } else {
       this.router.navigate(['/checkout']);

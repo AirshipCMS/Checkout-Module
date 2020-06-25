@@ -1,4 +1,4 @@
-<div class="cart-items">
+<div class="cart-items" *ngIf="cart">
   <h4 class="sidebar-header">Items</h4>
   <div class="cart-item" *ngFor="let item of cart.items">
     <div class="cart-item-description">
@@ -15,20 +15,22 @@
       <h4 class="subtotal-title cart-label">Subtotal</h4>
       <p class="cart-item-subtotal">{{ subtotal | currency: "USD" }}</p>
     </div>
-    <div class="cart-shipping">
-      <h4 class="shipping-title cart-label">Shipping</h4>
-      <p class="cart-item-shipping" *ngIf="!receipt && pending && !shippingError">{{ shipping }}</p>
-      <p class="cart-item-shipping" *ngIf="receipt || !pending">{{ shipping | currency: "USD" }}</p>
-    </div>
-    <div class="cart-tax">
-      <h4 class="tax-title cart-label">Tax</h4>
-      <p class="cart-item-tax" *ngIf="!receipt && pending && !shippingError">{{ tax }}</p>
-      <p class="cart-item-tax" *ngIf="receipt || !pending">{{ tax | currency: "USD" }}</p>
-    </div>
-    <div class="cart-handling">
-      <h4 class="handling-title cart-label">Handling</h4>
-      <p class="cart-item-handling" *ngIf="!receipt && pending && !shippingError">{{ handling }}</p>
-      <p class="cart-item-handling" *ngIf="receipt || !pending">{{ handling | currency: "USD" }}</p>
+    <div *ngIf="receipt || (cart && cart.items[0].has_shipments)">
+      <div class="cart-shipping">
+        <h4 class="shipping-title cart-label">Shipping</h4>
+        <p class="cart-item-shipping" *ngIf="!receipt && pending && !shippingError">{{ shipping }}</p>
+        <p class="cart-item-shipping" *ngIf="receipt || !pending">{{ shipping | currency: "USD" }}</p>
+      </div>
+      <div class="cart-tax">
+        <h4 class="tax-title cart-label">Tax</h4>
+        <p class="cart-item-tax" *ngIf="!receipt && pending && !shippingError">{{ tax }}</p>
+        <p class="cart-item-tax" *ngIf="receipt || !pending">{{ tax | currency: "USD" }}</p>
+      </div>
+      <div class="cart-handling">
+        <h4 class="handling-title cart-label">Handling</h4>
+        <p class="cart-item-handling" *ngIf="!receipt && pending && !shippingError">{{ handling }}</p>
+        <p class="cart-item-handling" *ngIf="receipt || !pending">{{ handling | currency: "USD" }}</p>
+      </div>
     </div>
   </div>
   <div class="cart-total">
@@ -37,8 +39,11 @@
     <p class="cart-item-total" *ngIf="receipt || !pending">{{ total | currency: "USD" }}</p>
   </div>
   <p class="error-message shipping-error-message" *ngIf="shippingError">{{ shippingErrorMessage }}</p>
-  <button type="button" class="button recalculate-shipping-button" (click)="getShipping()" *ngIf="shippingError" [disabled]="shippingAddress === null || shippingAddress === undefined">Recalculate Shipping</button>
+  <button type="button" class="button recalculate-shipping-button" (click)="getShipping()" *ngIf="shippingError"
+    [disabled]="shippingAddress === null || shippingAddress === undefined">Recalculate Shipping</button>
   <div class="cart-charge-details" *ngIf="receipt || !pending && !receipt">
-    <p>{{ receipt ? receipt?.single_payment.payment.stripe_card_raw_json_data.brand : creditCard?.brand }} ending *{{ receipt ? receipt?.single_payment.payment.stripe_card_raw_json_data.last4 : creditCard?.last4 }} will be charged {{ total | currency: "USD" }} <span>USD</span></p>
+    <p>{{ receipt ? receipt?.single_payment.payment.stripe_card_raw_json_data.brand : creditCard?.brand }} ending
+      *{{ receipt ? receipt?.single_payment.payment.stripe_card_raw_json_data.last4 : creditCard?.last4 }} will be
+      charged {{ total | currency: "USD" }} <span>USD</span></p>
   </div>
 </div>

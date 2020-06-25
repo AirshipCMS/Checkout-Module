@@ -1,10 +1,17 @@
 <div class="receipt-container">  
   <div class="receipt-body">
     <single-payment-order
-      *ngIf="receipt.products.items"
+      *ngIf="receipt.single_payment"
       [receipt]="receipt"
+      [single_payment]="receipt.single_payment"
     ></single-payment-order>
+    <single-payment-order
+    *ngIf="receipt.single_payment_has_shipments"
+    [receipt]="receipt"
+    [single_payment]="receipt.single_payment_has_shipments"
+  ></single-payment-order>
     <subscription-order
+      *ngIf="receipt.subscriptions.length > 0"
       [receipt]="receipt"
     ></subscription-order>
   </div>

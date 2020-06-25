@@ -3,16 +3,10 @@ import { Router } from '@angular/router';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/observable/forkJoin';
 import 'rxjs/add/observable/of';
-import { map } from 'rxjs/operators';
-
 import { AuthService } from '../auth.service';
 import { CartService } from '../cart';
 import { CheckoutService } from './checkout.service';
-import { SinglePaymentOrderComponent } from '../single-payment-order';
-import { SubscriptionOrderComponent } from '../subscription-order';
-import { PaymentMethodComponent } from '../payment-method';
 import { SharedService } from '../shared.service';
-import { environment } from '../../environments/environment';
 
 import * as _ from 'lodash';
 
@@ -25,24 +19,25 @@ import * as _ from 'lodash';
 })
 export class CheckoutComponent implements OnInit {
 
-  user : any;
-  account : any;
-  loading : boolean;
-  creditCard : any;
-  singlePaymentAddress : any;
+  user: any;
+  account: any;
+  loading: boolean;
+  creditCard: any;
+  singlePaymentAddress: any;
   singlePaymentMiscData;
   subscriptionMiscData;
-  subscriptionAddresses : Array<any>;
-  singlePaymentNotes : string;
-  singleOrderCart : any;
-  subscriptionCart : any;
+  subscriptionAddresses: Array<any>;
+  singlePaymentNotes: string;
+  singleOrderCart: any;
+  singleOrderHasShipmentsCart: any;
+  subscriptionCart: any;
   shippingType;
-  stripeToken : string;
-  checkoutResponse : any;
-  subscriptionNotes : Array<any>;
-  processing : boolean;
-  orderFailed : boolean;
-  activeSubscriptions : Array<any> = [];
+  stripeToken: string;
+  checkoutResponse: any;
+  subscriptionNotes: Array<any>;
+  processing: boolean;
+  orderFailed: boolean;
+  activeSubscriptions: Array<any> = [];
   subscriptionIndex: number = 0;
   orderResponse: Array<any> = [];
 
@@ -53,24 +48,19 @@ export class CheckoutComponent implements OnInit {
     private cartService: CartService,
     public sharedService: SharedService,
     private ref: ChangeDetectorRef
-    ) {
+  ) {
   }
 
   ngOnInit() {
-    if(environment.skip_subscription_shipping) {
-      this.subscriptionAddresses = [environment.default_address]
-    }
-    if(environment.skip_single_payment_shipping) {
-      this.singlePaymentAddress = environment.default_address
-    }
     this.loading = true;
-    if(localStorage.getItem('id_token') !== null) {
+    if (localStorage.getItem('id_token') !== null) {
       this.getUserProfile();
     } else {
       this.auth.isAuthenticated = false;
       this.auth.login();
     }
     this.singleOrderCart = this.cartService.singleOrderCart;
+    this.singleOrderHasShipmentsCart = this.cartService.singleOrderHasShipmentsCart;
     this.subscriptionCart = this.cartService.subscriptionCart;
     this.sharedService.orderNotes$.subscribe(singlePaymentNotes => this.singlePaymentNotes = singlePaymentNotes);
     this.sharedService.shippingAddress$.subscribe(shippingAddress => this.singlePaymentAddress = shippingAddress);
@@ -83,11 +73,11 @@ export class CheckoutComponent implements OnInit {
   }
 
   getCustomerSubscriptions() {
-    if(this.account && Object.keys(this.account).length > 0) {
+    if (this.account && Object.keys(this.account).length > 0) {
       this.service.getCustomerSubscriptions(this.user, this.account.id)
         .subscribe(
           res => {
-            if(Array.isArray(res)) {
+            if (Array.isArray(res)) {
               this.activeSubscriptions = res.filter((item) => !_.isEmpty(item.subscription) && item.subscription.stripe_data.status !== 'canceled');
             }
           },
@@ -111,14 +101,14 @@ export class CheckoutComponent implements OnInit {
           this.user = res;
           this.auth.isAuthenticated = true;
           this.user.email = this.user.auth0_user.email;
-          if(this.user.scope === 'user') {
+          if (this.user.scope === 'user') {
             this.getAccount({});
             this.loading = false;
             this.getCustomerSubscriptions();
             this.ref.detectChanges();
           } else {
             let account = localStorage.getItem('account') ? JSON.parse(localStorage.getItem('account')) : this.account;
-            if(account) {
+            if (account) {
               this.getAccount(account);
             } else {
               this.loading = false;
@@ -159,93 +149,85 @@ export class CheckoutComponent implements OnInit {
   placeOrder() {
     this.processing = true;
     let checkoutStreams = [];
-    let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
+    let subscriptionCart: any = _.cloneDeep(this.subscriptionCart);
     let singlePaymentAddress = this.singlePaymentAddress;
-    if(environment.skip_single_payment_shipping) singlePaymentAddress = environment.default_address;
     this.singleOrderCart.misc_data = this.singlePaymentMiscData;
-    if(this.singleOrderCart && this.singleOrderCart.items.length > 0) {
+    this.singleOrderHasShipmentsCart.misc_data = this.singlePaymentMiscData;
+    let orders = [];
+    let baseOrder = {
+      shipping_address: null,
+      user: this.user,
+      account: this.account,
+      cart: {
+        items: []
+      },
+      customer_notes: '',
+      stripe_token: this.stripeToken,
+      misc_data: {},
+      shipping_type: null
     }
-    if(this.subscriptionCart.items.length === 0) {
-      this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData, this.shippingType)
-        .subscribe(
-          res => this.checkoutComplete(res),
-          err => {
-            this.orderFailed = true;
-            this.processing = false;
-          }
-        );
-    }
-    if(this.singleOrderCart.items.length === 0) {
-      this.placeSubscriptionOrder();
-    }
-    if(this.singleOrderCart.items.length > 0 && this.subscriptionCart.items.length > 0) {
-      this.service.checkout(singlePaymentAddress, this.user, this.account, this.cartService.scrubCart(this.singleOrderCart), this.singlePaymentNotes, this.stripeToken, this.singlePaymentMiscData, this.shippingType)
-        .subscribe(
-          res => {
-            this.orderResponse.push(res);
-            this.placeSubscriptionOrder();
-          },
-          err => {
-            this.orderFailed = true;
-            this.processing = false;
-          }
-        );
-    }
-  }
-
-  placeSubscriptionOrder() {
-    setTimeout(() => {
-      if(this.subscriptionIndex === this.subscriptionCart.items.length) {
-        this.checkoutComplete(this.orderResponse);
-      } else {
-        let subscriptionCart : any = _.cloneDeep(this.subscriptionCart);
-          let item = subscriptionCart.items[this.subscriptionIndex];
-          let cart = { items: [item] };
-          let address;
-          let orderNotes = '';
-          let miscData = {};
-          if(!environment.skip_subscription_shipping) {
-            address = this.subscriptionAddresses[this.subscriptionIndex];
-          }
-          if(this.subscriptionNotes) {
-            orderNotes = this.subscriptionNotes[this.subscriptionIndex];
-          }
-          if(environment.skip_subscription_shipping || (environment.has_no_shipments && item.has_no_shipments)) {
-            address = environment.default_address;
-          }
-          if(this.subscriptionMiscData) {
-            miscData = this.subscriptionMiscData[this.subscriptionIndex];
-            cart.items[0].misc_data = this.subscriptionMiscData[this.subscriptionIndex];
-          }
-          this.service.checkout(address, this.user, this.account, this.cartService.scrubCart(cart), orderNotes, this.stripeToken, miscData, this.shippingType)
-            .subscribe(
-              res => {
-                this.subscriptionIndex++
-                this.orderResponse.push(res);
-                this.placeSubscriptionOrder();
-              }, err => {
-                this.subscriptionIndex++;
-                this.placeSubscriptionOrder();
-              }
-            )
+    if (this.singleOrderCart.items.length > 0) {
+      let order = {
+        ...baseOrder,
+        cart: this.cartService.scrubCart(this.singleOrderCart),
+        customer_notes: this.singlePaymentNotes,
+        misc_data: this.singlePaymentMiscData
       }
-    }, 3000);
+      orders.push(order)
+    }
+    if (this.singleOrderHasShipmentsCart.items.length > 0) {
+      let order = {
+        ...baseOrder,
+        shipping_address: singlePaymentAddress,
+        cart: this.cartService.scrubCart(this.singleOrderHasShipmentsCart),
+        customer_notes: this.singlePaymentNotes,
+        misc_data: this.singlePaymentMiscData,
+        shipping_type: this.shippingType
+      }
+      orders.push(order)
+    }
+    if (subscriptionCart.items.length > 0) {
+      subscriptionCart.items.map((item, i) => {
+        let cart = this.cartService.scrubCart({ items: [item] })
+        let subOrder = {
+          ...baseOrder,
+          customer_notes: this.subscriptionNotes && this.subscriptionNotes[i] ? this.subscriptionNotes[i] : '',
+          misc_data: this.subscriptionMiscData && this.subscriptionMiscData[i] ? this.subscriptionMiscData[i] : {},
+          cart,
+          shipping_address: item.has_shipments && this.subscriptionAddresses && this.subscriptionAddresses[i] ? this.subscriptionAddresses[i] : null,
+          shipping_type: item.has_shipments ? this.shippingType : null
+        }
+        orders.push(subOrder)
+      })
+    }
+    this.processing = true;
+    let completedOrders = []
+    let i = 1;
+    Observable.from(orders)
+      .concatMap(order =>
+        this.service.checkout(order)
+          .do(res => res)
+          .catch(obs => Observable.empty())
+          .delay(3000)
+      )
+      .subscribe(val => {
+        console.log(val)
+        if (val['account']) {
+          completedOrders.push(val)
+        }
+        if (i === orders.length) {
+          this.checkoutComplete(completedOrders)
+        }
+        i++
+      })
   }
 
   checkoutComplete(res: any) {
     let success = false;
-    if(Array.isArray(res)) {
-      res.forEach((item) => {
-        if(item.account) {
-          success = true;
-        }
-      });
-    } else {
-      if(res.account) {
-        success = true;
-      }
+    if (res.length > 0) {
+      success = true;
     }
-    if(success) {
+    if (success) {
       this.sharedService.checkoutResponse = res;
       this.router.navigate(['/checkout#receipt']);
     } else {

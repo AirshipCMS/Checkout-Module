@@ -6,6 +6,7 @@ export class CartService {
 
   cart : any;
   subscriptionCart : any = { items: [] };
+  singleOrderHasShipmentsCart : any = { items: [] }; //all products where has_shipments === true grouped together
   singleOrderCart : any = { items: [] };
 
   constructor(private http: HttpClient) {
@@ -18,7 +19,7 @@ export class CartService {
     let formattedCart = { items: [] };
     formattedCart.items = cart.items.map((item) => {
       delete item.product_plan;
-      delete item.has_no_shipments;
+      delete item.has_shipments;
       // delete item.misc_data;
       if(item.type !== 'plan') delete item.type;
       return item;
@@ -26,9 +27,9 @@ export class CartService {
     return formattedCart;
   }
 
-  calculateSubtotal() {
+  calculateSubtotal(cart) {
     let subtotal = 0;
-    this.singleOrderCart.items.forEach((item) => {
+    cart.items.forEach((item) => {
       let priceTimesQuantity = item.price.usd * item.quantity;
       subtotal += priceTimesQuantity;
     });
@@ -38,7 +39,13 @@ export class CartService {
   checkCartItemTypes() {
     this.cart.items.forEach((item) => {
       if(item.type === 'plan') this.subscriptionCart.items.push(item);
-      if(item.type !== 'plan') this.singleOrderCart.items.push(item);
+      if(item.type !== 'plan') {
+        if(item.has_shipments){
+          this.singleOrderHasShipmentsCart.items.push(item);
+        } else {
+          this.singleOrderCart.items.push(item);
+        }
+      }
     });
   }
 
@@ -53,7 +60,7 @@ export class CartService {
     for(const [key] of Object.entries(body)) {
       body[key] = address[key];
     }
-    body['cart'] = this.scrubCart(this.singleOrderCart);
+    body['cart'] = this.scrubCart(this.singleOrderHasShipmentsCart);
     body['shipping_type'] = shippingType;
     return this.http.put(`/api/shipping`, body);
   }

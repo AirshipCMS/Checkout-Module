@@ -14,17 +14,17 @@ export class SinglePaymentOrderComponent implements OnInit {
   @Input() account;
   @Input() receipt : any;
   @Input() singleOrderCart;
+  @Input() singleOrderHasShipmentsCart;
+  @Input() single_payment;
   shippingCalculationPending : boolean = true;
   orderTotal : number;
   @Input() creditCard : any;
-  skipShipping : boolean;
   order;
 
   constructor() { }
 
   ngOnInit() {
     this.order = this;
-    this.skipShipping = environment.skip_single_payment_shipping;
   }
 
   shippingCalculated(total:number) {

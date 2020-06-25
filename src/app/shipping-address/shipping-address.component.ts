@@ -93,7 +93,7 @@ export class ShippingAddressComponent implements OnInit {
   getAddress() {
     if(this.receipt) { //receipt
       if(this.singlePaymentOrder) {
-        this.address = this.receipt.shipping_address;
+        this.address = this.receipt.single_payment_has_shipments.shipping_address;
       } else {
         this.address = this.receipt.subscription_addresses[this.subscriptionItemIndex];
       }

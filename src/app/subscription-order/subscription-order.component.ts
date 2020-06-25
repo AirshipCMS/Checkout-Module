@@ -23,8 +23,6 @@ export class SubscriptionOrderComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.skipShipping = environment.skip_subscription_shipping;
-    this.hasNoShipments = environment.has_no_shipments;
     if(this.receipt) {
       this.subscriptionCart = this.receipt.subscriptions;
       this.plans = this.receipt.plans;

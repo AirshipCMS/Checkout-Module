@@ -1,21 +1,21 @@
-<div class="single-payment-order-container">
+<div class="single-payment-order-container" *ngIf="single_payment || singleOrderCart || singleOrderHasShipmentsCart">
   <div class="container-header">
     <h4 *ngIf="!receipt">Single-Payment Order</h4>
-    <h4 *ngIf="receipt">Single-Payment Order Receipt #{{ receipt?.single_payment.order_number }}</h4>
+    <h4 *ngIf="receipt">Single-Payment Order Receipt #{{ single_payment?.order_number }}</h4>
   </div>
   <div class="container-body">
     <div class="container-body-left">
-      <shipping-address *ngIf="!skipShipping && !receipt" [user]="user" [account]="account" [receipt]="receipt" [singlePaymentOrder]="true"></shipping-address>
-      <div class="shipping-type-container" *ngIf="!skipShipping && !receipt">
+      <shipping-address *ngIf="!receipt && singleOrderHasShipmentsCart" [user]="user" [account]="account" [receipt]="receipt" [singlePaymentOrder]="true"></shipping-address>
+      <div class="shipping-type-container" *ngIf="!receipt && singleOrderHasShipmentsCart">
         <shipping-type [receipt]="receipt"></shipping-type>
       </div>
       <div class="order-number-container" *ngIf="receipt">
         <label class="label">Order Number</label>
-        <p>#{{ receipt?.single_payment.order_number }}</p>
+        <p>#{{ single_payment?.order_number }}</p>
       </div>
       <div class="order-date-container" *ngIf="receipt">
         <label class="label">Order Date</label>
-        <p *ngIf="receipt">{{ receipt?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
+        <p *ngIf="receipt">{{ single_payment?.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
       <div class="customer-id-container" *ngIf="receipt">
         <label class="label">Customer ID</label>
@@ -24,24 +24,26 @@
       </div>
       <div class="billing-container">
         <label class="label">Billing</label>
-        <p *ngIf="shippingCalculationPending && !receipt">Pending...</p>
-        <p *ngIf="!shippingCalculationPending && !receipt">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charged {{ orderTotal | currency: 'USD'}} <span>USD</span></p>
-        <p *ngIf="receipt">{{ receipt?.single_payment.payment.stripe_card_raw_json_data.brand }} ending *{{ receipt?.single_payment.payment.stripe_card_raw_json_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} <span>USD</span> on {{ receipt?.single_payment.created_at | date: 'MM/dd/yyyy' }}</p>
+        <p *ngIf="shippingCalculationPending && !receipt && singleOrderHasShipmentsCart">Pending...</p>
+        <p *ngIf="(!shippingCalculationPending && !receipt) || singleOrderCart">{{ creditCard?.brand }} ending *{{ creditCard?.last4 }} will be charged {{ orderTotal | currency: 'USD'}} <span>USD</span></p>
+        <p *ngIf="receipt">{{ single_payment?.payment.stripe_card_raw_json_data.brand }} ending *{{ single_payment?.payment.stripe_card_raw_json_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} <span>USD</span> on {{ single_payment?.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
-      <shipping-address *ngIf="!skipShipping && receipt" [user]="user" [account]="account" [receipt]="receipt" [singlePaymentOrder]="true"></shipping-address>
-      <div class="shipping-type-container" *ngIf="!skipShipping && receipt">
+      <shipping-address *ngIf="receipt && receipt.single_payment.shipping_address" [user]="user" [account]="account" [receipt]="receipt" [singlePaymentOrder]="true"></shipping-address>
+      <div class="shipping-type-container" *ngIf="receipt">
         <shipping-type [receipt]="receipt"></shipping-type>
       </div>
       <div class="order-notes-container">
         <order-notes [receipt]="receipt" [singlePaymentOrder]="true"></order-notes>
       </div>
-      <misc-data [receipt]="receipt" [singleOrderCart]="singleOrderCart"></misc-data>
+      <misc-data [receipt]="receipt" [singleOrderCart]="singleOrderHasShipmentsCart || singleOrderCart"></misc-data>
     </div>
     <div class="container-body-right">
       <app-cart
+        [cart]="!receipt ? singleOrderHasShipmentsCart || singleOrderCart : null"
         (shippingCalculated)="shippingCalculated($event)"
         [creditCard]="creditCard"
         [receipt]="receipt"
+        [single_payment]="single_payment"
       ></app-cart>
     </div>
   </div>

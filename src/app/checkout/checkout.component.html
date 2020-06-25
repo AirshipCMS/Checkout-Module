@@ -10,7 +10,7 @@
       </div>
     </div>
   </div>
-  <div class="checkout-body" *ngIf="(singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0) && account">
+  <div class="checkout-body" *ngIf="(singleOrderHasShipmentsCart?.items.length > 0 || singleOrderCart?.items.length > 0 || subscriptionCart?.items.length > 0) && account">
     <payment-method
       [user]="user"
       [account]="account"
@@ -23,6 +23,13 @@
       [creditCard]="creditCard"
       [singleOrderCart]="singleOrderCart"
     ></single-payment-order>
+    <single-payment-order
+    *ngIf="singleOrderHasShipmentsCart.items.length > 0"
+    [user]="user"
+    [account]="account"
+    [creditCard]="creditCard"
+    [singleOrderHasShipmentsCart]="singleOrderHasShipmentsCart"
+  ></single-payment-order>
     <subscription-order
       *ngIf="subscriptionCart?.items.length > 0"
       [user]="user"
@@ -32,7 +39,7 @@
     ></subscription-order>
   </div>
   <select-customer-account *ngIf="user?.scope !== 'user' && !account"></select-customer-account>
-  <div class="empty-cart" *ngIf="singleOrderCart?.items.length === 0 && subscriptionCart?.items.length === 0">
+  <div class="empty-cart" *ngIf="singleOrderHasShipmentsCart?.items.length === 0 && singleOrderCart?.items.length === 0 && subscriptionCart?.items.length === 0">
     <p>You have no items in your cart.</p>
     <a href="/">Continue Shopping</a>
   </div>
@@ -40,7 +47,7 @@
     <button type="button" (click)="backToCart()" class="button back-to-cart-button">Back to Cart</button>
     <p *ngIf="orderFailed" class="checkout-error">There was an error processing your order.</p>
     <p *ngIf="activeSubscriptions.length >= 25" class="checkout-error">Subscriptions can't be added to this account. An account may only have 25 subscriptions.</p>
-    <button class="button place-order-button" type="button" (click)="placeOrder()" [disabled]="!creditCard || (subscriptionCart?.items.length > 0 && subscriptionAddresses.length === 0) || (singleOrderCart?.items.length > 0 && !singlePaymentAddress) || processing || activeSubscriptions.length >= 25">Place Order</button>
+    <button class="button place-order-button" type="button" (click)="placeOrder()" [disabled]="!creditCard || processing || activeSubscriptions.length >= 25">{{processing ? "Processing...Please Wait" : "Place Order" }}</button>
     <div *ngIf="processing" class="loader"></div>
   </div>
 </div>
