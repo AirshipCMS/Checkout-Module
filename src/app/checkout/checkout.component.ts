@@ -147,7 +147,6 @@ export class CheckoutComponent implements OnInit {
   }
 
   placeOrder() {
-    this.processing = true;
     let checkoutStreams = [];
     let subscriptionCart: any = _.cloneDeep(this.subscriptionCart);
     let singlePaymentAddress = this.singlePaymentAddress;
@@ -200,6 +199,7 @@ export class CheckoutComponent implements OnInit {
         orders.push(subOrder)
       })
     }
+
     this.processing = true;
     let completedOrders = []
     let i = 1;

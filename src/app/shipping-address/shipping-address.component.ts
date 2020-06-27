@@ -17,26 +17,27 @@ import { environment } from '../../environments/environment';
 })
 export class ShippingAddressComponent implements OnInit {
 
-  countries : Array<any> = [];
-  form : FormGroup;
-  address : any;
-  accountAddresses : Array<any> = [];
-  states : Array<any> = [];
-  editaddress : boolean = false;
-  changeCardOption : string = 'existing';
-  singlePaymentAddress : any;
-  subscriptionAddresses : Array<any>;
+  countries: Array<any> = [];
+  form: FormGroup;
+  address: any;
+  accountAddresses: Array<any> = [];
+  states: Array<any> = [];
+  editaddress: boolean = false;
+  changeCardOption: string = 'existing';
+  singlePaymentAddress: any;
+  subscriptionAddresses: Array<any>;
   newAddressInvalid: boolean = false;
   noAddressSelected: boolean = false;
-  @Input() receipt : any;
+  invalidZipcode: boolean = false;
+  @Input() receipt: any;
   @Input() user;
   @Input() account;
-  @Input() subscriptionCart : any;
-  @Input() subscriptionItemIndex : number;
+  @Input() subscriptionCart: any;
+  @Input() subscriptionItemIndex: number;
   @Input() singlePaymentOrder;
 
   constructor(private builder: FormBuilder, private service: ShippingAddressService, private sharedService: SharedService) {
-    this.form  = this.builder.group({
+    this.form = this.builder.group({
       first_name: ['', Validators.compose([Validators.required])],
       last_name: ['', Validators.compose([Validators.required])],
       address_1: ['', Validators.compose([Validators.required])],
@@ -45,7 +46,7 @@ export class ShippingAddressComponent implements OnInit {
       country: ['', Validators.compose([Validators.required])],
       state: ['', Validators.compose([Validators.required])],
       other_location_text: [''],
-      zipcode: ['', Validators.compose([Validators.required, FormValidator.validZipcode])],
+      zipcode: ['', Validators.compose([Validators.required])],
       phone_number: [''],
       change_address_option: [this.changeCardOption],
       address_options: ''
@@ -55,11 +56,11 @@ export class ShippingAddressComponent implements OnInit {
   ngOnInit() {
     this.countries = this.service.countries;
     let subscriptionAddresses = this.service.getSubscriptionAddresses();
-    if(this.account && Object.keys(this.account).length > 0) {
+    if (this.account && Object.keys(this.account).length > 0) {
       this.accountAddresses = this.account.postal_addresses;
     }
-    if(this.subscriptionCart) {
-      if(!subscriptionAddresses) {
+    if (this.subscriptionCart) {
+      if (!subscriptionAddresses) {
         this.subscriptionAddresses = [];
         this.subscriptionCart.items.forEach((item) => {
           this.subscriptionAddresses.push({});
@@ -72,17 +73,22 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   setAddress(address: any) {
-    if(address) {
-      this.address = this.service.scrubAddress(this.service.formatAddress(address));
-      this.editaddress = false;
-      if(this.singlePaymentOrder) {
-        this.sharedService.setShippingAddress(this.address);
-        this.service.saveSinglePaymentAddress(this.address);
+    this.invalidZipcode = false;
+    if (address) {
+      if (address.country === 'US' && address.zipcode.length !== 5) {
+        this.invalidZipcode = true;
       } else {
-        if(this.subscriptionAddresses) {
-          this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
-          this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
-          this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
+        this.address = this.service.scrubAddress(this.service.formatAddress(address));
+        this.editaddress = false;
+        if (this.singlePaymentOrder) {
+          this.sharedService.setShippingAddress(this.address);
+          this.service.saveSinglePaymentAddress(this.address);
+        } else {
+          if (this.subscriptionAddresses) {
+            this.subscriptionAddresses[this.subscriptionItemIndex] = this.address;
+            this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
+            this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
+          }
         }
       }
     } else {
@@ -91,8 +97,8 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   getAddress() {
-    if(this.receipt) { //receipt
-      if(this.singlePaymentOrder) {
+    if (this.receipt) { //receipt
+      if (this.singlePaymentOrder) {
         this.address = this.receipt.single_payment_has_shipments.shipping_address;
       } else {
         this.address = this.receipt.subscription_addresses[this.subscriptionItemIndex];
@@ -101,11 +107,11 @@ export class ShippingAddressComponent implements OnInit {
       this.sharedService.subscriptionAddresses$.subscribe(addressess => this.subscriptionAddresses = addressess);
       let singlePaymentAddress = this.service.getSinglePaymentAddress();
       let subscriptionAddresses = this.service.getSubscriptionAddresses();
-      if(this.subscriptionItemIndex !== undefined) {
+      if (this.subscriptionItemIndex !== undefined) {
         this.address = this.service.formatAddress(this.subscriptionAddresses[this.subscriptionItemIndex]);
         this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
       }
-      if(this.singlePaymentOrder && singlePaymentAddress) {
+      if (this.singlePaymentOrder && singlePaymentAddress) {
         this.address = this.service.formatAddress(singlePaymentAddress);
         this.sharedService.setShippingAddress(this.service.scrubAddress(this.address));
       }
@@ -114,9 +120,9 @@ export class ShippingAddressComponent implements OnInit {
 
   saveAddress() {
     this.newAddressInvalid = false;
-    if(this.form.valid) {
+    if (this.form.valid) {
       this.address = this.service.formatAddress(this.form.value);
-      if(Object.keys(this.account).length > 0) {
+      if (Object.keys(this.account).length > 0) {
         this.service.saveAddress(this.address, this.user, this.account)
           .subscribe(
             address => {
@@ -125,7 +131,7 @@ export class ShippingAddressComponent implements OnInit {
             err => this.service.handleError(err)
           );
       }
-      if(this.subscriptionItemIndex !== undefined) {
+      if (this.subscriptionItemIndex !== undefined) {
         this.subscriptionAddresses[this.subscriptionItemIndex] = this.service.formatAddress(this.service.scrubAddress(this.address));
         this.service.saveSubscriptionAddresses(this.subscriptionAddresses);
         this.sharedService.setSubscriptionAddresses(this.subscriptionAddresses);
@@ -140,7 +146,7 @@ export class ShippingAddressComponent implements OnInit {
   }
 
   getStates(country) {
-    if(country) {
+    if (country) {
       this.states = this.service.getStates(country);
     }
   }

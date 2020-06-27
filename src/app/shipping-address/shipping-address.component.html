@@ -97,7 +97,8 @@
         <label class="label">Zip/Postal Code*</label>
         <div class="control">
           <input class="input" type="text" formControlName="zipcode" required [(ngModel)]="zipcode">
-        </div>     
+        </div>
+        <p *ngIf="invalidZipcde" class="error-message">Invalid Zipcode</p>   
       </div>
       <div class="shipping-field" *ngIf="form.value.change_address_option === 'new' || accountAddresses.length === 0">
         <label class="label">Phone</label>
