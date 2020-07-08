@@ -72,6 +72,20 @@ export class CheckoutComponent implements OnInit {
     this.sharedService.shippingType$.subscribe(shippingType => this.shippingType = shippingType);
   }
 
+  validAddress() {
+    if (this.singleOrderHasShipmentsCart.items.length > 0 && !this.singlePaymentAddress) {
+      return false
+    }
+    if (this.subscriptionCart.items.length > 0) {
+      let subCart = this.subscriptionCart.items.filter(item => item.has_shipments);
+      let subAddress = this.subscriptionAddresses.filter(a => Object.keys(a).length > 0);
+      if(subCart.length > 0 && subCart.length !== subAddress.length){
+        return false
+      }
+    }
+    return true
+  }
+
   getCustomerSubscriptions() {
     if (this.account && Object.keys(this.account).length > 0) {
       this.service.getCustomerSubscriptions(this.user, this.account.id)
@@ -187,15 +201,16 @@ export class CheckoutComponent implements OnInit {
     }
     if (subscriptionCart.items.length > 0) {
       subscriptionCart.items.map((item, i) => {
-        let cart = this.cartService.scrubCart({ items: [item] })
         let subOrder = {
           ...baseOrder,
           customer_notes: this.subscriptionNotes && this.subscriptionNotes[i] ? this.subscriptionNotes[i] : '',
           misc_data: this.subscriptionMiscData && this.subscriptionMiscData[i] ? this.subscriptionMiscData[i] : {},
-          cart,
+          cart: null,
           shipping_address: item.has_shipments && this.subscriptionAddresses && this.subscriptionAddresses[i] ? this.subscriptionAddresses[i] : null,
           shipping_type: item.has_shipments ? this.shippingType : null
         }
+        let cart = this.cartService.scrubCart({ items: [item] })
+        subOrder.cart = cart;
         orders.push(subOrder)
       })
     }

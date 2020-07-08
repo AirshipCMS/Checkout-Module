@@ -47,7 +47,7 @@
     <button type="button" (click)="backToCart()" class="button back-to-cart-button">Back to Cart</button>
     <p *ngIf="orderFailed" class="checkout-error">There was an error processing your order.</p>
     <p *ngIf="activeSubscriptions.length >= 25" class="checkout-error">Subscriptions can't be added to this account. An account may only have 25 subscriptions.</p>
-    <button class="button place-order-button" type="button" (click)="placeOrder()" [disabled]="!creditCard || processing || activeSubscriptions.length >= 25">{{processing ? "Processing...Please Wait" : "Place Order" }}</button>
+    <button class="button place-order-button" type="button" (click)="placeOrder()" [disabled]="!creditCard || processing || activeSubscriptions.length >= 25 || !validAddress()">{{processing ? "Processing...Please Wait" : "Place Order" }}</button>
     <div *ngIf="processing" class="loader"></div>
   </div>
 </div>

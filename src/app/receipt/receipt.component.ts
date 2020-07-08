@@ -46,14 +46,13 @@ export class ReceiptComponent implements OnInit {
           this.receipt['single_payment'] = { ...order.single_payment, products: order.products }
         }
         if (order.subscriptions.length > 0) {
-          let subscriptionOrder = {
-            ...order.subscriptions
-          }
-          subscription_addresses.push(order.shipping_address);
-          subscriptions.items.push(subscriptionOrder);
+          subscription_addresses.push(order.shipping_address === null ? {} : order.shipping_address);
+          subscriptions.items.push(order.subscriptions[0]);
           plans.push(order.plans[0]);
         }
       })
+
+      console.log(subscriptions)
 
       this.receipt = {
         ...this.receipt,

@@ -11,7 +11,7 @@
     [single_payment]="receipt.single_payment_has_shipments"
   ></single-payment-order>
     <subscription-order
-      *ngIf="receipt.subscriptions.length > 0"
+      *ngIf="receipt.subscriptions && receipt.subscriptions.items.length > 0"
       [receipt]="receipt"
     ></subscription-order>
   </div>
