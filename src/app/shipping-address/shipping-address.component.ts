@@ -75,7 +75,7 @@ export class ShippingAddressComponent implements OnInit {
   setAddress(address: any) {
     this.invalidZipcode = false;
     if (address) {
-      if (address.country === 'US' && address.zipcode.length !== 5) {
+      if (address.country === 'US' && address.zipcode.length >= 5 && address.zipcdoe.length <= 10) {
         this.invalidZipcode = true;
       } else {
         this.address = this.service.scrubAddress(this.service.formatAddress(address));
