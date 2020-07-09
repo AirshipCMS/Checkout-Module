@@ -52,8 +52,6 @@ export class ReceiptComponent implements OnInit {
         }
       })
 
-      console.log(subscriptions)
-
       this.receipt = {
         ...this.receipt,
         subscription_addresses,

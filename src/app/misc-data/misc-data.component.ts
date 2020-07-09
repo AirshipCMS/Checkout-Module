@@ -19,6 +19,7 @@ export class MiscDataComponent implements OnInit {
   subscriptionMiscData: Array<any> = [];
   @Input() miscData = {};
   @Input() receipt;
+  @Input() singlePaymentOrder;
   hasMiscData: boolean;
 
   constructor(private sharedService: SharedService) {
@@ -61,7 +62,7 @@ export class MiscDataComponent implements OnInit {
       if(this.subscriptionItem !== undefined) {
         this.miscData = this.subscriptionItem.misc_data;
       } else {
-        this.miscData = this.receipt.single_payment.misc_data;
+        this.miscData = this.singlePaymentOrder ? this.singlePaymentOrder.misc_data : {};
       }
     }
     if(this.miscData && Object.keys(this.miscData).length > 0) {

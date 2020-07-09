@@ -42,8 +42,8 @@
   <button type="button" class="button recalculate-shipping-button" (click)="getShipping()" *ngIf="shippingError"
     [disabled]="shippingAddress === null || shippingAddress === undefined">Recalculate Shipping</button>
   <div class="cart-charge-details" *ngIf="receipt || !pending && !receipt">
-    <p>{{ receipt ? receipt?.single_payment.payment.stripe_card_raw_json_data.brand : creditCard?.brand }} ending
-      *{{ receipt ? receipt?.single_payment.payment.stripe_card_raw_json_data.last4 : creditCard?.last4 }} will be
+    <p>{{ receipt ? single_payment?.payment.stripe_card_raw_json_data.brand : creditCard?.brand }} ending
+      *{{ receipt ? single_payment?.payment.stripe_card_raw_json_data.last4 : creditCard?.last4 }} will be
       charged {{ total | currency: "USD" }} <span>USD</span></p>
   </div>
 </div>

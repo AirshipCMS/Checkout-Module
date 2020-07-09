@@ -29,13 +29,13 @@
         <p *ngIf="receipt">{{ single_payment?.payment.stripe_card_raw_json_data.brand }} ending *{{ single_payment?.payment.stripe_card_raw_json_data.last4 }} was charged {{ orderTotal | currency: 'USD'}} <span>USD</span> on {{ single_payment?.created_at | date: 'MM/dd/yyyy' }}</p>
       </div>
       <shipping-address *ngIf="receipt && receipt.single_payment_has_shipments" [user]="user" [account]="account" [receipt]="receipt" [singlePaymentOrder]="true"></shipping-address>
-      <div class="shipping-type-container" *ngIf="receipt">
+      <div class="shipping-type-container" *ngIf="receipt && single_payment?.shipping_address">
         <shipping-type [receipt]="receipt"></shipping-type>
       </div>
       <div class="order-notes-container">
         <order-notes [receipt]="receipt" [singlePaymentOrder]="true"></order-notes>
       </div>
-      <misc-data [receipt]="receipt" [singleOrderCart]="singleOrderHasShipmentsCart || singleOrderCart"></misc-data>
+      <misc-data [receipt]="receipt" [singlePaymentOrder]="receipt ? single_payment : null" [singleOrderCart]="singleOrderHasShipmentsCart || singleOrderCart"></misc-data>
     </div>
     <div class="container-body-right">
       <app-cart

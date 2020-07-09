@@ -226,7 +226,6 @@ export class CheckoutComponent implements OnInit {
           .delay(3000)
       )
       .subscribe(val => {
-        console.log(val)
         if (val['account']) {
           completedOrders.push(val)
         }

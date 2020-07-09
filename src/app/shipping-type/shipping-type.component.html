@@ -7,4 +7,4 @@
   </div>
 </div>
 <label *ngIf="receipt" class="label">Shipping Type</label>
-<p class="shipping-type" *ngIf="receipt">{{ receipt?.single_payment.shipping_type }}</p>
+<p class="shipping-type" *ngIf="receipt">{{ receipt?.single_payment_has_shipments?.shipping_type }}</p>
