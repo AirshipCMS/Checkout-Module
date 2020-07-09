@@ -75,7 +75,7 @@ export class ShippingAddressComponent implements OnInit {
   setAddress(address: any) {
     this.invalidZipcode = false;
     if (address) {
-      if (address.country === 'US' && (address.zipcode.length < 5 || address.zipcode.length > 10)) {
+      if (address.country === 'US' && address.zipcode.match(/^(?:\d{5}(?:[-]\d{4})?|\d{9})$/) === null) {
         this.invalidZipcode = true;
       } else {
         this.address = this.service.scrubAddress(this.service.formatAddress(address));
@@ -121,7 +121,7 @@ export class ShippingAddressComponent implements OnInit {
   saveAddress() {
     this.newAddressInvalid = false;
     this.invalidZipcode = false
-    if (this.form.valid && (this.form.value.country.code !== 'US' || (this.form.value.country.code === 'US' && (this.form.value.zipcode.length >= 5 && this.form.value.zipcode.length <= 10)))) {
+    if (this.form.valid && (this.form.value.country.code !== 'US' || (this.form.value.country.code === 'US' && this.form.value.zipcode.match(/^(?:\d{5}(?:[-]\d{4})?|\d{9})$/) !== null))) {
       this.address = this.service.formatAddress(this.form.value);
       if (this.account && Object.keys(this.account).length > 0) {
         this.service.saveAddress(this.address, this.user, this.account)
@@ -143,7 +143,7 @@ export class ShippingAddressComponent implements OnInit {
       this.editaddress = false;
     } else {
       this.newAddressInvalid = true;
-      this.invalidZipcode = this.form.value.country.code === 'US' && (this.form.value.zipcode.length < 5 || this.form.value.zipcode.length > 10)
+      this.invalidZipcode = this.form.value.country.code === 'US' && this.form.value.zipcode.match(/^(?:\d{5}(?:[-]\d{4})?|\d{9})$/) === null;
     }
   }
 
